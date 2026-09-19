@@ -39,6 +39,21 @@
                   'select:not([disabled]), textarea:not([disabled]), ' +
                   '[tabindex]:not([tabindex="-1"])';
 
+  /**
+   * Rewrite the URL without adding a history entry.
+   * Some hosts refuse history writes — a sandboxed iframe preview, or a page
+   * opened straight off the filesystem. Losing the shareable URL there is
+   * acceptable; losing the reader is not, so this never throws.
+   */
+  function setHash(slug) {
+    try {
+      history.replaceState(null, '',
+        slug ? '#case/' + slug : location.pathname + location.search);
+    } catch (err) {
+      /* no addressable URL in this context — the reader still works */
+    }
+  }
+
   /* ======================================================================
      Rendering
      ====================================================================== */
@@ -235,9 +250,7 @@
 
     render(i);
 
-    if (!fromHash) {
-      history.replaceState(null, '', '#case/' + items[i].slug);
-    }
+    if (!fromHash) setHash(items[i].slug);
 
     scroll.focus({ preventScroll: true });
   }
@@ -251,9 +264,7 @@
 
     // Strip the hash without adding to history, so Back still leaves the page
     // rather than re-opening the study the visitor just closed.
-    if (location.hash.indexOf('#case/') === 0) {
-      history.replaceState(null, '', location.pathname + location.search);
-    }
+    if (location.hash.indexOf('#case/') === 0) setHash(null);
 
     var done = function () {
       root.hidden = true;
@@ -338,7 +349,7 @@
     var i = slugIndex(decodeURIComponent(m[1]));
     if (i === -1) {
       // Unknown slug — clear it rather than leaving a broken-looking URL.
-      history.replaceState(null, '', location.pathname + location.search);
+      setHash(null);
       return;
     }
     openAt(i, true);
