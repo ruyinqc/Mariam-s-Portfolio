@@ -1,0 +1,540 @@
+/* ==========================================================================
+   Shell, section rhythm, hero, and the large page regions
+   ========================================================================== */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.section { padding-block: var(--section-y); position: relative; }
+
+.section__head { max-width: 46ch; margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
+.section__head--tight { margin-bottom: var(--s-5); }
+
+.section__title {
+  font-size: var(--t-h2);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.035em;
+}
+.section__title em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--blue);
+  /* the serif sits optically small next to 800-weight Jakarta */
+  font-size: 1.12em;
+}
+.section__title--invert { color: var(--on-panel); }
+.section__title--invert em { color: var(--lime); }
+
+.section__sub {
+  margin-top: var(--s-5);
+  font-size: var(--t-lede);
+  color: var(--muted);
+  max-width: 44ch;
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  margin-bottom: var(--s-5);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.eyebrow span {
+  display: grid;
+  place-items: center;
+  width: 2rem; height: 2rem;
+  background: var(--blue);
+  color: #fff;
+  border-radius: var(--r-sm);
+  letter-spacing: 0.02em;
+}
+.eyebrow--invert { color: var(--on-panel-soft); }
+.eyebrow--invert span { background: var(--lime); color: var(--ink); }
+
+.mini-title {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: var(--s-4);
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: min(100svh, 980px);
+  display: flex;
+  align-items: center;
+  padding-block: clamp(7rem, 14vh, 10rem) clamp(4rem, 8vh, 7rem);
+  overflow: hidden;
+}
+
+/* A design-tool canvas grid that fades out before it can compete with text. */
+.hero__grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  -webkit-mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, transparent 72%);
+          mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, transparent 72%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.hero__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.hero__name {
+  font-size: var(--t-display);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.05em;
+  margin-block: var(--s-5) var(--s-4);
+}
+
+.hero__role {
+  font-family: var(--font-mono);
+  font-size: clamp(0.875rem, 0.8rem + 0.35vw, 1.0625rem);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-2) var(--s-5);
+  margin-top: var(--s-5);
+  padding: 0;
+  list-style: none;
+  font-size: var(--t-small);
+  color: var(--muted);
+}
+.hero__facts li { display: flex; align-items: baseline; gap: 0.4em; }
+.hero__facts li + li::before {
+  content: "";
+  width: 4px; height: 4px;
+  margin-right: calc(var(--s-5) - 0.4em);
+  border-radius: 50%;
+  background: var(--line-strong);
+  align-self: center;
+}
+.hero__facts b {
+  font-size: 1.45em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.hero__lede {
+  margin-top: var(--s-6);
+  max-width: 46ch;
+  font-size: var(--t-lede);
+  color: var(--ink-soft);
+}
+.hero__lede em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.1em;
+  color: var(--ink);
+}
+
+.hero__cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-3);
+  margin-top: var(--s-7);
+}
+
+/* ---- Portrait ----------------------------------------------------------- */
+.hero__portrait {
+  position: relative;
+  margin: 0;
+  border-radius: var(--r-lg);
+  overflow: visible;
+  will-change: transform;
+}
+.hero__portrait img {
+  width: 100%;
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-3);
+}
+
+/* A multiplayer cursor label, the way a design tool shows who is on canvas. */
+.hero__tag {
+  position: absolute;
+  right: clamp(-0.5rem, 1vw, 1rem);
+  bottom: clamp(-0.75rem, -1vw, -0.5rem);
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.5em 0.9em;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  border-radius: var(--r-pill);
+  box-shadow: var(--sh-2);
+  animation: tag-float 5.5s var(--ease) infinite;
+}
+.hero__tag .icon { width: 0.95em; height: 0.95em; fill: currentColor; }
+
+@keyframes tag-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50%      { transform: translate3d(0, -7px, 0); }
+}
+
+.hero__scroll {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.25rem, 3vh, 2.5rem);
+  translate: -50% 0;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  color: var(--muted);
+  border-radius: 50%;
+  z-index: 1;
+  animation: scroll-bob 2.6s var(--ease) infinite;
+}
+.hero__scroll:hover { color: var(--blue); }
+.hero__scroll .icon { width: 1.4rem; height: 1.4rem; }
+
+@keyframes scroll-bob {
+  0%, 100% { transform: translateY(0); opacity: .55; }
+  50%      { transform: translateY(6px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__tag, .hero__scroll { animation: none; }
+}
+
+@media (max-width: 900px) {
+  /* The nav has moved to the bottom by now, so the hero no longer needs to
+     duck under it. */
+  .hero { min-height: 0; padding-block: clamp(2.5rem, 7vh, 4rem) clamp(2rem, 6vh, 3.5rem); }
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__portrait { order: -1; max-width: 26rem; }
+  .hero__scroll { display: none; }
+}
+
+/* Below this the three facts stop fitting on one line, and the separator
+   dots start orphaning onto a line of their own. */
+@media (max-width: 560px) {
+  .hero__facts { display: grid; gap: var(--s-2); }
+  .hero__facts li + li::before { content: none; }
+}
+
+/* ==========================================================================
+   Pitch strip
+   ========================================================================== */
+
+.pitch { padding-block: clamp(2rem, 4vw, 4rem) 0; }
+
+.pitch__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: var(--s-4);
+}
+
+.pitch__card {
+  padding: var(--s-5);
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-1);
+}
+.pitch__k {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.pitch__k .icon { width: 1em; height: 1em; }
+.pitch__card p {
+  margin-top: var(--s-3);
+  font-size: var(--t-small);
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Path / experience
+   ========================================================================== */
+
+.path__cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .path__cols { grid-template-columns: 1fr; }
+}
+
+.timeline { list-style: none; padding: 0; margin: 0; }
+
+.timeline__item {
+  position: relative;
+  padding: 0 0 var(--s-7) var(--s-7);
+  border-left: 1px solid var(--line-strong);
+}
+.timeline__item:last-child { padding-bottom: 0; border-left-color: transparent; }
+.timeline__item::before {
+  content: "";
+  position: absolute;
+  left: -5px; top: 0.45rem;
+  width: 9px; height: 9px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--line-strong);
+}
+.timeline__item--now::before {
+  background: var(--blue);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 5px var(--blue-wash);
+}
+.timeline__item--edu::before { border-radius: 2px; }
+
+.timeline__when {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+.timeline__role { font-size: var(--t-h3); margin-top: var(--s-2); }
+.timeline__org { color: var(--blue); font-weight: 600; font-size: var(--t-small); }
+.timeline__note {
+  margin-top: var(--s-3);
+  font-size: var(--t-small);
+  color: var(--muted);
+  max-width: 48ch;
+}
+
+.path__side { display: grid; gap: var(--s-5); position: sticky; top: 7rem; }
+@media (max-width: 860px) { .path__side { position: static; } }
+
+.langs, .relocate {
+  padding: var(--s-5);
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.langs__list { list-style: none; padding: 0; display: grid; gap: var(--s-3); }
+.langs__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  font-weight: 600;
+}
+.langs__list small {
+  margin-left: auto;
+  font-weight: 500;
+  font-size: var(--t-meta);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.langs__code {
+  display: grid;
+  place-items: center;
+  width: 2.25rem; height: 1.6rem;
+  background: var(--blue);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  border-radius: 5px;
+}
+.langs__code--soft { background: var(--paper-sunk); color: var(--muted); }
+
+.relocate p { font-size: var(--t-small); color: var(--muted); }
+.relocate p + p { margin-top: var(--s-4); }
+.relocate b { color: var(--ink); }
+.relocate__status {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink) !important;
+}
+
+/* ==========================================================================
+   Toolkit
+   ========================================================================== */
+
+.toolkit__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: clamp(1.5rem, 3vw, 3rem);
+}
+.toolgroup__note {
+  margin-top: var(--s-4);
+  font-size: var(--t-small);
+  color: var(--muted);
+  max-width: 34ch;
+}
+
+.colophon {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--s-4);
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding: var(--s-5);
+  background: var(--blue-wash);
+  border: 1px solid var(--blue-line);
+  border-radius: var(--r-md);
+  font-size: var(--t-small);
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+.colophon .icon { color: var(--blue); width: 1.4rem; height: 1.4rem; margin-top: 0.1rem; }
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+.contact {
+  background: var(--panel);
+  color: var(--on-panel);
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+}
+
+.contact__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .contact__inner { grid-template-columns: 1fr; }
+}
+
+.contact__copy { position: relative; }
+
+.contact__lede {
+  font-size: var(--t-lede);
+  color: var(--on-panel-soft);
+  max-width: 34ch;
+}
+
+.contact__direct {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--s-6);
+  display: grid;
+  gap: var(--s-1);
+}
+.contact__direct a {
+  display: flex;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  margin-inline: calc(var(--s-4) * -1);
+  border-radius: var(--r-sm);
+  color: var(--on-panel);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.contact__direct a:hover { background: var(--panel-soft); color: var(--lime); }
+.contact__direct .icon { color: var(--on-panel-soft); }
+.contact__direct a:hover .icon { color: var(--lime); }
+
+.contact__photo {
+  width: min(22rem, 70%);
+  margin-top: var(--s-6);
+  filter: grayscale(1) contrast(1.06);
+  opacity: 0.92;
+}
+@media (max-width: 860px) { .contact__photo { display: none; } }
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+  background: var(--panel);
+  color: var(--on-panel-soft);
+  padding-block: var(--s-7) var(--s-6);
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.footer__inner { display: grid; gap: var(--s-3); }
+.footer__name {
+  font-size: var(--t-h3);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--on-panel);
+}
+.footer__meta { font-size: var(--t-small); }
+.footer__links {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-5);
+  margin-top: var(--s-3);
+}
+.footer__links a {
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--on-panel);
+  text-decoration: none;
+  /* Padded out and pulled back in: "CV" is only 17px of text, which is under
+     the 24px minimum in SC 2.5.8. The negative margin keeps the visual
+     spacing while the hit area grows. */
+  padding: var(--s-2) var(--s-2);
+  margin-inline: calc(var(--s-2) * -1);
+  border-radius: var(--r-sm);
+}
+.footer__links a:hover { color: var(--lime); }
+.footer__fine {
+  margin-top: var(--s-4);
+  font-size: var(--t-meta);
+  font-family: var(--font-mono);
+  letter-spacing: 0.06em;
+}

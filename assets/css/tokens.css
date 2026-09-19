@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Design tokens — Mariam Emad Nabih
+   Light only. There is deliberately no dark-mode block anywhere in this file.
+   Contrast ratios in the comments are measured, not estimated — see
+   tools/contrast.js, which fails the build if any of them regress.
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* ---- Surface ---------------------------------------------------------- */
+  --paper:        #F7F5F1;   /* page                                          */
+  --paper-raised: #FFFFFF;   /* cards on paper                                */
+  --paper-sunk:   #F0EDE7;   /* wells, diagram panels                         */
+  --panel:        #101018;   /* dark section (contact)                        */
+  --panel-soft:   #1B1B26;   /* raised surface on the dark panel              */
+
+  /* ---- Ink -------------------------------------------------------------- */
+  --ink:       #14141A;      /* 16.9:1 on paper                               */
+  --ink-soft:  #3A3A45;      /* 10.3:1 on paper                               */
+  --muted:     #5A5A66;      /*  6.3:1 on paper — smallest allowed body ink   */
+  --on-panel:      #F4F2EE;  /* 16.8:1 on panel                               */
+  --on-panel-soft: #A9A9B8;  /*  8.2:1 on panel · 7.4:1 on --panel-soft       */
+
+  /* ---- Accent ----------------------------------------------------------- */
+  --blue:       #3B25F5;     /*  7.0:1 on paper (AAA) · 7.6:1 behind white    */
+  --blue-deep:  #2A18C4;     /* hover / pressed                               */
+  --blue-wash:  #EDEAFE;     /* tint fill — ink on top stays 15.6:1           */
+  --blue-line:  #CFC7FB;
+
+  /* Lime is a FILL ONLY. It never carries text.
+     Dark ink on lime measures 14.7:1, which is what makes it usable at all. */
+  --lime:       #D9F24B;
+  --lime-deep:  #C2DD2B;
+  --lime-wash:  #F4FBD4;
+
+  /* --line and --line-strong are decorative rules only: page hairlines, the
+     timeline rail, the string between the pin cards. WCAG 1.4.11 exempts pure
+     decoration, and darkening them would make the whole page feel heavier.
+     Anything that is a control boundary or carries meaning uses --edge or
+     --graphic instead, both of which clear 3:1. */
+  --line:       #E3DFD7;
+  --line-strong:#CFC9BD;
+  --edge:       #83838D;     /* 3.4:1 on paper — control borders             */
+  --graphic:    #5A5A66;     /* 6.2:1 on paper — arrows, operators, marks    */
+  --graphic-bad:#C2410C;     /* 5.2:1 on white — the "before" state          */
+
+  /* Form controls on the dark panel. The border is measured against the
+     field's own translucent fill, not the panel behind it — .14 came out at
+     1.54:1 and .34 at 2.82:1. .40 is the first value that clears 3:1. */
+  --field-edge:       rgba(255, 255, 255, .40);
+  --field-edge-hover: rgba(255, 255, 255, .58);
+  --field-bg:         rgba(255, 255, 255, .04);
+  --field-placeholder:#8B8B99;   /* 5.1:1 on --panel-soft                    */
+
+  /* ---- Type ------------------------------------------------------------- */
+  --font-sans:  "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+                "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
+                Consolas, monospace;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+
+  /* Fluid scale, 1.25 ratio, clamped so nothing breaks at 320px or 2560px. */
+  --t-display: clamp(2.75rem, 1.5rem + 5vw, 5.5rem);
+  --t-h2:      clamp(2.1rem, 1.35rem + 3.3vw, 4rem);
+  --t-h3:      clamp(1.3rem, 1.1rem + 0.85vw, 1.75rem);
+  --t-lede:    clamp(1.05rem, 0.98rem + 0.4vw, 1.3rem);
+  --t-body:    clamp(1rem,   0.97rem + 0.16vw, 1.0625rem);
+  --t-small:   0.875rem;
+  --t-meta:    0.75rem;
+
+  --lh-tight: 0.94;
+  --lh-snug:  1.2;
+  --lh-body:  1.65;
+
+  /* ---- Space ------------------------------------------------------------ */
+  --gutter:    clamp(1rem, 0.4rem + 2.6vw, 3.5rem);
+  --shell:     1240px;
+  --shell-narrow: 780px;
+  --s-1: 0.25rem;  --s-2: 0.5rem;   --s-3: 0.75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;   --s-6: 2rem;     --s-7: 3rem;     --s-8: 4rem;
+  --s-9: 6rem;     --s-10: 8rem;
+  --section-y: clamp(4.5rem, 2rem + 9vw, 9rem);
+
+  /* ---- Shape ------------------------------------------------------------ */
+  --r-sm: 8px;  --r-md: 14px;  --r-lg: 22px;  --r-xl: 32px;  --r-pill: 999px;
+
+  /* ---- Elevation -------------------------------------------------------- */
+  --sh-1: 0 1px 2px rgba(20,20,26,.05), 0 2px 8px rgba(20,20,26,.04);
+  --sh-2: 0 2px 6px rgba(20,20,26,.06), 0 12px 28px rgba(20,20,26,.07);
+  --sh-3: 0 4px 12px rgba(20,20,26,.08), 0 26px 60px rgba(20,20,26,.12);
+  --sh-lift: 0 10px 24px rgba(20,20,26,.10), 0 38px 80px rgba(20,20,26,.14);
+
+  /* ---- Motion ----------------------------------------------------------- */
+  --ease:      cubic-bezier(.16, 1, .3, 1);   /* the house curve             */
+  --ease-in:   cubic-bezier(.5, 0, .75, 0);
+  --dur-fast:  160ms;
+  --dur:       280ms;
+  --dur-slow:  520ms;
+
+  /* Set to 0 by motion.js when the visitor asks for reduced motion, so JS
+     animations read the same switch the stylesheet does. */
+  --motion: 1;
+
+  --focus: 0 0 0 2px var(--paper), 0 0 0 4.5px var(--blue);
+  --focus-on-panel: 0 0 0 2px var(--panel), 0 0 0 4.5px var(--lime);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion: 0; --dur-fast: 1ms; --dur: 1ms; --dur-slow: 1ms; }
+}
