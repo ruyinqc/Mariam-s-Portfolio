@@ -189,8 +189,53 @@ hash routing behave better over HTTP.
 **Netlify / Vercel / Cloudflare Pages** — drag the folder in. No build command,
 no output directory.
 
-Whatever you use, update `<link rel="canonical">` and the `og:image` URL in
-`index.html` to your real domain once you have one.
+Whatever you use, update the site address once you have a real domain — see
+the SEO section below, it is the one thing that genuinely matters.
+
+---
+
+## SEO
+
+The site is set up to rank for your name first, and for "product designer
+Egypt" / "B2B SaaS product designer" after that.
+
+**The one thing to change when you move domains.** Six values in `index.html`,
+plus `robots.txt` and `sitemap.xml`, hardcode the site address. There is a
+loud comment above the canonical link in `index.html` telling you which. Find
+and replace `https://ruyinqc.github.io/Mariam-s-Portfolio/` with the new one.
+
+This matters more than it looks. A canonical link pointing at a domain that
+does not resolve tells Google "the real copy of this page lives elsewhere",
+and it will drop the page from the index without anything on the page looking
+broken. `tools/seo.js` checks for exactly that.
+
+**What's in place**
+- Title, description, `robots` with `max-image-preview:large` so Google can
+  show the big thumbnail
+- Full Open Graph and Twitter card set, with a 1200x630 social image built
+  from the site's own fonts and tokens (`tools/make-og.js` regenerates it)
+- `rel="me"` links to LinkedIn and Instagram, so search engines tie those
+  profiles to this page
+- JSON-LD: `ProfilePage` + `WebSite` + a detailed `Person` with `knowsAbout`,
+  `knowsLanguage`, `hasOccupation`, `alumniOf` and `worksFor`
+- Case studies and certificates are added to the structured data **at runtime
+  from `data.js` and `config.js`**, so editing content updates the search
+  markup automatically. Only studies marked `status: 'live'` are described —
+  a placeholder full of `TODO` would be worse than nothing
+- `robots.txt` and `sitemap.xml`
+
+**Once it is live**, submit it to Google: add the site at
+[Search Console](https://search.google.com/search-console), verify with the
+HTML-file method, then submit `sitemap.xml`. Paste a case-study URL into the
+[Rich Results Test](https://search.google.com/test/rich-results) to see the
+structured data the way Google does.
+
+**One honest limitation.** The case-study prose lives in `data.js` and is
+rendered into the overlay when someone opens it. Google does run JavaScript,
+but it does not click, so it sees each study's title and summary — which the
+structured data gives it — rather than the full text. For ranking on her name
+that is more than enough. If you ever want individual case studies to rank on
+their own subject matter, the next step is a static page per study.
 
 ---
 
@@ -213,6 +258,18 @@ node tools/check.js
 Drives a real browser: keyboard access, focus trapping in the reader, the
 contact form's success *and* failure paths, four screen widths, reduced motion,
 and the page with JavaScript switched off. 52 checks.
+
+```bash
+node tools/seo.js           # add LIVE=1 to also check the canonical resolves
+```
+
+42 checks over the head, the social cards, the structured data (including the
+parts JavaScript adds), and the crawl files. Run it after changing content or
+moving domains.
+
+```bash
+node tools/make-og.js       # rebuild the 1200x630 social image
+```
 
 ```bash
 bash tools/fetch-fonts.sh   # only if you change which fonts are used
@@ -242,9 +299,16 @@ assets/
     contact.js           validation and delivery
     app.js               bootstrap
   fonts/                 woff2, latin + latin-ext
-  img/                   photography
+  img/                   photography + og-cover.png (the social card)
   cv/                    the PDF the Download CV button serves
-tools/                   contrast checker, browser checks, font fetcher
+robots.txt               crawl rules + sitemap pointer
+sitemap.xml              the one URL, for Search Console
+tools/
+  contrast.js            colour contrast, no install needed
+  check.js               52 browser checks (accessibility, reader, form)
+  seo.js                 42 SEO checks
+  make-og.js             rebuilds the social image
+  fetch-fonts.sh         re-downloads the webfonts
 ```
 
 ### Decisions worth knowing about
