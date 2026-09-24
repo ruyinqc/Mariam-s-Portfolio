@@ -2,7 +2,7 @@
 /**
  * Renders the card thumbnails that are pictures of the site's own content:
  *
- *   assets/img/work/localisation-card.webp   the Cairo and Beijing dashboards
+ *   assets/img/work/localisation-card.webp   the Western and Chinese dashboards
  *                                            from mockups.js, split down the middle
  *   assets/img/work/vibe-coding-card.webp    the projects listed in data.js
  *                                            (Vibe Coding), as browser windows
@@ -118,8 +118,8 @@ const HTML = `<!DOCTYPE html>
     <div class="half half--beijing"><div class="dash" id="beijing"></div></div>
     <div class="split"></div>
     <div class="knob"><svg viewBox="0 0 24 24"><path d="m9 7-5 5 5 5M15 7l5 5-5 5"/></svg></div>
-    <span class="place place--cairo">Cairo</span>
-    <span class="place place--beijing">Beijing</span>
+    <span class="place place--cairo">Western</span>
+    <span class="place place--beijing">Chinese</span>
   </div>
 
   <div class="scene" id="vibe"></div>
