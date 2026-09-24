@@ -65,6 +65,8 @@ A minimal one looks like this:
       right: { icon: 'check', count: 1 },   // the "after"
       tone: 'blue'                          // or 'lime'
     }                                       // { art: 'invoice', count: 5 } uses a picture
+                                            // or thumb: { zoom: {…}, tone } shows a close-up
+                                            // of one of your screens (see "Close-ups" below)
   },
 
   title: 'My Project',

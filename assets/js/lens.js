@@ -1,6 +1,7 @@
 /* ==========================================================================
    lens.js — a zoomed-in crop of one of the hi-fi screens, used in a
-   challenge diagram instead of an illustration (see data.js → `zoom`).
+   challenge diagram or a card thumbnail instead of an illustration (see
+   data.js → `zoom`).
 
    The whole screen from mockups.js is drawn at a fixed width, then scaled
    and moved inside a small window so that one part of it fills the view.
@@ -50,20 +51,26 @@
   }
 
   /* ---- geometry -----------------------------------------------------------
-     Everything is measured in the screen's own pixels, whatever the lens,
-     the reader's open transition or the page zoom are doing to it.          */
+     Everything is measured in the screen's own layout pixels, so nothing
+     around the lens can throw it off: not its own zoom, the reader's open
+     transition, or the tilt of a card on the pin board.                    */
 
   function boxes(canvas, keys) {
     var names = (keys || '').replace(/"/g, '').split(/\s+/).filter(Boolean);
     if (!names.length) return [];
-    var c = canvas.getBoundingClientRect();
-    var k = c.width / canvas.offsetWidth || 1;
     var nodes = canvas.querySelectorAll(names.map(function (n) {
       return '[data-focus~="' + n + '"]';
     }).join(','));
     return Array.prototype.map.call(nodes, function (el) {
-      var r = el.getBoundingClientRect();
-      return { x: (r.left - c.left) / k, y: (r.top - c.top) / k, w: r.width / k, h: r.height / k };
+      // walk up to the canvas, which is positioned, so it is always on the way
+      var x = 0, y = 0, n = el;
+      while (n && n !== canvas) {
+        x += n.offsetLeft;
+        y += n.offsetTop;
+        n = n.offsetParent;
+        if (n && n !== canvas) { x += n.clientLeft; y += n.clientTop; }
+      }
+      return { x: x, y: y, w: el.offsetWidth, h: el.offsetHeight };
     });
   }
 

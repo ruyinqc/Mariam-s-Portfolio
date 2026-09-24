@@ -230,8 +230,8 @@ window.WORK = [
     sub: 'I designed the step where founders name their company in Arabic and English — then redesigned it so they only write one.',
     tags: ['Onboarding', 'B2B'],
     thumb: {
-      left:  { icon: 'doc', count: 3 },
-      right: { icon: 'check', count: 1 },
+      // the founder types the Arabic name once; the English one is generated
+      zoom: { screen: 'naming-after', frame: 'own gen add', focus: 'gen', span: 0.52, align: 'end' },
       tone: 'lime'
     }
   },
