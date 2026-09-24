@@ -51,13 +51,18 @@
     el.innerHTML =
       '<span class="pincard__pin" aria-hidden="true"></span>' +
 
-      '<div class="pincard__thumb" aria-hidden="true">' +
-        '<div class="mini ' + (t.tone === 'lime' ? 'mini--lime' : '') + '">' +
-          miniCluster(t.left) +
-          '<span class="mini__arrow">' + icon('arrow') + '</span>' +
-          miniCluster(t.right) +
-        '</div>' +
-      '</div>' +
+      // `zoom` shows a close-up of one of the study's own screens instead
+      (t.zoom && window.Lens
+        ? '<div class="pincard__thumb pincard__thumb--lens" aria-hidden="true">' +
+            Lens.html(t.zoom) +
+          '</div>'
+        : '<div class="pincard__thumb" aria-hidden="true">' +
+            '<div class="mini ' + (t.tone === 'lime' ? 'mini--lime' : '') + '">' +
+              miniCluster(t.left) +
+              '<span class="mini__arrow">' + icon('arrow') + '</span>' +
+              miniCluster(t.right) +
+            '</div>' +
+          '</div>') +
 
       '<div class="pincard__tags">' +
         '<span class="tag tag--kind">' + item.kind + '</span>' +
@@ -90,6 +95,8 @@
   });
 
   if (!cards.length) return;
+
+  if (window.Lens) Lens.mount(holder);
 
   /* ---- drift ------------------------------------------------------------ */
 

@@ -34,6 +34,7 @@
   var index = -1;
   var lastFocus = null;
   var backdropNodes = [];
+  var unmountLenses = function () {};
 
   var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), ' +
                   'select:not([disabled]), textarea:not([disabled]), ' +
@@ -69,14 +70,15 @@
 
   /* ---- The challenge rectangle -------------------------------------------
      Each row reads left to right: what should happen → what actually
-     happens. The pictures and piles come from art.js.                        */
+     happens. The pictures and piles come from art.js; a side with `zoom`
+     shows a close-up of one of the hi-fi screens instead (lens.js).         */
 
   var PLUS = '<span class="flow__plus" aria-hidden="true">+</span>';
 
   function flowSide(side, cls) {
     return '<div class="flow__side flow__side--' + cls + '">' +
       '<div class="flow__art">' +
-        side.art.map(Art.pile).join(PLUS) +
+        (side.zoom ? Lens.html(side.zoom) : side.art.map(Art.pile).join(PLUS)) +
       '</div>' +
       '<p class="flow__cap">' + esc(side.caption) +
         (side.emoji
@@ -95,7 +97,8 @@
   function renderDiagram(d) {
     // The pictures are decorative. The captions carry the argument, and
     // `alt` fills in whatever only the pictures say.
-    return '<figure class="flow">' +
+    var zoom = d.rows.some(function (r) { return r.from.zoom || r.to.zoom; });
+    return '<figure class="flow' + (zoom ? ' flow--zoom' : '') + '">' +
       d.rows.map(function (r) {
         return '<div class="flow__row">' +
           flowSide(r.from, 'from') + ARROW + flowSide(r.to, 'to') +
@@ -256,6 +259,7 @@
     var it = items[i];
     var isArg = /argument/i.test(it.kind);
 
+    unmountLenses();
     body.innerHTML =
       '<p class="cs__kind' + (isArg ? ' cs__kind--argument' : '') + '">' +
         icon(isArg ? 'quote' : 'layers') + esc(it.kind) +
@@ -282,6 +286,8 @@
             '</button>'
           : '') +
       '</footer>';
+
+    unmountLenses = Lens.mount(body);
 
     elKind.textContent = it.kind;
     elIdx.textContent = i + 1;
@@ -363,6 +369,8 @@
 
     var done = function () {
       root.hidden = true;
+      unmountLenses();
+      unmountLenses = function () {};
       body.innerHTML = '';
       root.removeEventListener('transitionend', onEnd);
     };

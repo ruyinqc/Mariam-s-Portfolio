@@ -360,6 +360,114 @@
   }
 }
 
+/* ---- Lens: a close-up of a hi-fi screen, in place of a picture ----------
+   lens.js scales and moves the whole screen (.lens__canvas) so one part of
+   it fills the window, then draws the ring and the dimming (.lens__spot).  */
+/* the close-ups want the width more than the arrow does */
+@media (min-width: 641px) {
+  .flow--zoom .flow__row {
+    grid-template-columns: minmax(0, 1fr) minmax(2.5rem, 4.5rem) minmax(0, 1fr);
+  }
+}
+.flow--zoom .flow__art { width: 100%; }
+
+.lens {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  max-width: 27rem;
+  margin-inline: auto;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--r-md);
+  text-align: left;
+}
+.lens__view {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+.lens--bad {
+  background:
+    repeating-linear-gradient(135deg, transparent 0 14px, rgba(20,20,26,.025) 14px 15px),
+    var(--paper-sunk);
+  box-shadow: 0 0 0 1px var(--line), var(--sh-2);
+}
+.lens--good {
+  background:
+    radial-gradient(120% 80% at 100% 0%, rgba(217,242,75,.55), transparent 55%),
+    radial-gradient(90% 90% at 0% 100%, rgba(59,37,245,.22), transparent 60%),
+    var(--blue-wash);
+  box-shadow: 0 0 0 1px var(--blue-line), var(--sh-lift);
+}
+
+/* the screen keeps the width it was designed at, whatever the window does */
+.lens__canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 40rem;
+  container-type: inline-size;
+  transform-origin: 0 0;
+  pointer-events: none;
+}
+.lens.is-zooming .lens__canvas {
+  transition: transform 1.25s var(--ease);
+}
+/* the numbered markers belong to the full screens above, not to a close-up */
+.lens .mk-mark { display: none; }
+
+.lens__spot {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.45s ease 0.75s;
+  pointer-events: none;
+}
+.lens.is-zoomed .lens__spot { opacity: 1; }
+.lens__dim  { fill: rgba(255, 255, 255, .56); }
+.lens__halo { fill: none; stroke-width: 7; }
+.lens__ring { fill: none; stroke-width: 2; }
+.lens--bad  .lens__halo { stroke: rgba(194, 65, 12, .12); }
+.lens--bad  .lens__ring { stroke: var(--graphic-bad); stroke-dasharray: 6 4; }
+.lens--good .lens__halo { stroke: rgba(59, 37, 245, .14); }
+.lens--good .lens__ring { stroke: var(--blue); }
+
+.lens__tag {
+  position: absolute;
+  top: -0.7rem; left: 0.9rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.2rem 0.55rem 0.2rem 0.45rem;
+  border-radius: var(--r-pill);
+  background: rgba(255, 255, 255, .92);
+  box-shadow: 0 0 0 1px var(--line), var(--sh-1);
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.lens__loupe {
+  width: 0.8rem; height: 0.8rem;
+  fill: none;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+.lens--bad  .lens__loupe { stroke: var(--graphic-bad); }
+.lens--good .lens__loupe { stroke: var(--blue); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lens.is-zooming .lens__canvas,
+  .lens__spot { transition: none; }
+}
+
 /* ---- Why / How two-column ----------------------------------------------- */
 /* side by side, the two columns are centred on each other, so the plain Why
    text sits in the middle of the How panel's height rather than hanging off
