@@ -436,64 +436,157 @@
       <h2 class="section__title">Code first. <br><em>Then</em> craft.</h2>
       <p class="section__sub">Five years of building, three and a half of designing — in the same room as the engineers.</p>
     </header>
+  </div>
 
-    <div class="path__cols">
-      <ol class="timeline" aria-label="Work experience">
-        <li class="timeline__item timeline__item--now" data-reveal>
-          <span class="timeline__when">Sep 2025 — Present</span>
-          <h3 class="timeline__role">Product Designer</h3>
-          <p class="timeline__org">Ovarc · Maadi, Egypt</p>
-          <p class="timeline__note">End-to-end ownership across multiple products: discovery, research, journey mapping, hi-fi design, developer handoff.</p>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__when">Nov 2024 — May 2025</span>
-          <h3 class="timeline__role">UI/UX Designer</h3>
-          <p class="timeline__org">Loccamp · Giza, Egypt</p>
-          <p class="timeline__note">Admin dashboards and mobile apps for school systems; a recruitment platform end to end.</p>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__when">Mar 2024 — Nov 2024</span>
-          <h3 class="timeline__role">UI/UX Designer</h3>
-          <p class="timeline__org">Huawei Technologies · Cairo, Egypt</p>
-          <p class="timeline__note">Financial dashboards between Huawei and its partners. Adapted UI patterns to Chinese design sensibilities.</p>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__when">May 2022 — Mar 2024</span>
-          <h3 class="timeline__role">Software Engineer</h3>
-          <p class="timeline__org">Huawei Technologies · Cairo, Egypt</p>
-          <p class="timeline__note">Built the backend of an IT performance dashboard — APIs, validation and visualisation over large datasets.</p>
-        </li>
-        <li class="timeline__item" data-reveal>
-          <span class="timeline__when">Jul 2021 — Jun 2022</span>
-          <h3 class="timeline__role">Software Engineer Intern</h3>
-          <p class="timeline__org">Huawei Technologies · Cairo, Egypt</p>
-        </li>
-        <li class="timeline__item timeline__item--edu" data-reveal>
-          <span class="timeline__when">2016 — 2021</span>
-          <h3 class="timeline__role">B.Sc. Computer Science</h3>
-          <p class="timeline__org">Beijing Jiaotong University · Beijing, China</p>
-        </li>
-      </ol>
+  <!-- The path as a clothesline. line.js pins it while you scroll and turns
+       the scroll into sideways travel; it can also be dragged, swiped or
+       stepped with the arrows. Without JavaScript it is a plain row you can
+       scroll sideways, so nothing here depends on the script.
 
-      <aside class="path__side">
-        <div class="langs" data-reveal>
-          <h3 class="mini-title">Languages</h3>
-          <ul class="langs__list">
-            <li><span class="langs__code">AR</span> Arabic <small>Native</small></li>
-            <li><span class="langs__code">EN</span> English <small>Fluent</small></li>
-            <li><span class="langs__code">ZH</span> Chinese <small>Fluent</small></li>
-            <li><span class="langs__code langs__code--soft">ES</span> Spanish <small>A1.1</small></li>
-            <li><span class="langs__code langs__code--soft">HY</span> Armenian <small>Beginner</small></li>
-          </ul>
+       Newest on the left, ending at university. To change a photo, replace
+       the file in assets/img/path/ (any size, any shape — the sticker keeps
+       the height and follows the photo's own proportions).
+       --tilt is how crooked the sticker hangs, --drop how far its weight
+       pulls the rope down. -->
+  <div class="line" id="line">
+    <div class="line__pin" id="linePin">
+      <div class="line__view" id="lineView" tabindex="0" role="region"
+           aria-label="Work experience, newest first. Scroll sideways or use the arrow keys.">
+        <div class="line__track" id="lineTrack">
+          <svg class="line__rope" id="lineRope" aria-hidden="true" focusable="false"></svg>
+
+          <ol class="line__list" aria-label="Work experience">
+            <li class="hang hang--now" style="--tilt:-3deg; --drop:6px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/ovarc.webp" width="573" height="600" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam at Ovarc's exhibition stand, pointing to the onboarding flow on the screen beside her.">
+                <span class="hang__sticker hang__sticker--lime" aria-hidden="true">Now</span>
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">Sep 2025 — Present</span>
+                <h3 class="hang__role">Product Designer</h3>
+                <p class="hang__org">Ovarc · Maadi, Egypt</p>
+                <p class="hang__note">End-to-end ownership across multiple products: discovery, research, journey mapping, hi-fi design, developer handoff.</p>
+              </div>
+            </li>
+
+            <li class="hang" style="--tilt:2.5deg; --drop:26px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/loccamp.webp" width="600" height="529" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam's Figma canvas for SWAA-211, Edit &amp; Delete a Quiz: a row of mobile screens for the quiz flow.">
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">Nov 2024 — May 2025</span>
+                <h3 class="hang__role">UI/UX Designer</h3>
+                <p class="hang__org">Loccamp · Giza, Egypt</p>
+                <p class="hang__note">Admin dashboards and mobile apps for school systems; a recruitment platform end to end.</p>
+              </div>
+            </li>
+
+            <li class="hang" style="--tilt:-1.5deg; --drop:12px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/huawei-designer.webp" width="600" height="442" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam outside the Huawei office in Cairo, wearing her staff lanyard, with the Huawei logo on the glass above.">
+                <span class="hang__sticker hang__sticker--blue" aria-hidden="true">Code → Design</span>
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">Mar 2024 — Nov 2024</span>
+                <h3 class="hang__role">UI/UX Designer</h3>
+                <p class="hang__org">Huawei Technologies · Cairo, Egypt</p>
+                <p class="hang__note">Financial dashboards between Huawei and its partners. Adapted UI patterns to Chinese design sensibilities.</p>
+              </div>
+            </li>
+
+            <li class="hang" style="--tilt:3deg; --drop:30px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/huawei-engineer.webp" width="600" height="524" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam in the lobby of Huawei's regional office, holding a Huawei laptop.">
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">May 2022 — Mar 2024</span>
+                <h3 class="hang__role">Software Engineer</h3>
+                <p class="hang__org">Huawei Technologies · Cairo, Egypt</p>
+                <p class="hang__note">Built the backend of an IT performance dashboard — APIs, validation and visualisation over large datasets.</p>
+              </div>
+            </li>
+
+            <li class="hang" style="--tilt:-2.5deg; --drop:4px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/huawei-intern.webp" width="427" height="600" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam standing in front of the entrance to the Huawei office.">
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">Jul 2021 — Jun 2022</span>
+                <h3 class="hang__role">Software Engineer Intern</h3>
+                <p class="hang__org">Huawei Technologies · Cairo, Egypt</p>
+              </div>
+            </li>
+
+            <li class="hang hang--edu" style="--tilt:2deg; --drop:20px" data-reveal>
+              <figure class="hang__photo">
+                <span class="hang__peg" aria-hidden="true"></span>
+                <img src="assets/img/path/bjtu-graduation.webp" width="543" height="600" loading="lazy" decoding="async" draggable="false"
+                     alt="Mariam in her graduation cap and gown.">
+                <span class="hang__sticker hang__sticker--lime" aria-hidden="true">Class of 2021</span>
+              </figure>
+              <div class="hang__text">
+                <span class="hang__when">2016 — 2021</span>
+                <h3 class="hang__role">B.Sc. Computer Science</h3>
+                <p class="hang__org">Beijing Jiaotong University · Beijing, China</p>
+              </div>
+            </li>
+          </ol>
         </div>
+      </div>
 
-        <div class="relocate" data-reveal data-reveal-delay="1">
-          <h3 class="mini-title">Relocation</h3>
-          <p>Already lived and studied five years in <b>Beijing</b>. Moving countries for the
-          right product team is not a hypothetical for me — it's something I've done.</p>
-          <p class="relocate__status"><span class="status__dot" aria-hidden="true"></span> Open to relocation &amp; remote</p>
+      <div class="line__ctrl shell">
+        <p class="line__hint" id="lineHint">
+          <svg class="icon" aria-hidden="true"><use href="#i-cursor"/></svg>
+          <span>Scroll sideways to follow the line</span>
+        </p>
+        <div class="line__rail" aria-hidden="true">
+          <span>Now</span>
+          <span class="line__bar"><i id="lineBar"></i></span>
+          <span>2016</span>
         </div>
-      </aside>
+        <div class="line__steps" id="lineSteps" hidden>
+          <button class="line__step" type="button" id="linePrev" aria-controls="lineView">
+            <svg class="icon" aria-hidden="true"><use href="#i-prev"/></svg>
+            <span class="sr-only">Towards today</span>
+          </button>
+          <button class="line__step" type="button" id="lineNext" aria-controls="lineView">
+            <svg class="icon" aria-hidden="true"><use href="#i-next"/></svg>
+            <span class="sr-only">Further back</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="shell">
+    <div class="path__side">
+      <div class="langs" data-reveal>
+        <h3 class="mini-title">Languages</h3>
+        <ul class="langs__list">
+          <li><span class="langs__code">AR</span> Arabic <small>Native</small></li>
+          <li><span class="langs__code">EN</span> English <small>Fluent</small></li>
+          <li><span class="langs__code">ZH</span> Chinese <small>Fluent</small></li>
+          <li><span class="langs__code langs__code--soft">ES</span> Spanish <small>A1.1</small></li>
+          <li><span class="langs__code langs__code--soft">HY</span> Armenian <small>Beginner</small></li>
+        </ul>
+      </div>
+
+      <div class="relocate" data-reveal data-reveal-delay="1">
+        <h3 class="mini-title">Relocation</h3>
+        <p>Already lived and studied five years in <b>Beijing</b>. Moving countries for the
+        right product team is not a hypothetical for me — it's something I've done.</p>
+        <p class="relocate__status"><span class="status__dot" aria-hidden="true"></span> Open to relocation &amp; remote</p>
+      </div>
     </div>
   </div>
 </section>
@@ -710,6 +803,7 @@
 <script src="assets/js/motion.js"></script>
 <script src="assets/js/nav.js"></script>
 <script src="assets/js/board.js"></script>
+<script src="assets/js/line.js"></script>
 <script src="assets/js/reader.js"></script>
 <script src="assets/js/contact.js"></script>
 <script src="assets/js/app.js"></script>

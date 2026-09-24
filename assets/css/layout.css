@@ -293,42 +293,215 @@
    Path / experience
    ========================================================================== */
 
-.path__cols {
-  display: grid;
-  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
-  gap: clamp(2rem, 5vw, 5rem);
-  align-items: start;
-}
+/* ---- The clothesline ----------------------------------------------------
+   One long row of photos pegged to a rope. Without JavaScript it is a row
+   you scroll sideways. line.js adds .line--live, and .line--pinned when the
+   stage fits the screen: then the stage sticks and the page's own scroll
+   carries the row sideways. */
 
-@media (max-width: 860px) {
-  .path__cols { grid-template-columns: 1fr; }
-}
-
-.timeline { list-style: none; padding: 0; margin: 0; }
-
-.timeline__item {
+.line {
+  --hang-w:   clamp(14rem, 11.5rem + 5vw, 17rem);
+  --hang-gap: clamp(2.5rem, 1.5rem + 3vw, 4.5rem);
+  --ph:       clamp(140px, 25svh, 240px);   /* every photo is this tall   */
+  --clip:     16px;                          /* peg height above the photo */
+  --rope-room: 1.75rem;                      /* sag above the highest peg  */
+  --drop-max: 30px;                          /* the largest --drop below   */
   position: relative;
-  padding: 0 0 var(--s-7) var(--s-7);
-  border-left: 1px solid var(--line-strong);
 }
-.timeline__item:last-child { padding-bottom: 0; border-left-color: transparent; }
-.timeline__item::before {
+
+.line__pin {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-5);
+}
+.line--pinned .line__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  justify-content: center;
+  /* the floating nav sits over the top of the screen */
+  padding-block: clamp(4.5rem, 10vh, 6.5rem) var(--s-4);
+}
+
+.line__view {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+}
+.line__view:focus-visible { box-shadow: inset 0 0 0 2.5px var(--blue); border-radius: 0; }
+
+.line--live .line__view {
+  cursor: grab;
+  scrollbar-width: none;
+  -webkit-user-select: none;
+          user-select: none;
+}
+.line--live .line__view::-webkit-scrollbar { display: none; }
+/* Sideways swipes go to line.js; up and down, and pinch-zoom, stay the
+   browser's. Safari does not know pinch-zoom, so it keeps the first line. */
+.line--pinned .line__view {
+  overflow: hidden;
+  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
+}
+.line.is-dragging .line__view { cursor: grabbing; }
+
+.line__track {
+  position: relative;
+  width: max-content;
+  /* line the first photo up with the page's text column */
+  padding: var(--s-2) max(var(--gutter), calc((100% - var(--shell)) / 2 + var(--gutter))) var(--s-5);
+  will-change: transform;
+}
+/* A straight rope until line.js draws the real one. */
+.line__track::before {
   content: "";
   position: absolute;
-  left: -5px; top: 0.45rem;
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: var(--paper);
-  border: 2px solid var(--line-strong);
+  inset-inline: 0;
+  top: calc(var(--s-2) + var(--rope-room) + 1.25rem);
+  height: 2px;
+  background: var(--rope);
 }
-.timeline__item--now::before {
-  background: var(--blue);
-  border-color: var(--blue);
-  box-shadow: 0 0 0 5px var(--blue-wash);
-}
-.timeline__item--edu::before { border-radius: 2px; }
+.line--roped .line__track::before { content: none; }
 
-.timeline__when {
+.line__rope {
+  position: absolute;
+  left: 0; top: 0;
+  max-width: none;
+  overflow: visible;
+  pointer-events: none;
+}
+.line__cord {
+  fill: none;
+  stroke: var(--rope);
+  stroke-width: 2.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.line__twist {                       /* the lay of the twine */
+  fill: none;
+  stroke: rgba(255, 255, 255, .55);
+  stroke-width: 1;
+  stroke-dasharray: 2 4;
+  stroke-linecap: round;
+}
+.line__tack       { fill: var(--graphic); }
+.line__tack-shine { fill: rgba(255, 255, 255, .6); }
+
+.line__list {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hang-gap);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hang {
+  position: relative;
+  flex: none;
+  width: var(--hang-w);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(var(--rope-room) + var(--drop, 0px));
+}
+
+/* ---- The photo: a die-cut sticker, pegged at the top ------------------- */
+.hang__photo {
+  position: relative;
+  margin-top: var(--clip);
+  padding: 7px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow:
+    0 0 0 1px rgba(20, 20, 26, .05),
+    0 2px 4px rgba(20, 20, 26, .08),
+    0 16px 28px -12px rgba(20, 20, 26, .34);
+  /* it swings from the point where the rope runs through the peg */
+  transform-origin: 50% calc(7px - var(--clip));
+  transform: rotate(calc(var(--tilt, 0deg) + var(--swing, 0deg)));
+}
+.hang__photo img {
+  height: var(--ph);
+  width: auto;
+  max-width: none;
+  border-radius: 10px;
+  background: var(--paper-sunk);
+  -webkit-user-drag: none;
+}
+
+/* A clothespin: two jaws and a steel spring. */
+.hang__peg {
+  position: absolute;
+  z-index: 2;
+  left: 50%;
+  top: calc(var(--clip) * -1);
+  width: 12px;
+  height: 36px;
+  margin-left: -6px;
+  border-radius: 3px 3px 5px 5px;
+  background: linear-gradient(90deg, #6D5BFF, var(--blue) 42%, var(--blue-deep));
+  box-shadow: 0 3px 5px rgba(20, 20, 26, .3);
+}
+.hang__peg::before {
+  content: "";
+  position: absolute;
+  left: -2px; right: -2px;
+  top: 14px;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(#EEEFF4, #9A9DAA);
+  box-shadow: 0 1px 1px rgba(20, 20, 26, .3);
+}
+.hang__peg::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 3px; bottom: 3px;
+  width: 1px;
+  margin-left: -0.5px;
+  background: rgba(10, 6, 60, .4);
+}
+.hang--now .hang__peg {
+  background: linear-gradient(90deg, #EEFF8F, var(--lime) 45%, var(--lime-deep));
+}
+.hang--now .hang__peg::after { background: rgba(60, 70, 0, .35); }
+
+/* A smaller sticker stuck on the photo. */
+.hang__sticker {
+  position: absolute;
+  right: -12px;
+  bottom: 16px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  border: 3px solid #fff;
+  border-radius: 9px;
+  box-shadow: 0 3px 8px rgba(20, 20, 26, .22);
+  rotate: 7deg;
+}
+.hang__sticker--lime { background: var(--lime); }
+.hang__sticker--blue { background: var(--blue); color: #fff; rotate: -5deg; }
+
+/* ---- The words under each photo ---------------------------------------- */
+.hang__text {
+  align-self: stretch;
+  /* every caption starts on the same line, however far its photo dropped */
+  margin-top: calc(var(--s-5) + var(--drop-max) - var(--drop, 0px));
+}
+.hang__when {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   font-weight: 600;
@@ -336,17 +509,118 @@
   color: var(--muted);
   text-transform: uppercase;
 }
-.timeline__role { font-size: var(--t-h3); margin-top: var(--s-2); }
-.timeline__org { color: var(--blue); font-weight: 600; font-size: var(--t-small); }
-.timeline__note {
+.hang--now .hang__when::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--lime-deep);
+}
+.hang__role {
+  margin-top: var(--s-2);
+  font-size: 1.25rem;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+.hang__org {
+  margin-top: 2px;
+  color: var(--blue);
+  font-weight: 600;
+  font-size: var(--t-small);
+}
+.hang__note {
   margin-top: var(--s-3);
   font-size: var(--t-small);
   color: var(--muted);
-  max-width: 48ch;
 }
 
-.path__side { display: grid; gap: var(--s-5); position: sticky; top: 7rem; }
-@media (max-width: 860px) { .path__side { position: static; } }
+/* ---- Under the line: hint, progress, steppers --------------------------- */
+.line__ctrl {
+  display: flex;
+  align-items: center;
+  gap: var(--s-5);
+}
+.line__hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.line__hint .icon { color: var(--blue); fill: currentColor; }
+
+.line__rail {
+  flex: 1;
+  display: none;
+  align-items: center;
+  gap: var(--s-3);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.line--live .line__rail { display: flex; }
+.line__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--r-pill);
+  background: var(--line);
+  overflow: hidden;
+}
+.line__bar i {
+  display: block;
+  height: 100%;
+  background: var(--lime-deep);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+.line__steps { display: flex; gap: var(--s-2); }
+.line__steps[hidden] { display: none; }
+.line__step {
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1.5px solid var(--edge);
+  border-radius: 50%;
+  transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+.line__step:hover { border-color: var(--ink); }
+.line__step:focus-visible { border-radius: 50%; }
+.line__step[aria-disabled="true"] { opacity: .4; cursor: default; border-color: var(--edge); }
+
+/* Everything already fits on one screen: nothing to scroll, nothing to say. */
+.line--fits .line__ctrl { display: none; }
+
+@media (max-width: 880px) {
+  .line {
+    --hang-w: 15rem;
+    --hang-gap: 2.25rem;
+    --ph: clamp(128px, 20svh, 220px);
+  }
+  /* the nav is at the bottom of the screen now */
+  .line--pinned .line__pin { padding-block: var(--s-3) 6rem; gap: var(--s-4); }
+}
+@media (max-width: 560px) {
+  .line__hint { display: none; }
+}
+
+.path__side {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  gap: var(--s-5);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+/* the pinned stage already ends in its own breathing room */
+.line--pinned + .shell .path__side { margin-top: 0; }
 
 .langs, .relocate {
   padding: var(--s-5);
