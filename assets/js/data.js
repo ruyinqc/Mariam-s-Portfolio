@@ -40,7 +40,7 @@ window.WORK = [
 
   title: 'Invoices & Payments Module',
   standfirst:
-    'Ovarc customers were receiving several invoices a month and paying only the one that ' +
+    'Customers were receiving several invoices a month and paying only the one that ' +
     'scared them most. The ones who did try to pay in full often sent the wrong amount. ' +
     'I rebuilt the payment flow so that the right number is the obvious number.',
 
@@ -48,7 +48,8 @@ window.WORK = [
     'Role':     { value: 'Product Designer', note: 'End-to-end design' },
     'Timeline': { value: '2.5 weeks' },
     'Status':   { value: 'Shipped', note: 'In production since November 2025' },
-    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
+    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' },
+    'Outcome':  { value: '>90%', note: 'Completion rate' }
   },
 
   // shown full width right under the Role / Timeline / Status row
@@ -67,9 +68,8 @@ window.WORK = [
       num: '01',
       title: 'Where it started',
       body: [
-        'Ovarc bills its customers for several services at once — payroll, government ' +
-        'fees, service charges. Each one arrives as its own invoice. In theory a customer ' +
-        'opens the billing page and settles what is due. In practice, they did not.',
+        'In theory a customer opens the billing page and settles what is due. In practice, ' +
+        'they did not.',
 
         'Two behaviours showed up again and again: customers paid a single invoice and ' +
         'left the rest open, and customers who did pay in full transferred an amount that ' +
@@ -203,23 +203,6 @@ window.WORK = [
     {
       type: 'pull',
       text: 'People do not read a payment screen. They find a number and they send it.'
-    },
-
-    {
-      type: 'section',
-      num: '03',
-      title: 'What I would watch next',
-      body: [
-        'The redesign shipped in November 2025. The measures that matter are the ones ' +
-        'tied to the two behaviours it targeted: how many invoices get settled per ' +
-        'payment session, and how many payments arrive at an amount finance has to ' +
-        'correct by hand.',
-
-        'I would also want session recordings on the summary block specifically. The ' +
-        'hypothesis is that hierarchy fixed the wrong-amount problem — but hierarchy is ' +
-        'exactly the kind of fix that is easy to believe in and hard to prove without ' +
-        'watching someone use it.'
-      ]
     }
   ]
 },
@@ -283,10 +266,10 @@ window.WORK = [
       num: '02',
       title: 'Before and after',
       intro:
-        'Both screens are my own work. I designed the first version, then pressure-tested it ' +
-        'against what a founder actually has to do here, and the problems below are the ones ' +
-        'I found in it. The redesign keeps the same features, data and rules. What I changed ' +
-        'is how the pieces relate to each other, and that turned out to be the whole problem.',
+        'Both screens are my own work. I designed the first version, and the problems below ' +
+        'are the ones I found in it. The redesign keeps the same features, data and rules. ' +
+        'What I changed is how the pieces relate to each other, and that turned out to be ' +
+        'the whole problem.',
       before: {
         label: 'Before',
         kicker: 'My first version · two panels',
@@ -492,7 +475,7 @@ window.WORK = [
     'Format':     { value: 'UX argument' },
     'Context':    { value: 'Huawei Technologies', note: 'Financial dashboards · 2024' },
     'Background': { value: '5 years in China', note: 'B.Sc. in China' },
-    'Reading':    { value: '5 min' }
+    'Reading':    { value: '4 min' }
   },
 
   blocks: [
@@ -583,35 +566,21 @@ window.WORK = [
         'Put the two screens side by side and none of the differences are in the words. ' +
         'Four of them decide whether the dashboard feels right.',
 
-        '<b>Density reads as capability, not clutter.</b> The apps people in China use ' +
-        'every day, for payments, shopping, travel and public services, put dozens of entry ' +
-        'points on one screen, and people learn to scan dense screens fast. A dashboard ' +
-        'with eight rows and three big numbers does not read as calm there. It reads as a ' +
-        'tool that is hiding something, or one that is not finished. The Chinese screen ' +
-        'shows 14 customers across more than twenty columns, because that is what its ' +
-        'reader expects to take in at a glance.',
+        '<b>Density reads as capability, not clutter.</b> People in China scan dense apps ' +
+        'every day. A dashboard with three big numbers does not read as calm there. It ' +
+        'reads as unfinished.',
 
-        '<b>Hidden filters feel like missing features.</b> The Western screen uses progressive ' +
-        'disclosure: two dropdowns, and a Filters button for the rest. That keeps the page ' +
-        'quiet for someone asking one question at a time. The Chinese screen puts period, ' +
-        'region, industry, owner and dates on screen as chips. The filter bar doubles as a ' +
-        'summary of what the table is showing, and every change is one click, not a panel.',
+        '<b>Hidden filters feel like missing features.</b> Every filter sits on screen as a ' +
+        'chip, so the filter bar doubles as a summary of the table, and every change is ' +
+        'one click.',
 
-        '<b>Colour carries meaning before it carries style.</b> In China, red means up. ' +
-        'Stock tickers, sales reports and finance screens show gains in red and losses in ' +
-        'green, the reverse of the Western convention. A growth figure in green, the obvious ' +
-        'choice in the West, reads as a loss in China. Colour also does the grouping that ' +
-        'white space does on the Western screen: status, region and credit rating each get ' +
-        'their own colour, and every tab shows a count.',
+        '<b>Colour carries meaning before it carries style.</b> In China, red means up and ' +
+        'green means down, so a growth figure in green reads as a loss.',
 
         '<b>The data is expected to leave the screen.</b> Export Excel sits in the header, ' +
-        'not in a menu. The table ends with a page total, and the header shows the exact ' +
-        'time the data was last updated. Numbers on a screen like this usually end up in a ' +
-        'report, and the design treats exporting them as the main job, not an edge case.',
+        'not in a menu, because these numbers usually end up in a report.',
 
-        'None of this would come back from a translator. Every word on the Western screen ' +
-        'could be rendered perfectly in Chinese, and it would still feel like a product ' +
-        'built for somewhere else.'
+        'None of this would come back from a translator.'
       ]
     },
     {
@@ -675,7 +644,8 @@ window.WORK = [
     'open it and try it.',
 
   meta: {
-    'Role':     { value: 'Designer & builder' },
+    'Role':     { value: 'Designer & builder', note: 'Idea owner' },
+    'AI tool':  { value: 'Claude.ai' },
     'Projects': { value: '3', note: 'All live' },
     'Type':     { value: 'Freelance', note: 'All delivered' },
     'Status':   { value: 'Live' }
@@ -687,13 +657,17 @@ window.WORK = [
       num: '01',
       title: 'The projects',
       intro: 'Each link opens in a new tab.',
+      // `view` is a screenshot of the site as it is used: device 'mobile' or
+      // 'desktop'. A card without one shows its square `img` instead.
       items: [
         { name: 'Mirayti',          url: 'https://mirayti.vercel.app/',
-          img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'], tool: 'Claude' },
+          img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'] },
         { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/',
-          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'], tool: 'Claude' },
+          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'],
+          view: { src: 'assets/img/vibe/match-and-attack-desktop.webp', width: 800, height: 388, device: 'desktop' } },
         { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/',
-          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'], tool: 'Claude' }
+          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'],
+          view: { src: 'assets/img/vibe/sandra-alex-mobile.webp', width: 400, height: 599, device: 'mobile' } }
       ]
     }
   ]
@@ -735,11 +709,11 @@ window.WORK = [
     'Status':   { value: 'Concept', note: 'Prototype video' }
   },
 
-  // A vibe coding card under the meta row. The image is a placeholder:
-  // swap in a screenshot, and add `url` once there is a live link.
+  // A vibe coding card under the meta row. The picture is the app's logo,
+  // cropped from its loading screen. Add `url` once there is a live link.
   projects: [
-    { name: 'Journey Guide Tracker', img: 'assets/img/vibe/placeholder.svg',
-      badges: ['Vibe coding'], tool: 'claude.ai' }
+    { name: 'Journey Guide Tracker', img: 'assets/img/vibe/journey-guide-tracker.webp',
+      badges: ['Vibe coding'] }
   ],
 
   // the prototype walkthrough, shown full width under the meta row
@@ -808,13 +782,14 @@ window.WORK = [
           }
         },
         {
-          title: 'Follow the footprints',
-          text: 'A trail of footprints on the map shows the way. Here it heads for the ' +
-                '<b>Time Travelers’ Gallery</b>, with 20% of the visit done.',
+          title: 'On to the next stop',
+          text: 'Your next stop, the <b>Time Travelers’ Gallery</b>, comes into view on the ' +
+                'map, still <b>Not visited</b>, with 20% of the visit done.',
           image: {
             src: 'assets/img/work/journey-guide-step-4.webp', width: 418, height: 872,
-            alt: 'The map with a trail of footprints toward Time Travelers’ Gallery. The top ' +
-                 'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%.'
+            alt: 'The map with Time Travelers’ Gallery in view, flagged Not visited. The top ' +
+                 'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%. The card at ' +
+                 'the bottom shows Time Travelers’ Gallery: 9 min, Floor 1.'
           }
         },
         {

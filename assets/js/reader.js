@@ -300,18 +300,35 @@
 
   // A row of project cards. With a url the card opens it in a new tab;
   // without one (still being built) it is a plain card.
+  // When any project in the list has a `view` (a screenshot of the site on a
+  // phone or a desktop), the list becomes a gallery: every card shows its
+  // view, or its square `img`, on a stage above the text.
+  var DEVICE = { mobile: 'Mobile view', desktop: 'Desktop view' };
+
+  function projStage(it) {
+    var v = it.view || { src: it.img, width: 240, height: 240 };
+    return '<span class="proj__stage">' +
+      '<img class="proj__view" src="' + esc(v.src) + '" alt=""' +
+        ' width="' + v.width + '" height="' + v.height + '" loading="lazy" decoding="async">' +
+      (DEVICE[v.device] ? '<span class="proj__device">' + DEVICE[v.device] + '</span>' : '') +
+    '</span>';
+  }
+
   function renderProjects(list) {
-    return '<ul class="proj">' + list.map(function (it) {
+    var gallery = list.some(function (it) { return it.view; });
+    return '<ul class="proj' + (gallery ? ' proj--gallery' : '') + '">' + list.map(function (it) {
       var tag = it.url ? 'a' : 'div';
-      return '<li><' + tag + ' class="proj__link' + (it.img ? ' proj__link--img' : '') + '"' +
+      var media = it.view || it.img;
+      return '<li><' + tag + ' class="proj__link' +
+          (media ? (gallery ? ' proj__link--stage' : ' proj__link--img') : '') + '"' +
           (it.url ? ' href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer"' : '') + '>' +
-        (it.img ? '<img class="proj__img" src="' + esc(it.img) + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '') +
+        (media && gallery ? projStage(it) : '') +
+        (it.img && !gallery ? '<img class="proj__img" src="' + esc(it.img) + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '') +
         '<span class="proj__body">' +
           '<span class="proj__name">' + esc(it.name) + (it.url ? ' ' + icon('ext', 'icon--xs') : '') + '</span>' +
           (it.badges ? '<span class="proj__badges">' + it.badges.map(function (t) {
             return '<span class="proj__badge' + (/delivered/i.test(t) ? ' proj__badge--done' : '') + '">' + esc(t) + '</span>';
           }).join('') + '</span>' : '') +
-          (it.tool ? '<span class="proj__tool">Tool: <b>' + esc(it.tool) + '</b></span>' : '') +
           (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
           (it.url ? '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' : '') +
         '</span>' +

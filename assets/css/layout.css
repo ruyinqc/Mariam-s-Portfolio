@@ -13,6 +13,7 @@
 
 .section__head { max-width: 46ch; margin-bottom: clamp(2.5rem, 5vw, 4.5rem); }
 .section__head--tight { margin-bottom: var(--s-5); }
+.section__head--wide { max-width: none; }
 
 .section__title {
   font-size: var(--t-h2);
@@ -647,11 +648,15 @@
 
 .toolkit { padding-bottom: clamp(2rem, 1rem + 3vw, 3.5rem); }
 
+/* Flex rather than grid, so a group left alone on the last row (Method, on
+   a wide screen) spreads its chips across the rest of the width instead of
+   stacking them in one narrow column. */
 .toolkit__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: clamp(1.5rem, 3vw, 3rem);
 }
+.toolgroup { flex: 1 1 16rem; }
 .toolgroup__note {
   margin-top: var(--s-4);
   font-size: var(--t-small);
