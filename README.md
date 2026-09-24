@@ -192,6 +192,21 @@ and `note` adds a small line under it.
   items: [{ text: 'Museums', note: 'The prototype', accent: true }, 'City Tours'] }
 ```
 
+**`projects`** — cards that link out to live work, each opening in a new
+tab. `img` is a small square picture; `view` is a screenshot of the site as
+it is used, on a phone (`device: 'mobile'`) or a desktop (`'desktop'`). When
+any card in the list has a `view`, the list becomes a gallery: every card
+shows its view (or its `img`) on a stage, labelled *Mobile view* or *Desktop
+view*. Screenshots live in `assets/img/vibe/`.
+
+```js
+{ type: 'projects', num: '01', title: 'The projects',
+  items: [{ name: 'Sandra & Alex', url: 'https://…',
+            img: 'assets/img/vibe/sandra-alex.webp', badges: ['Freelance', 'Delivered'],
+            view: { src: 'assets/img/vibe/sandra-alex-mobile.webp',
+                    width: 400, height: 599, device: 'mobile' } }] }
+```
+
 ### Finishing a placeholder
 
 When a study is ready, change two things:

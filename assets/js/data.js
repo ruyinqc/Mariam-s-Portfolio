@@ -657,13 +657,17 @@ window.WORK = [
       num: '01',
       title: 'The projects',
       intro: 'Each link opens in a new tab.',
+      // `view` is a screenshot of the site as it is used: device 'mobile' or
+      // 'desktop'. A card without one shows its square `img` instead.
       items: [
         { name: 'Mirayti',          url: 'https://mirayti.vercel.app/',
           img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'], tool: 'Claude' },
         { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/',
-          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'], tool: 'Claude' },
+          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'], tool: 'Claude',
+          view: { src: 'assets/img/vibe/match-and-attack-desktop.webp', width: 800, height: 388, device: 'desktop' } },
         { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/',
-          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'], tool: 'Claude' }
+          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'], tool: 'Claude',
+          view: { src: 'assets/img/vibe/sandra-alex-mobile.webp', width: 400, height: 599, device: 'mobile' } }
       ]
     }
   ]
