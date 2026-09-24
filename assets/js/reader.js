@@ -111,17 +111,19 @@
     var out = '';
     if (c.text)   out += c.text.map(function (p) { return '<p>' + p + '</p>'; }).join('');
     if (c.points) out += '<ul>' + c.points.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>';
-    if (c.image) {
-      var im = c.image;
-      out += '<figure class="shot">' +
-        '<img src="' + esc(im.src) + '" alt="' + esc(im.alt || '') + '"' +
-          (im.width ? ' width="' + im.width + '" height="' + im.height + '"' : '') +
-          ' loading="lazy" decoding="async">' +
-        (im.caption ? '<figcaption>' + esc(im.caption) + '</figcaption>' : '') +
-      '</figure>';
-    }
     if (c.wireframe) out += renderWireframe(c.wireframe);
     return out;
+  }
+
+  /** A screenshot. `width`/`height` are the file's own pixels, so the page
+      keeps its place while the image loads. */
+  function renderShot(im, cls, lazy) {
+    return '<figure class="' + cls + '">' +
+      '<img src="' + esc(im.src) + '" alt="' + esc(im.alt || '') + '"' +
+        (im.width ? ' width="' + im.width + '" height="' + im.height + '"' : '') +
+        (lazy ? ' loading="lazy"' : '') + ' decoding="async">' +
+      (im.caption ? '<figcaption>' + esc(im.caption) + '</figcaption>' : '') +
+    '</figure>';
   }
 
   /* ---- Wireframe ------------------------------------------------------------
@@ -187,6 +189,8 @@
               '<h4>' + esc(b.how.title || 'How I worked on solving this?') + '</h4>' +
               renderCopy(b.how) +
             '</div>' +
+            // the screen gets the full width of the challenge, under both columns
+            (b.how.image ? renderShot(b.how.image, 'shot', true) : '') +
           '</div>' +
         '</section>';
 
@@ -236,6 +240,7 @@
         : '') +
 
       renderMeta(it.meta) +
+      (it.cover ? renderShot(it.cover, 'cs__cover', false) : '') +
       it.blocks.map(renderBlock).join('') +
 
       '<footer class="cs__foot">' +
