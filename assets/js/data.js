@@ -499,11 +499,14 @@ window.WORK = [
         'Both screens do the same job: track sales, and for every customer, how much they ' +
         'signed for, how much they have paid and how much is still left. The first is how ' +
         'I would design it for a Western or Egyptian team. The second is how the same ' +
-        'dashboard is expected to look in China.',
+        'dashboard is expected to look in China. <b>All the data on both screens is dummy ' +
+        'data</b>: the customers, names and numbers are made up, not real.',
       before: {
         label: 'Cairo',
         kicker: 'Modern Western UI · light · calm',
         screen: 'dash-cairo',
+        disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
+                    'dummy data, not real.',
         alt: 'A light, spacious sales dashboard: three headline cards for total sales, ' +
              'collected and still to collect, then a customer table with status tabs and ' +
              'filters. The table has more columns than fit, with a horizontal scrollbar under it.',
@@ -520,6 +523,8 @@ window.WORK = [
         label: 'Beijing',
         kicker: 'Asian-style UI · dark · dense',
         screen: 'dash-beijing',
+        disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
+                    'dummy data, not real.',
         alt: 'The same customer table in a dark, dense, colourful style: every filter shown as ' +
              'chips, colour-coded status tabs with counts, an Export Excel button, and a small-type ' +
              'table whose middle columns scroll sideways between a pinned customer column and a ' +
