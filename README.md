@@ -26,25 +26,20 @@ sending to you directly. That's the fallback. Messages are delivered by
 Resend key secret (a key in the page would be readable by anyone, and Resend
 refuses calls from browsers anyway). Both are free at this volume.
 
-**1. Resend** — use the existing Resend account (the one signed up with
-`ruyinqc@gmail.com`). Nothing already set up there needs to change: go to
-**API Keys → Create API Key** (permission: *Sending access*, name it
-`portfolio`) and copy it. A new key sits alongside the old ones, so whatever
-else already sends through this account keeps working, and you can revoke this
-one on its own later.
+**1. Resend** — sign up at **https://resend.com** with `marmaremad31@gmail.com`,
+then **API Keys → Create API Key** (permission: *Sending access*). Copy it.
 
 **2. The Worker** — at **https://dash.cloudflare.com** go to
 **Workers & Pages → Create → Create Worker**, name it `portfolio-contact`,
 deploy the starter, then **Edit code**, replace everything with the contents of
-`worker/contact.js`, and **Deploy**. This is a new Worker of its own, so
-anything you already have running is left untouched.
+`worker/contact.js`, and **Deploy**.
 
 **3. Its settings** — on the Worker, **Settings → Variables and Secrets**, add:
 
 | Name | Type | Value |
 | --- | --- | --- |
 | `RESEND_API_KEY` | Secret | the key from step 1 |
-| `TO_EMAIL` | Text | `ruyinqc@gmail.com` |
+| `TO_EMAIL` | Text | `marmaremad31@gmail.com` |
 | `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,http://localhost:8080` |
 | `FROM_EMAIL` | Text | optional — see below |
 
@@ -59,12 +54,10 @@ That's it. Messages arrive with the sender's address in the reply-to, so you
 can just hit reply.
 
 **About `FROM_EMAIL`.** Left empty, mail comes from Resend's test sender,
-`onboarding@resend.dev`, which can only deliver to the address the Resend
-account signed up with — that's why `TO_EMAIL` is `ruyinqc@gmail.com`. Once
-you own a domain, verify it in Resend (**Domains → Add Domain**), set
-`FROM_EMAIL` to something like `Mariam's Portfolio <hello@yourdomain.com>`,
-and `TO_EMAIL` can then list more than one address, comma-separated, e.g.
-`ruyinqc@gmail.com,marmaremad31@gmail.com`.
+`onboarding@resend.dev`, which can only deliver to the address your Resend
+account signed up with — fine while `TO_EMAIL` is that same address. Once you
+own a domain, verify it in Resend (**Domains → Add Domain**) and set
+`FROM_EMAIL` to something like `Portfolio <hello@yourdomain.com>`.
 
 **If you move domains**, add the new address to `ALLOWED_ORIGINS`, or the
 Worker will refuse posts from it.
