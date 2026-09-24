@@ -719,6 +719,7 @@
   grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   gap: var(--s-4);
   margin-top: var(--s-5);
+  padding: 0;
 }
 .outcome li {
   list-style: none;
@@ -735,6 +736,8 @@
   color: var(--lime);
 }
 .outcome span { display: block; margin-top: var(--s-2); font-size: var(--t-small); opacity: .82; }
+/* a single result stays tile-sized instead of stretching into a banner */
+.outcome li:only-child { max-width: 20rem; }
 
 /* ---- Draft banner ------------------------------------------------------- */
 .cs__draft {

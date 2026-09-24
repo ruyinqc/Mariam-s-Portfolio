@@ -56,7 +56,7 @@ A minimal one looks like this:
   published: true,               // false hides the card completely
   status: 'live',                // 'live' → "Shipped" pill · 'draft' → "In progress"
 
-  card: {                        // what shows on the pin board
+  card: {                        // what shows on the work card
     title: 'My Project',
     sub: 'One sentence a recruiter can understand at a glance.',
     tags: ['Fintech'],           // only the first one is shown
@@ -356,7 +356,7 @@ assets/
     tokens.css           colour, type, space, motion — change the design here
     base.css             reset, focus rings, the reveal mechanism
     layout.css           shell, hero, the clothesline, contact, footer
-    components.css       nav, buttons, pin board, quotes, chips, form
+    components.css       nav, buttons, work cards, quotes, chips, form
     reader.css           the case-study overlay
   js/
     config.js            ← yours
@@ -366,7 +366,7 @@ assets/
     lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
-    board.js             pin cards, drift, tilt, the string between pins
+    board.js             the work cards (the 3-column grid is CSS)
     line.js              the clothesline: pinning, drag, the swing, the rope
     reader.js            the overlay: routing, prev/next, focus trap
     contact.js           validation and delivery
@@ -416,6 +416,6 @@ simply complete rather than blank.
 
 **Motion is genuinely optional.** `prefers-reduced-motion: reduce` sets
 `--motion: 0`, stops the animation loop, drops the parallax, and freezes the
-card drift and the swing of the photos on the clothesline. The clothesline
-still follows the scroll, because that is the visitor's own hand moving it. The static tilt on the cards stays, because it's a layout choice
-rather than movement. Nothing is ever hidden behind an animation.
+swing of the photos on the clothesline. The clothesline still follows the
+scroll, because that is the visitor's own hand moving it. Nothing is ever
+hidden behind an animation.

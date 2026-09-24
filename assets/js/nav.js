@@ -60,7 +60,7 @@
   /* Which section is the reader actually looking at? Use the one whose top
      is closest to just under the nav, rather than whatever happens to be
      intersecting — with sections this tall, several always are. */
-  var sections = ['work', 'words', 'path', 'toolkit', 'proof']
+  var sections = ['path', 'work', 'words', 'toolkit', 'proof']
     .map(function (id) { return document.getElementById(id); })
     .filter(Boolean);
 
