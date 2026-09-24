@@ -234,6 +234,20 @@
       case 'note':
         return '<p class="cs__note">' + b.text + '</p>';
 
+      case 'projects':
+        // Live things built elsewhere — each one opens in a new tab.
+        return '<section class="cs__section">' +
+          '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
+          (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
+          '<ul class="proj">' + b.items.map(function (it) {
+            return '<li><a class="proj__link" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">' +
+              '<span class="proj__name">' + esc(it.name) + ' ' + icon('ext', 'icon--xs') + '</span>' +
+              (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
+              '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' +
+            '</a></li>';
+          }).join('') + '</ul>' +
+        '</section>';
+
       case 'outcome':
         return '<section class="cs__section">' +
           '<h3 class="cs__h"><span>' + esc(b.num || '') + '</span>' + esc(b.title || 'Outcome') + '</h3>' +

@@ -177,7 +177,6 @@
   <symbol id="i-happy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="currentColor" opacity=".12"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8.2 13.6c.9 1.5 2.2 2.3 3.8 2.3s2.9-.8 3.8-2.3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="9.2" cy="9.8" r="1.05" fill="currentColor"/><circle cx="14.8" cy="9.8" r="1.05" fill="currentColor"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9.2" fill="currentColor" opacity=".14"/><circle cx="12" cy="12" r="9.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m8 12.2 2.8 2.8L16.2 9.6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
   <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.6 21.4 20H2.6z" fill="currentColor" opacity=".14"/><path d="M12 3.6 21.4 20H2.6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M12 9.6v4.2" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.15" fill="currentColor"/></symbol>
-  <symbol id="i-scroll" viewBox="0 0 24 24"><rect x="7.4" y="2.6" width="9.2" height="18.8" rx="4.6" fill="currentColor" opacity=".12"/><rect x="7.4" y="2.6" width="9.2" height="18.8" rx="4.6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 6.6v3.4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></symbol>
   <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2.9 9 5.1-9 5.1-9-5.1z" fill="currentColor" opacity=".16"/><path d="m12 2.9 9 5.1-9 5.1-9-5.1zM3 12.4l9 5.1 9-5.1M3 16.5l9 5.1 9-5.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></symbol>
   <symbol id="i-cursor" viewBox="0 0 24 24"><path d="m5 3 14.5 7.8-6.3 1.6-2.3 6.2z" fill="currentColor"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15.5m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
@@ -292,9 +291,6 @@
     </figure>
   </div>
 
-  <a class="hero__scroll" href="#pitch" aria-label="Scroll to next section">
-    <svg class="icon" aria-hidden="true"><use href="#i-scroll"/></svg>
-  </a>
 </section>
 
 <!-- ============ PITCH STRIP ============ -->
@@ -326,8 +322,8 @@
       <p class="eyebrow"><span>01</span> Selected work</p>
       <h2 class="section__title">What I <em>Can</em> <br>Help&nbsp;with:</h2>
       <p class="section__sub">
-        Two case studies and one argument. Pick one — it opens right here,
-        and you can move between them with the arrows.
+        Case studies, an argument and the things I build for fun. Pick one — it
+        opens right here, and you can move between them with the arrows.
       </p>
     </header>
   </div>
@@ -672,7 +668,14 @@
     <div class="contact__copy">
       <header class="section__head section__head--tight" data-reveal>
         <p class="eyebrow eyebrow--invert"><span>06</span> Contact</p>
-        <h2 class="section__title section__title--invert">Let's talk <br>about <em>your</em> product.</h2>
+        <div class="contact__title-row">
+          <h2 class="section__title section__title--invert">Let's talk <br>about <em>your</em> product.</h2>
+          <picture class="contact__photo-wrap">
+            <source srcset="assets/img/mariam-wave.webp" type="image/webp">
+            <img class="contact__photo" src="assets/img/mariam-wave.png" width="720" height="872"
+                 alt="" loading="lazy" decoding="async" aria-hidden="true">
+          </picture>
+        </div>
       </header>
 
       <p class="contact__lede" data-reveal data-reveal-delay="1">
@@ -686,12 +689,6 @@
         <li><a href="https://www.instagram.com/ruyi_nqc/" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true"><use href="#i-instagram"/></svg> Instagram <svg class="icon icon--xs" aria-hidden="true"><use href="#i-ext"/></svg></a></li>
         <li><a href="assets/cv/Mariam-Emad-Nabih-Product-Designer-CV.pdf" download><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg> Download CV (PDF)</a></li>
       </ul>
-
-      <picture>
-        <source srcset="assets/img/mariam-wave.webp" type="image/webp">
-        <img class="contact__photo" src="assets/img/mariam-wave.png" width="720" height="872"
-             alt="" loading="lazy" decoding="async" aria-hidden="true">
-      </picture>
     </div>
 
     <form class="form" id="contactForm" novalidate>

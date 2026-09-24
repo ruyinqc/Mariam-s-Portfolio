@@ -571,6 +571,116 @@ window.WORK = [
       ]
     }
   ]
+},
+
+/* ==========================================================================
+   4 — VIBE CODING  (side projects, links out)
+   --------------------------------------------------------------------------
+   Mariam: the `text` line under each project is yours to fill in — one
+   sentence on what it is and what you used to build it.
+   ========================================================================== */
+{
+  slug: 'vibe-coding',
+  kind: 'Vibe coding',
+  published: true,
+  status: 'live',
+
+  card: {
+    title: 'Vibe Coding Projects',
+    sub: 'Three things I designed and built myself, end to end, with AI as my pair programmer.',
+    tags: [],
+    thumb: {
+      left:  { icon: 'doc', count: 3 },
+      right: { icon: 'layers', count: 1 },
+      tone: 'blue'
+    }
+  },
+
+  title: 'Vibe Coding Projects',
+  standfirst:
+    'Designing a product and shipping one are different skills. These are projects I took ' +
+    'from idea to a live link myself, building with AI tools. Each one is live, so you can ' +
+    'open it and try it.',
+
+  meta: {
+    'Role':     { value: 'Designer & builder' },
+    'Projects': { value: '3', note: 'All live' },
+    'Status':   { value: 'Live' }
+  },
+
+  blocks: [
+    {
+      type: 'projects',
+      num: '01',
+      title: 'The projects',
+      intro: 'Each link opens in a new tab.',
+      items: [
+        { name: 'Mirayti',          url: 'https://mirayti.vercel.app/' },
+        { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/' },
+        { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/' }
+      ]
+    }
+  ]
+},
+
+/* ==========================================================================
+   5 — JOURNEY GUIDE TRACKER  (tourism UI/UX project, from Behance)
+   --------------------------------------------------------------------------
+   ⚠️ Mariam: paste the project text from Behance into the TODO sections
+   below, then switch `status` to 'live' and delete `draft: true`.
+   ========================================================================== */
+{
+  slug: 'journey-guide-tracker',
+  kind: 'Case study',
+  published: true,
+  status: 'draft',
+  draft: true,
+
+  card: {
+    title: 'Journey Guide Tracker',
+    sub: 'A UI/UX project for tourism: keeping travellers and their guides on the same route.',
+    tags: ['Tourism'],
+    thumb: {
+      left:  { icon: 'alert', count: 3 },
+      right: { icon: 'check', count: 1 },
+      tone: 'lime'
+    }
+  },
+
+  title: 'Journey Guide Tracker',
+  standfirst:
+    'A UI/UX project for the tourism industry. The full project, with every screen, is on ' +
+    'Behance.',
+
+  meta: {
+    'Role':     { value: 'UI/UX Designer' },
+    'Industry': { value: 'Tourism' },
+    'Status':   { value: 'In progress', note: 'Write-up coming' }
+  },
+
+  blocks: [
+    {
+      type: 'projects',
+      num: '01',
+      title: 'See the full project',
+      items: [
+        { name: 'Journey Guide Tracker on Behance',
+          url: 'https://www.behance.net/gallery/232930537/Journey-Gide-Tracker-UIUX-Project-Tourism' }
+      ]
+    },
+    {
+      type: 'section',
+      num: '02',
+      title: 'The problem',
+      body: ['TODO — paste the problem statement from Behance.']
+    },
+    {
+      type: 'section',
+      num: '03',
+      title: 'The solution',
+      body: ['TODO — paste the solution and key screens from Behance.']
+    }
+  ]
 }
 
 ];
