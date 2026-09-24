@@ -605,6 +605,7 @@ window.WORK = [
   meta: {
     'Role':     { value: 'Designer & builder' },
     'Projects': { value: '3', note: 'All live' },
+    'Type':     { value: 'Freelance', note: 'All delivered' },
     'Status':   { value: 'Live' }
   },
 
@@ -615,9 +616,12 @@ window.WORK = [
       title: 'The projects',
       intro: 'Each link opens in a new tab.',
       items: [
-        { name: 'Mirayti',          url: 'https://mirayti.vercel.app/' },
-        { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/' },
-        { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/' }
+        { name: 'Mirayti',          url: 'https://mirayti.vercel.app/',
+          img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'] },
+        { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/',
+          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'] },
+        { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/',
+          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'] }
       ]
     }
   ]

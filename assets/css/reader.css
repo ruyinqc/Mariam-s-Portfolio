@@ -267,6 +267,35 @@
   transition: border-color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
 }
 .proj__link:hover { border-color: var(--blue); background: var(--blue-wash); }
+.proj__link--img {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--s-4);
+  padding: var(--s-3) var(--s-4);
+}
+.proj__img {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--line-strong);
+  background: var(--blue-wash);
+}
+.proj__body { display: grid; gap: var(--s-1); min-width: 0; }
+.proj__badges { display: flex; flex-wrap: wrap; gap: var(--s-1); }
+.proj__badge {
+  padding: 0.1rem 0.55rem;
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line-strong);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+.proj__badge--done {
+  border-color: var(--lime-deep);
+  background: var(--lime-wash);
+  color: var(--ink);
+}
 .proj__name { font-weight: 700; }
 .proj__name .icon { color: var(--blue); }
 .proj__text { font-size: var(--t-small); color: var(--ink-soft); }
