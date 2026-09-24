@@ -5,15 +5,16 @@ open `index.html` and it works. Deploys by copying the folder.
 
 ---
 
-## The two files you edit
+## The files you edit
 
-Everything you'd normally want to change lives in two places. You don't need
-to touch anything else.
+Everything you'd normally want to change lives in these three places. You
+don't need to touch anything else.
 
 | File | What's in it |
 |---|---|
 | `assets/js/config.js` | Contact-form key, your links, the certificate list |
 | `assets/js/data.js` | Every word of every case study |
+| `index.html` → *EXPERIENCE* | Your roles on the clothesline, and their photos |
 
 ---
 
@@ -163,7 +164,44 @@ draft: true,       →   (delete this line)
 
 ---
 
-## 3. Two things worth fixing in your content
+## 3. The clothesline (your experience)
+
+The *Path* section is a rope with a photo pegged on for each stop, newest on
+the left, ending at university. Scrolling down the page carries it sideways
+while it is on screen; visitors can also drag it, swipe it, use the arrow
+buttons under it, or the arrow keys.
+
+**The words** are in `index.html` — search for `EXPERIENCE`. Each stop is one
+`<li class="hang">` with the dates, role, company and a one-line note.
+
+**The photos** are in `assets/img/path/`, one per stop:
+
+| File | Stop |
+|---|---|
+| `ovarc.webp` | Product Designer, Ovarc |
+| `loccamp.webp` | UI/UX Designer, Loccamp |
+| `huawei-designer.webp` | UI/UX Designer, Huawei |
+| `huawei-engineer.webp` | Software Engineer, Huawei |
+| `huawei-intern.webp` | Software Engineer Intern, Huawei |
+| `bjtu-graduation.webp` | B.Sc., Beijing Jiaotong University |
+
+To change one, overwrite the file with the same name. Any shape works: every
+photo is shown at the same height and keeps its own proportions. Crop so that
+whatever says *where* you were — a logo, a sign, the cap — stays in frame.
+If the new photo is a different shape, update its `width` and `height` in
+the `<img>` so nothing jumps while it loads.
+
+Two small settings on each `<li>`: `--tilt` is how crooked the photo hangs,
+`--drop` is how far its weight pulls the rope down (0–30px). The little
+stickers on the photos (*Now*, *Code → Design*, *Class of 2021*) are the
+`hang__sticker` lines — delete one to remove it.
+
+On a screen too short to hold the whole line (a phone on its side), it stops
+pinning and becomes a row you swipe sideways instead.
+
+---
+
+## 4. Two things worth fixing in your content
 
 **Your certificate links.** Your CV gives the *same* Coursera URL for three
 different certificates — CalArts Graphic Design, Google UX, and Udacity
@@ -267,8 +305,9 @@ node tools/check.js
 ```
 
 Drives a real browser: keyboard access, focus trapping in the reader, the
-contact form's success *and* failure paths, four screen widths, reduced motion,
-and the page with JavaScript switched off. 52 checks.
+contact form's success *and* failure paths, the clothesline (scroll, drag,
+arrows), four screen widths, reduced motion, and the page with JavaScript
+switched off. 58 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -297,7 +336,7 @@ assets/
     fonts.css            self-hosted @font-face (generated)
     tokens.css           colour, type, space, motion — change the design here
     base.css             reset, focus rings, the reveal mechanism
-    layout.css           shell, hero, experience, contact, footer
+    layout.css           shell, hero, the clothesline, contact, footer
     components.css       nav, buttons, pin board, quotes, chips, form
     reader.css           the case-study overlay
   js/
@@ -307,6 +346,7 @@ assets/
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
     board.js             pin cards, drift, tilt, the string between pins
+    line.js              the clothesline: pinning, drag, the swing, the rope
     reader.js            the overlay: routing, prev/next, focus trap
     contact.js           validation and delivery
     app.js               bootstrap
@@ -314,6 +354,7 @@ assets/
   img/                   photography + og-cover.png (the social card)
     art/                 pictures for the challenge diagrams — swap freely
     work/                screenshots used inside case studies
+    path/                one photo per stop on the clothesline
     people/              testimonial photos. Mohamed Wael's card is a
                          placeholder: the comment next to "MW" in index.html
                          says what to add when his words and photo arrive
@@ -322,7 +363,7 @@ robots.txt               crawl rules + sitemap pointer
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               52 browser checks (accessibility, reader, form)
+  check.js               58 browser checks (accessibility, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   fetch-fonts.sh         re-downloads the webfonts
@@ -354,5 +395,6 @@ simply complete rather than blank.
 
 **Motion is genuinely optional.** `prefers-reduced-motion: reduce` sets
 `--motion: 0`, stops the animation loop, drops the parallax, and freezes the
-card drift. The static tilt on the cards stays, because it's a layout choice
+card drift and the swing of the photos on the clothesline. The clothesline
+still follows the scroll, because that is the visitor's own hand moving it. The static tilt on the cards stays, because it's a layout choice
 rather than movement. Nothing is ever hidden behind an animation.

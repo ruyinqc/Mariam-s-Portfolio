@@ -87,6 +87,43 @@ async function run() {
     s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
   check('no horizontal overflow at 1440', overflow.s <= overflow.c);
 
+  /* ------------------------------------------------------------------
+     The path: a clothesline the page's own scroll carries sideways
+     ------------------------------------------------------------------ */
+  const rowX = () => page.evaluate(() => {
+    const m = /translate3d\((-?[\d.]+)px/.exec(document.getElementById('lineTrack').style.transform);
+    return m ? -parseFloat(m[1]) : 0;
+  });
+  const pinned = await page.evaluate(() => {
+    const l = document.getElementById('line');
+    document.documentElement.style.scrollBehavior = 'auto';
+    scrollTo(0, l.getBoundingClientRect().top + scrollY);
+    return l.classList.contains('line--pinned');
+  });
+  await page.waitForTimeout(700);
+  check('the path is pinned while it is on screen', pinned);
+
+  const x0 = await rowX();
+  await page.mouse.move(720, 450);
+  await page.mouse.wheel(0, 300);
+  await page.waitForTimeout(900);
+  const x1 = await rowX();
+  check('scrolling down moves the path sideways', x1 - x0 > 200, `${x0} → ${x1}`);
+
+  await page.mouse.move(900, 450);
+  await page.mouse.down();
+  for (let i = 1; i <= 8; i++) { await page.mouse.move(900 + i * 25, 450); await page.waitForTimeout(16); }
+  await page.mouse.up();
+  await page.waitForTimeout(900);
+  const x2 = await rowX();
+  check('dragging moves the path', x1 - x2 > 150, `${x1} → ${x2}`);
+
+  await page.click('#lineNext');
+  await page.waitForTimeout(1000);
+  const x3 = await rowX();
+  check('the arrow buttons step along the path', x3 - x2 > 20, `${x2} → ${x3}`);
+  await page.evaluate(() => { scrollTo(0, 0); document.documentElement.style.scrollBehavior = ''; });
+
   /* ==================================================================
      2 — The reader dialog
      ================================================================== */
@@ -283,7 +320,7 @@ async function run() {
   await page.waitForTimeout(1100);
 
   const rm = await page.evaluate(() => {
-    window.__snap = () => [...document.querySelectorAll('[data-parallax], .pincard')]
+    window.__snap = () => [...document.querySelectorAll('[data-parallax], .pincard, .hang__photo')]
       .map(e => getComputedStyle(e).transform);
     window.__first = window.__snap();
     return {
@@ -324,6 +361,13 @@ async function run() {
     await page.isVisible('.hero__name') && await page.isVisible('.hero__cta'));
   check('the page still says who she is with JavaScript off',
     text.includes('Mariam') && text.includes('Open to relocation'));
+  const row = await page.evaluate(() => {
+    const v = document.getElementById('lineView');
+    return { sw: v.scrollWidth, cw: v.clientWidth, ox: getComputedStyle(v).overflowX };
+  });
+  check('the path still lists every stop with JavaScript off',
+    ['Product Designer', 'Software Engineer Intern', 'B.Sc. Computer Science'].every(t => text.includes(t)));
+  check('…and scrolls sideways on its own', row.ox === 'auto' && row.sw > row.cw, JSON.stringify(row));
   await ctx.close();
 
   await browser.close();
