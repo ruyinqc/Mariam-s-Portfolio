@@ -433,6 +433,37 @@
   .board__strings { display: none; }
 }
 
+/* ==========================================================================
+   Illustrations (assets/img/art/) and how copies of one pile up — built by
+   art.js, used by the challenge diagrams and the card thumbnails. Set --k on
+   a parent to scale every picture inside it at once.
+   ========================================================================== */
+.pile {
+  position: relative;
+  display: block;
+  flex: none;
+  width:  calc(var(--w) * var(--aw));
+  height: calc(var(--h) * var(--ah));
+}
+.pile__item {
+  position: absolute;
+  left: calc(var(--x) * var(--aw));
+  top:  calc(var(--y) * var(--ah));
+  width: var(--aw);
+  height: var(--ah);
+}
+.pile__item img,
+.pile__item .icon { display: block; width: 100%; height: 100%; }
+
+/* each picture's height, and its width from the file's own proportions.
+   Anything not listed falls back to a 4rem square. */
+.pile               { --ah: calc(4rem * var(--k, 1)); --aw: var(--ah); }
+.art--invoice       { --ah: calc(4.5rem * var(--k, 1)); --aw: calc(var(--ah) * 73 / 92); }
+.art--coins         { --ah: calc(3.4rem * var(--k, 1)); --aw: calc(var(--ah) * 66 / 47); }
+.art--wallet        { --ah: calc(4.5rem * var(--k, 1)); --aw: calc(var(--ah) * 70 / 64); }
+.art--support-agent { --ah: calc(7.2rem * var(--k, 1)); --aw: calc(var(--ah) * 117 / 157); }
+.art--icon          { --ah: calc(2.4rem * var(--k, 1)); --aw: var(--ah); color: var(--graphic); }
+
 /* ---- Mini diagrams used as card thumbnails ------------------------------ */
 .mini {
   display: flex;
@@ -445,6 +476,7 @@
 }
 .mini__cluster { display: flex; flex-wrap: wrap; gap: 0.3rem; max-width: 5.2rem; justify-content: center; }
 .mini__cluster .icon { width: 1.5rem; height: 1.5rem; }
+.mini__cluster--art { max-width: none; --k: 0.6; }
 .mini__arrow { color: var(--graphic); }
 .mini__arrow .icon { width: 1.6rem; height: 1.6rem; }
 .mini--lime { color: var(--lime-deep); }

@@ -41,6 +41,9 @@
      --graphic instead, both of which clear 3:1. */
   --line:       #E3DFD7;
   --line-strong:#CFC9BD;
+  --wire:       #E9E6E0;     /* wireframe bars — ink-soft on top is 9.0:1   */
+  --rose-line:  #F2D3D8;     /* the challenge rectangle's outline, from      */
+                             /* Mariam's own layout — decorative only        */
   --edge:       #83838D;     /* 3.4:1 on paper — control borders             */
   --graphic:    #5A5A66;     /* 6.2:1 on paper — arrows, operators, marks    */
   --graphic-bad:#C2410C;     /* 5.2:1 on white — the "before" state          */

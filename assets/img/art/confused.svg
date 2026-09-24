@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Confused face — the 😕 in "User pays only 1". -->
+  <defs>
+    <radialGradient id="cf-face" cx=".4" cy=".3" r=".8">
+      <stop offset="0" stop-color="#FFE36A"/>
+      <stop offset=".6" stop-color="#FFC928"/>
+      <stop offset="1" stop-color="#F5A80E"/>
+    </radialGradient>
+  </defs>
+  <circle cx="16" cy="16" r="14.5" fill="url(#cf-face)"/>
+  <ellipse cx="11.3" cy="13.2" rx="1.75" ry="2.5" fill="#5B3A16"/>
+  <ellipse cx="20.7" cy="13.2" rx="1.75" ry="2.5" fill="#5B3A16"/>
+  <path d="M10.6 22.8c3.4-.3 7-1.3 10.6-2.9" fill="none" stroke="#5B3A16" stroke-width="2" stroke-linecap="round"/>
+</svg>
