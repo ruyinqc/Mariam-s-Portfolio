@@ -254,20 +254,7 @@
         return '<section class="cs__section">' +
           '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
           (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
-          '<ul class="proj">' + b.items.map(function (it) {
-            return '<li><a class="proj__link' + (it.img ? ' proj__link--img' : '') + '" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">' +
-              (it.img ? '<img class="proj__img" src="' + esc(it.img) + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '') +
-              '<span class="proj__body">' +
-                '<span class="proj__name">' + esc(it.name) + ' ' + icon('ext', 'icon--xs') + '</span>' +
-                (it.badges ? '<span class="proj__badges">' + it.badges.map(function (t) {
-                  return '<span class="proj__badge' + (/delivered/i.test(t) ? ' proj__badge--done' : '') + '">' + esc(t) + '</span>';
-                }).join('') + '</span>' : '') +
-                (it.tool ? '<span class="proj__tool">Tool: <b>' + esc(it.tool) + '</b></span>' : '') +
-                (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
-                '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' +
-              '</span>' +
-            '</a></li>';
-          }).join('') + '</ul>' +
+          renderProjects(b.items) +
         '</section>';
 
       case 'steps':
@@ -311,6 +298,27 @@
     }
   }
 
+  // A row of project cards. With a url the card opens it in a new tab;
+  // without one (still being built) it is a plain card.
+  function renderProjects(list) {
+    return '<ul class="proj">' + list.map(function (it) {
+      var tag = it.url ? 'a' : 'div';
+      return '<li><' + tag + ' class="proj__link' + (it.img ? ' proj__link--img' : '') + '"' +
+          (it.url ? ' href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer"' : '') + '>' +
+        (it.img ? '<img class="proj__img" src="' + esc(it.img) + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '') +
+        '<span class="proj__body">' +
+          '<span class="proj__name">' + esc(it.name) + (it.url ? ' ' + icon('ext', 'icon--xs') : '') + '</span>' +
+          (it.badges ? '<span class="proj__badges">' + it.badges.map(function (t) {
+            return '<span class="proj__badge' + (/delivered/i.test(t) ? ' proj__badge--done' : '') + '">' + esc(t) + '</span>';
+          }).join('') + '</span>' : '') +
+          (it.tool ? '<span class="proj__tool">Tool: <b>' + esc(it.tool) + '</b></span>' : '') +
+          (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
+          (it.url ? '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' : '') +
+        '</span>' +
+      '</' + tag + '></li>';
+    }).join('') + '</ul>';
+  }
+
   function renderMeta(meta) {
     return '<dl class="cs__meta">' + Object.keys(meta).map(function (k) {
       var m = meta[k];
@@ -339,6 +347,7 @@
         : '') +
 
       renderMeta(it.meta) +
+      (it.projects ? '<div class="cs__projects">' + renderProjects(it.projects) + '</div>' : '') +
       (it.cover
         ? (it.cover.video ? renderVideo(it.cover, 'cs__cover') : renderShot(it.cover, 'cs__cover', false))
         : '') +
