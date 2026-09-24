@@ -40,8 +40,9 @@
      can never disagree. Google merges nodes that share an @id across blocks,
      so this attaches to the same Person.
 
-     Note the filter: only studies marked 'live' are described. A placeholder
-     still full of TODO is worse than no structured data at all. */
+     Note the filter: only finished studies are described, 'live' or
+     'concept'. A placeholder still full of TODO is worse than no structured
+     data at all. */
 
   var canonical = document.querySelector('link[rel="canonical"]');
   var SITE = canonical ? canonical.href : location.href;
@@ -55,7 +56,7 @@
   }
 
   var live = (window.WORK || []).filter(function (w) {
-    return w.published !== false && w.status === 'live';
+    return w.published !== false && (w.status === 'live' || w.status === 'concept');
   });
 
   if (live.length) {

@@ -50,6 +50,7 @@ const PAIRS = [
   ['blue-deep',    'blue-wash',    4.5, 'kind pill'],
   ['ink',          'blue-wash',    4.5, 'text in a blue tint panel'],
   ['ink',          'lime',         4.5, 'ink on the lime chip'],
+  ['muted',        'lime',         4.5, 'note under a lime chip in a case study'],
   ['ink',          'lime-wash',    4.5, '"How I worked on solving this?" panel'],
   ['ink-soft',     'lime-wash',    4.5, 'paragraphs in the How panel'],
   ['muted',        'lime-wash',    4.5, 'screenshot caption in the How panel'],

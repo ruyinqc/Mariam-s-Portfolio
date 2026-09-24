@@ -129,6 +129,21 @@
     '</figure>';
   }
 
+  /** A video in place of a screenshot. It never plays by itself and nothing
+      downloads until the reader presses play: the poster stands in until then. */
+  function renderVideo(v, cls) {
+    return '<figure class="' + cls + '">' +
+      '<video controls playsinline preload="none"' +
+        (v.poster ? ' poster="' + esc(v.poster) + '"' : '') +
+        (v.width ? ' width="' + v.width + '" height="' + v.height + '"' : '') +
+        (v.alt ? ' aria-label="' + esc(v.alt) + '"' : '') + '>' +
+        '<source src="' + esc(v.video) + '" type="video/mp4">' +
+        '<a href="' + esc(v.video) + '">Download the video</a>' +
+      '</video>' +
+      (v.caption ? '<figcaption>' + esc(v.caption) + '</figcaption>' : '') +
+    '</figure>';
+  }
+
   /* ---- Wireframe ------------------------------------------------------------
      A low-fidelity before/after, drawn from data. '~' is a scribble standing
      in for text that does not matter to the point.                            */
@@ -254,6 +269,34 @@
           }).join('') + '</ul>' +
         '</section>';
 
+      case 'steps':
+        // A walkthrough told in frames: one still per step, in order.
+        return '<section class="cs__section">' +
+          '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
+          (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
+          '<ol class="steps">' + b.items.map(function (s, i) {
+            return '<li class="step">' +
+              '<img class="step__shot" src="' + esc(s.image.src) + '" alt="' + esc(s.image.alt || '') + '"' +
+                ' width="' + s.image.width + '" height="' + s.image.height + '" loading="lazy" decoding="async">' +
+              '<p class="step__n" aria-hidden="true">' + (i < 9 ? '0' : '') + (i + 1) + '</p>' +
+              '<h4 class="step__t">' + esc(s.title) + '</h4>' +
+              '<p class="step__p">' + s.text + '</p>' +
+            '</li>';
+          }).join('') + '</ol>' +
+        '</section>';
+
+      case 'chips':
+        // A short list of words. `accent: true` picks one out.
+        return '<section class="cs__section">' +
+          '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
+          (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
+          '<ul class="chips cs__chips">' + b.items.map(function (c) {
+            var it = typeof c === 'string' ? { text: c } : c;
+            return '<li class="chip' + (it.accent ? ' chip--accent' : '') + '">' + esc(it.text) +
+              (it.note ? '<small>' + esc(it.note) + '</small>' : '') + '</li>';
+          }).join('') + '</ul>' +
+        '</section>';
+
       case 'outcome':
         return '<section class="cs__section">' +
           '<h3 class="cs__h"><span>' + esc(b.num || '') + '</span>' + esc(b.title || 'Outcome') + '</h3>' +
@@ -295,7 +338,9 @@
         : '') +
 
       renderMeta(it.meta) +
-      (it.cover ? renderShot(it.cover, 'cs__cover', false) : '') +
+      (it.cover
+        ? (it.cover.video ? renderVideo(it.cover, 'cs__cover') : renderShot(it.cover, 'cs__cover', false))
+        : '') +
       it.blocks.map(renderBlock).join('') +
 
       '<footer class="cs__foot">' +
@@ -429,6 +474,9 @@
     if (!open) return;
 
     if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+
+    // a focused video keeps its arrow keys for seeking
+    if (e.target.tagName === 'VIDEO' && e.key !== 'Tab') return;
 
     if (e.key === 'ArrowRight' && !e.metaKey && !e.ctrlKey) { step(1); return; }
     if (e.key === 'ArrowLeft'  && !e.metaKey && !e.ctrlKey) { step(-1); return; }
