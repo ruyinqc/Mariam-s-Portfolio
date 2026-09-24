@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Components — nav, buttons, pin board, quotes, chips, certificates, form
+   Components — nav, buttons, work cards, quotes, chips, certificates, form
    ========================================================================== */
 
 /* ==========================================================================
@@ -263,91 +263,48 @@
 @media (prefers-reduced-motion: reduce) { .status__dot { animation: none; } }
 
 /* ==========================================================================
-   Pin board
+   Work cards — three to a row, then two, then one. A short last row sits
+   in the middle, under the centred title.
    ========================================================================== */
 
-.board__stage {
-  position: relative;
-  padding-block: clamp(1rem, 3vw, 2.5rem) clamp(2rem, 5vw, 4rem);
-  padding-inline: var(--gutter);
-}
-
-.board__strings {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-.board__strings path {
-  fill: none;
-  stroke: var(--line-strong);
-  stroke-width: 1.5;
-  stroke-dasharray: 5 7;
-  stroke-linecap: round;
-}
+.board .section__head { max-width: 52rem; margin-inline: auto; text-align: center; }
+.board .eyebrow { justify-content: center; }
+.board .section__sub { margin-inline: auto; }
+/* On a phone the second line is too long to hold, so the forced break left
+   "Shipped" on a line of its own. Let the browser balance it instead. */
+@media (max-width: 640px) { .board .section__title br { display: none; } }
 
 .board__cards {
-  --card-w: 20rem;
+  --cols: 1;
+  --gap: clamp(1rem, 2.2vw, 1.75rem);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-start;
-  gap: clamp(1.25rem, 3vw, 2.75rem);
-  max-width: var(--shell);
-  margin-inline: auto;
+  gap: var(--gap);
 }
+@media (min-width: 640px)  { .board__cards { --cols: 2; } }
+@media (min-width: 1000px) { .board__cards { --cols: 3; } }
 
 .pincard {
   position: relative;
-  width: var(--card-w);
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols));
   padding: 1.25rem 1.25rem 1.4rem;
   background: var(--paper-raised);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
   box-shadow: var(--sh-2);
   text-align: left;
-  /* board.js drives these three; CSS composes them so JS never fights CSS. */
-  --drift-y: 0px;
-  --tilt-x: 0deg;
-  --tilt-y: 0deg;
-  --lift: 0;
-  transform:
-    translate3d(0, calc(var(--drift-y) * var(--motion)), 0)
-    rotateX(var(--tilt-x)) rotateY(var(--tilt-y))
-    rotate(var(--skew, 0deg))
-    scale(calc(1 + var(--lift) * 0.02));
-  transform-style: preserve-3d;
-  transition: box-shadow var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  transition:
+    box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    translate var(--dur) var(--ease);
 }
-.pincard:hover, .pincard:focus-visible {
+.pincard:hover, .pincard:focus-within {
   box-shadow: var(--sh-lift);
   border-color: var(--blue-line);
-}
-.pincard:focus-visible { box-shadow: var(--sh-lift), var(--focus); }
-
-/* the pin */
-.pincard__pin {
-  position: absolute;
-  top: -0.7rem;
-  left: 50%;
-  translate: -50% 0;
-  width: 1.4rem; height: 1.4rem;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 30%, #6D5BFF, var(--blue) 55%, var(--blue-deep));
-  box-shadow: 0 3px 6px rgba(20,20,26,.28);
-}
-.pincard__pin::after {
-  content: "";
-  position: absolute;
-  inset: 26% 26% auto auto;
-  width: 0.35rem; height: 0.35rem;
-  border-radius: 50%;
-  background: rgba(255,255,255,.75);
-}
-.pincard--lime .pincard__pin {
-  background: radial-gradient(circle at 35% 30%, #EEFF8F, var(--lime) 55%, var(--lime-deep));
+  translate: 0 -4px;
 }
 
 .pincard__thumb {
@@ -399,7 +356,8 @@
   display: flex;
   align-items: center;
   gap: 0.4em;
-  margin-top: var(--s-4);
+  margin-top: auto;
+  padding-top: var(--s-4);
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   font-weight: 600;
@@ -422,6 +380,7 @@
   align-items: center;
   justify-content: center;
   gap: 0.5em;
+  margin-top: clamp(1.75rem, 4vw, 2.75rem);
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   font-weight: 600;
@@ -430,11 +389,6 @@
   color: var(--muted);
 }
 .board__hint .icon { fill: currentColor; width: 0.9em; height: 0.9em; }
-
-@media (max-width: 720px) {
-  .board__cards { --card-w: 100%; }
-  .board__strings { display: none; }
-}
 
 /* ==========================================================================
    Illustrations (assets/img/art/) and how copies of one pile up — built by

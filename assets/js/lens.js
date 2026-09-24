@@ -53,7 +53,7 @@
   /* ---- geometry -----------------------------------------------------------
      Everything is measured in the screen's own layout pixels, so nothing
      around the lens can throw it off: not its own zoom, the reader's open
-     transition, or the tilt of a card on the pin board.                    */
+     transition, or a card lifting on hover.                                */
 
   function boxes(canvas, keys) {
     var names = (keys || '').replace(/"/g, '').split(/\s+/).filter(Boolean);

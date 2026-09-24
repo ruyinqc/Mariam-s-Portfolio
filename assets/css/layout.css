@@ -271,6 +271,62 @@
    Path / experience
    ========================================================================== */
 
+/* The title on the left, the languages she speaks at the far right. When
+   the two stop fitting side by side, the languages drop under the title. */
+.path__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--s-5) var(--s-7);
+  max-width: none;
+}
+
+.spoken {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  list-style: none;
+  padding: 0;
+}
+.spoken li {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.45rem 0.9rem 0.45rem 0.6rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  box-shadow: var(--sh-1);
+  font-size: var(--t-small);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* A flag at 3:2 with softened corners. The hairline keeps white and yellow
+   stripes from melting into the white chip. */
+.flag {
+  position: relative;
+  flex: none;
+  width: 1.5em;
+  height: 1em;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.flag svg { width: 100%; height: 100%; }
+.flag::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(20, 20, 26, .14);
+}
+
+/* Two by two on a phone, instead of three and an orphan. */
+@media (max-width: 480px) {
+  .spoken { display: grid; grid-template-columns: repeat(2, max-content); }
+}
+
 /* ---- The clothesline ----------------------------------------------------
    One long row of photos pegged to a rope. Without JavaScript it is a row
    you scroll sideways. line.js adds .line--live, and .line--pinned when the
@@ -593,14 +649,14 @@
 
 .path__side {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
   gap: var(--s-5);
   margin-top: clamp(2.5rem, 5vw, 4.5rem);
 }
 /* the pinned stage already ends in its own breathing room */
 .line--pinned + .shell .path__side { margin-top: 0; }
 
-.langs, .relocate {
+.langs {
   padding: var(--s-5);
   background: var(--paper-raised);
   border: 1px solid var(--line);
@@ -637,21 +693,6 @@
 }
 .langs__code--soft { background: var(--paper-sunk); color: var(--muted); }
 
-.relocate p { font-size: var(--t-small); color: var(--muted); }
-.relocate p + p { margin-top: var(--s-4); }
-.relocate b { color: var(--ink); }
-.relocate__status {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  font-family: var(--font-mono);
-  font-size: var(--t-meta);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink) !important;
-}
-
 /* ==========================================================================
    Toolkit
    ========================================================================== */
@@ -677,6 +718,9 @@
   background: var(--panel);
   color: var(--on-panel);
   border-radius: var(--r-xl) var(--r-xl) 0 0;
+  /* the footer below carries on in the same colour with its own padding,
+     so a full section's worth here left a dark gap under the form */
+  padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
 }
 
 .contact__inner {

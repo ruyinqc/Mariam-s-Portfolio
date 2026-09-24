@@ -1,21 +1,17 @@
 /* ==========================================================================
-   board.js — the pin board.
+   board.js — the work cards.
 
-   Renders a card per published entry in window.WORK, lets them drift as if
-   there were air in the room, tilts them toward the cursor, and draws the
-   string between the pins. All of it goes quiet under prefers-reduced-motion.
+   Renders a card per published entry in window.WORK into the grid. The
+   layout itself (three columns, then two, then one) is all CSS.
    ========================================================================== */
 
 (function () {
   'use strict';
 
-  var stage   = document.getElementById('boardStage');
-  var holder  = document.getElementById('boardCards');
-  var strings = document.getElementById('boardStrings');
+  var holder = document.getElementById('boardCards');
   if (!holder || !window.WORK) return;
 
-  var SKEWS = [-1.4, 0.9, -0.6, 1.2, -1.1];   // a little human imprecision
-  var cards = [];
+  var count = 0;
 
   function icon(id, extraClass) {
     return '<svg class="icon ' + (extraClass || '') + '" aria-hidden="true">' +
@@ -67,7 +63,7 @@
 
   /* ---- render ----------------------------------------------------------- */
 
-  window.WORK.forEach(function (item, i) {
+  window.WORK.forEach(function (item) {
     if (item.published === false) return;
 
     var t = item.card.thumb || {};
@@ -75,12 +71,9 @@
     var id = 'pc-' + item.slug;
 
     var el = document.createElement('article');
-    el.className = 'pincard' + (t.tone === 'lime' ? ' pincard--lime' : '');
-    el.style.setProperty('--skew', SKEWS[i % SKEWS.length] + 'deg');
+    el.className = 'pincard';
 
     el.innerHTML =
-      '<span class="pincard__pin" aria-hidden="true"></span>' +
-
       thumb(t) +
 
       '<div class="pincard__tags">' +
@@ -101,97 +94,8 @@
          'aria-label="Read ' + item.kind.toLowerCase() + ': ' + item.card.title + '"></a>';
 
     holder.appendChild(el);
-
-    cards.push({
-      el: el,
-      phase: Math.random() * Math.PI * 2,
-      amp: 4 + Math.random() * 4,      // px
-      speed: 0.00042 + Math.random() * 0.00024,
-      live: true
-    });
+    count++;
   });
 
-  if (!cards.length) return;
-
-  if (window.Lens) Lens.mount(holder);
-
-  /* ---- drift ------------------------------------------------------------ */
-
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        var hit = cards.find(function (c) { return c.el === e.target; });
-        if (hit) hit.live = e.isIntersecting;
-      });
-    }, { rootMargin: '10% 0px' });
-    cards.forEach(function (c) { io.observe(c.el); });
-  }
-
-  Motion.onFrame(function (t) {
-    for (var i = 0; i < cards.length; i++) {
-      var c = cards[i];
-      if (!c.live) continue;
-      var y = Math.sin(t * c.speed + c.phase) * c.amp;
-      c.el.style.setProperty('--drift-y', y.toFixed(2) + 'px');
-    }
-  });
-
-  /* ---- tilt toward the cursor ------------------------------------------- */
-
-  if (!Motion.reduced && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    cards.forEach(function (c) {
-      c.el.addEventListener('pointermove', function (e) {
-        var b = c.el.getBoundingClientRect();
-        var nx = (e.clientX - b.left) / b.width - 0.5;    // -0.5 … 0.5
-        var ny = (e.clientY - b.top) / b.height - 0.5;
-        c.el.style.setProperty('--tilt-y', (nx * 7).toFixed(2) + 'deg');
-        c.el.style.setProperty('--tilt-x', (-ny * 7).toFixed(2) + 'deg');
-        c.el.style.setProperty('--lift', '1');
-      });
-      c.el.addEventListener('pointerleave', function () {
-        c.el.style.setProperty('--tilt-y', '0deg');
-        c.el.style.setProperty('--tilt-x', '0deg');
-        c.el.style.setProperty('--lift', '0');
-      });
-    });
-  }
-
-  /* ---- the string between the pins -------------------------------------- */
-
-  function drawStrings() {
-    if (!strings || !stage) return;
-    var wide = window.matchMedia('(min-width: 721px)').matches;
-    if (!wide || cards.length < 2) { strings.innerHTML = ''; return; }
-
-    var base = stage.getBoundingClientRect();
-    strings.setAttribute('viewBox', '0 0 ' + base.width + ' ' + base.height);
-
-    var pts = cards.map(function (c) {
-      var pin = c.el.querySelector('.pincard__pin').getBoundingClientRect();
-      return {
-        x: pin.left - base.left + pin.width / 2,
-        y: pin.top - base.top + pin.height / 2
-      };
-    });
-
-    var d = '';
-    for (var i = 0; i < pts.length - 1; i++) {
-      var a = pts[i], b = pts[i + 1];
-      var midX = (a.x + b.x) / 2;
-      var sag = Math.min(Math.abs(b.x - a.x) * 0.22, 52);   // gravity on a string
-      d += 'M' + a.x + ' ' + a.y +
-           ' Q' + midX + ' ' + (Math.max(a.y, b.y) + sag) + ' ' + b.x + ' ' + b.y + ' ';
-    }
-    strings.innerHTML = '<path d="' + d + '"/>';
-  }
-
-  var resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(drawStrings, 120);
-  }, { passive: true });
-
-  drawStrings();
-  window.addEventListener('load', drawStrings);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(drawStrings);
+  if (count && window.Lens) Lens.mount(holder);
 })();

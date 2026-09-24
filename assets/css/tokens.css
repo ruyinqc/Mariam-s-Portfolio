@@ -36,9 +36,9 @@
   --sage:       #EDF1DA;     /* testimonial bubbles — Mariam's #F1F5E3, one  */
                              /* step deeper so the ring shows on --paper     */
 
-  /* --line and --line-strong are decorative rules only: page hairlines, the
-     timeline rail, the string between the pin cards. WCAG 1.4.11 exempts pure
-     decoration, and darkening them would make the whole page feel heavier.
+  /* --line and --line-strong are decorative rules only: page hairlines and
+     the timeline rail. WCAG 1.4.11 exempts pure decoration, and darkening
+     them would make the whole page feel heavier.
      --rope is the same kind of thing.
      Anything that is a control boundary or carries meaning uses --edge or
      --graphic instead, both of which clear 3:1. */

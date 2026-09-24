@@ -192,13 +192,22 @@ window.WORK = [
     },
 
     {
+      type: 'outcome',
+      num: '02',
+      title: 'Outcome',
+      items: [
+        { value: '>90%', label: 'Completion rate' }
+      ]
+    },
+
+    {
       type: 'pull',
       text: 'People do not read a payment screen. They find a number and they send it.'
     },
 
     {
       type: 'section',
-      num: '02',
+      num: '03',
       title: 'What I would watch next',
       body: [
         'The redesign shipped in November 2025. The measures that matter are the ones ' +
