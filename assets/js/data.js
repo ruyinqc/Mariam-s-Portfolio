@@ -9,8 +9,9 @@
    status    : 'live'  → green "Shipped" pill
                'draft' → grey "In progress" pill + a note at the top of the
                          study telling the reader it isn't finished yet
-   Icons you can use in a diagram:
-     doc · coin · wallet · sad · happy · check · alert
+   Pictures you can use in a challenge diagram live in assets/img/art/:
+     invoice · coins · wallet · confused · support-agent.png
+   Drop any new SVG or PNG in that folder and use its name.
    ========================================================================== */
 
 window.WORK = [
@@ -29,8 +30,8 @@ window.WORK = [
     sub: 'Users were paying one invoice out of five — and paying the wrong number when they did.',
     tags: ['Fintech', 'B2B'],
     thumb: {
-      left:  { icon: 'doc', count: 5 },
-      right: { icon: 'doc', count: 1 },
+      left:  { art: 'invoice', count: 5 },
+      right: { art: 'invoice', count: 1 },
       tone: 'blue'
     }
   },
@@ -43,7 +44,7 @@ window.WORK = [
 
   meta: {
     'Role':     { value: 'Product Designer', note: 'End-to-end design' },
-    'Timeline': { value: '~7.5 weeks' },
+    'Timeline': { value: '2.5 weeks' },
     'Status':   { value: 'Shipped', note: 'In production since November 2025' },
     'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
   },
@@ -69,97 +70,113 @@ window.WORK = [
       type: 'challenge',
       n: 1,
       diagram: {
-        alt: 'Five invoices are due. The customer pays only one of them.',
-        before: {
-          tone: 'bad',
-          rows: [{
-            groups: [{ icon: 'doc', count: 5 }],
-            caption: '5 invoices the user needs to pay'
-          }]
-        },
-        after: {
-          tone: 'bad',
-          rows: [{
-            groups: [{ icon: 'doc', count: 1 }, { icon: 'sad', count: 1, join: false }],
-            caption: 'User pays only 1'
-          }]
-        }
+        rows: [{
+          from: { art: [{ name: 'invoice', count: 5 }], caption: '5 Invoices user needs to pay' },
+          to:   { art: [{ name: 'invoice', count: 1 }], caption: 'User pays only 1', emoji: 'confused' }
+        }]
       },
-      why: [
-        '<b>No batch payment existed.</b> The interface could only take one invoice at a ' +
-        'time, so paying five meant repeating the same flow five times.',
+      why: {
+        title: 'Why this happened?',
+        text: [
+          '<b>Unable</b> to process <b>batch payments</b>, the user only paid the most ' +
+          'critical invoice: payroll.',
 
-        '<b>Manual bank transfer was the only method.</b> Every invoice meant another trip ' +
-        'to a banking app, another reference number, another chance to give up halfway.',
-
-        '<b>So people triaged.</b> They paid the invoice with the hardest deadline — ' +
-        'usually payroll — and ignored the rest until someone chased them.'
-      ],
-      how: [
-        'Customers can now select <b>multiple invoices and pay them in one action</b>.',
-
-        'The total updates live as invoices are ticked, so the commitment is visible ' +
-        '<b>before</b> anything is confirmed — not after.',
-
-        'Available <b>wallet balance</b> is shown in the same view, so the customer can ' +
-        'see what the payment will actually cost them out of pocket.'
-      ]
+          'Because the only payment method was <b>manual transfer</b>, which made it easy ' +
+          'to <b>ignore</b> the other invoices.'
+        ]
+      },
+      how: {
+        title: 'How I worked on solving this?',
+        text: [
+          'Users can now <b>pay multiple invoices at once</b> with full <b>upfront ' +
+          'visibility</b> into totals and <b>wallet</b> balances before taking action.'
+        ],
+        image: {
+          src: 'assets/img/work/invoices-ui-preview.png',
+          width: 777, height: 122,
+          alt: 'The invoices page: Wallet Balance, Selected Invoices and Amount To Pay ' +
+               'above the invoice table, with a Proceed To Payment button.',
+          caption: 'Public UI preview only—no real data included (NDA).'
+        }
+      }
     },
 
     {
       type: 'challenge',
       n: 2,
       diagram: {
-        alt: 'Customers transferred either more or less than the amount actually owed.',
-        before: {
-          tone: 'bad',
-          rows: [
-            {
-              groups: [{ icon: 'coin', count: 3 }, { icon: 'wallet', count: 1 }],
-              caption: 'User pays more than what is required'
-            },
-            {
-              groups: [{ icon: 'coin', count: 1 }],
-              caption: 'User pays less than what is required'
-            }
-          ]
-        },
-        after: {
-          tone: 'good',
-          rows: [{
-            groups: [{ icon: 'check', count: 1 }],
-            caption: 'One clear amount, confirmed before paying'
-          }]
-        }
+        alt: 'Top: what is required is coins plus the wallet balance, but the user pays ' +
+             'more than what is required. Bottom: the user pays less than what is ' +
+             'required, shown next to a frustrated support agent.',
+        rows: [
+          {
+            from: { art: [{ name: 'coins', count: 2 }, { name: 'wallet', count: 1 }],
+                    caption: 'What is required' },
+            to:   { art: [{ name: 'coins', count: 4 }],
+                    caption: 'User pays more than what is required' }
+          },
+          {
+            from: { art: [{ name: 'coins', count: 4 }],
+                    caption: 'What is required' },
+            to:   { art: [{ name: 'coins', count: 2 }, { name: 'support-agent.png', count: 1 }],
+                    caption: 'User pays less than what is required' }
+          }
+        ]
       },
-      why: [
-        '<b>Missing information hierarchy.</b> Nothing on the screen said which number was ' +
-        'the one to act on. The final payable amount had the same visual weight as every ' +
-        'other figure.',
+      why: {
+        title: 'Why this happens?',
+        points: [
+          '<b>Missing Information Hierarchy:</b> No clear visual distinction or priority ' +
+          'for the final payable amount.',
 
-        '<b>No section titles.</b> Total invoiced, available wallet balance and bank ' +
-        'transfer details ran together with no labels separating them.',
+          '<b>Lack of Section Titles:</b> No labels to differentiate between total ' +
+          'invoices, available wallet balance, and bank transfer details.',
 
-        '<b>High risk of incorrect payment.</b> People transferred the first number they ' +
-        'saw — the gross total — instead of the net amount left after the wallet balance ' +
-        'was deducted.',
+          '<b>High Risk of Incorrect Payments:</b> Users pay the first visible number ' +
+          '(gross total) instead of the net amount after wallet deduction.',
 
-        '<b>Excessive vertical scrolling.</b> The figures that mattered sat below the fold, ' +
-        'so the decision was made before the evidence was even on screen.'
-      ],
-      how: [
-        'Split the screen into three <b>named</b> regions — Payment Details, Invoice ' +
-        'Details and Payment Summary — so every number has a stated job.',
-
-        'Gave the <b>final payable amount</b> the strongest treatment on the page, and ' +
-        'demoted the gross total to supporting text.',
-
-        'Showed the <b>wallet deduction as a line item</b>, so the arithmetic is visible ' +
-        'rather than implied.',
-
-        'Pulled the summary <b>above the fold</b> — the customer now sees what they owe ' +
-        'and what they are about to send without scrolling.'
-      ]
+          '<b>Excessive Vertical Scrolling:</b> Key payment figures are pushed below the ' +
+          'fold, forcing unnecessary scrolling.'
+        ]
+      },
+      how: {
+        title: 'How I worked on solving this?',
+        // '~' draws a scribble placeholder, like in a hand wireframe.
+        wireframe: {
+          before: {
+            label: 'Before',
+            panels: [{
+              title: 'Payments Details',
+              rows: [
+                ['Amount', '$x,xxx.xx'],
+                ['~', '~'],
+                ['~', '$x,xxx.xx'],
+                ['Total', '$x,xxx.xx'],
+                ['~', '~'],
+                ['~', '~']
+              ]
+            }]
+          },
+          after: {
+            label: 'After',
+            panels: [
+              {
+                title: 'Invoice Details',
+                rows: [['~', '~', '~'], ['~', '~', '~'], ['~', '~', '~']]
+              },
+              {
+                title: 'Payment Summary',
+                rows: [
+                  ['Total Amount', '$x,xxx.xx'],
+                  ['Wallet Balance', '$xx.xx'],
+                  ['Outstanding Amount', '$x,xxx.xx']
+                ],
+                button: 'Pay $x,xxx.xx'
+              }
+            ]
+          }
+        }
+      }
     },
 
     {
@@ -238,29 +255,25 @@ window.WORK = [
       n: 1,
       diagram: {
         alt: 'Placeholder diagram — replace with the real before and after.',
-        before: {
-          tone: 'bad',
-          rows: [{
-            groups: [{ icon: 'alert', count: 3 }],
-            caption: 'TODO — what went wrong, in one line'
-          }]
-        },
-        after: {
-          tone: 'good',
-          rows: [{
-            groups: [{ icon: 'check', count: 1 }],
-            caption: 'TODO — what happens now instead'
-          }]
-        }
+        rows: [{
+          from: { art: [{ icon: 'alert', count: 3 }], caption: 'TODO — what went wrong, in one line' },
+          to:   { art: [{ icon: 'check', count: 1 }], caption: 'TODO — what happens now instead' }
+        }]
       },
-      why: [
-        '<b>TODO.</b> The root cause, not the symptom.',
-        '<b>TODO.</b> A second contributing cause.'
-      ],
-      how: [
-        'TODO — what you changed, and why that change addresses the cause above.',
-        'TODO — a second move.'
-      ]
+      why: {
+        title: 'Why this happened?',
+        points: [
+          '<b>TODO.</b> The root cause, not the symptom.',
+          '<b>TODO.</b> A second contributing cause.'
+        ]
+      },
+      how: {
+        title: 'How I worked on solving this?',
+        points: [
+          'TODO — what you changed, and why that change addresses the cause above.',
+          'TODO — a second move.'
+        ]
+      }
     }
   ]
 },

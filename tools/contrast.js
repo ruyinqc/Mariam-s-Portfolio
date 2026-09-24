@@ -50,7 +50,10 @@ const PAIRS = [
   ['blue-deep',    'blue-wash',    4.5, 'kind pill'],
   ['ink',          'blue-wash',    4.5, 'text in a blue tint panel'],
   ['ink',          'lime',         4.5, 'ink on the lime chip'],
-  ['ink',          'lime-wash',    4.5, '"How I solved it" panel'],
+  ['ink',          'lime-wash',    4.5, '"How I worked on solving this?" panel'],
+  ['ink-soft',     'lime-wash',    4.5, 'paragraphs in the How panel'],
+  ['muted',        'lime-wash',    4.5, 'screenshot caption in the How panel'],
+  ['ink-soft',     'wire',         4.5, 'text on a wireframe bar'],
   ['ink',          'paper-raised', 4.5, 'card text'],
   ['muted',        'paper-raised', 4.5, 'card meta'],
   ['ink',          'paper-sunk',   4.5, 'tag text'],
@@ -66,7 +69,8 @@ const PAIRS = [
      --line / --line-strong are absent on purpose: they are decorative
      rules only, which 1.4.11 exempts. */
   ['edge',         'paper',        3.0, 'ghost button and control borders'],
-  ['graphic',      'paper-raised', 3.0, 'diagram arrows and "+" operators'],
+  ['graphic',      'paper-raised', 3.0, 'placeholder icons in a diagram'],
+  ['ink',          'paper-raised', 3.0, 'diagram arrows and "+" operators'],
   ['graphic-bad',  'paper-raised', 3.0, 'the "before" state in a diagram'],
   ['blue',         'paper-raised', 3.0, 'the "after" state in a diagram'],
   ['field-placeholder', 'panel-soft', 4.5, 'form placeholder text'],

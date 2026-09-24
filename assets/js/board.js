@@ -23,9 +23,16 @@
   }
 
   function cluster(spec) {
+    // An illustration from assets/img/art/ piles up like it does in the study.
+    if (spec.art && window.Art) return Art.pile({ name: spec.art, count: spec.count });
     var out = '';
     for (var i = 0; i < spec.count; i++) out += icon(spec.icon);
     return out;
+  }
+
+  function miniCluster(spec) {
+    return '<span class="mini__cluster' + (spec && spec.art ? ' mini__cluster--art' : '') + '">' +
+             (spec ? cluster(spec) : '') + '</span>';
   }
 
   /* ---- render ----------------------------------------------------------- */
@@ -46,9 +53,9 @@
 
       '<div class="pincard__thumb" aria-hidden="true">' +
         '<div class="mini ' + (t.tone === 'lime' ? 'mini--lime' : '') + '">' +
-          '<span class="mini__cluster">' + (t.left ? cluster(t.left) : '') + '</span>' +
+          miniCluster(t.left) +
           '<span class="mini__arrow">' + icon('arrow') + '</span>' +
-          '<span class="mini__cluster">' + (t.right ? cluster(t.right) : '') + '</span>' +
+          miniCluster(t.right) +
         '</div>' +
       '</div>' +
 

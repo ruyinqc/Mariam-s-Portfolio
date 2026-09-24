@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="3 0 73 92" width="73" height="92">
+  <!-- Invoice — cream paper, folded corner, three "ping" marks.
+       Swap this file for your own illustration with the same name. -->
+  <defs>
+    <linearGradient id="inv-paper" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F8ECDD"/>
+      <stop offset="1" stop-color="#F0DFCA"/>
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="#24242B" stroke-width="2.4" stroke-linecap="round">
+    <path d="M17.4 8.6 15.2 2.8"/>
+    <path d="M12.6 12.2 7 8.6"/>
+    <path d="M11.4 17.6 5 17.9"/>
+  </g>
+  <g transform="rotate(7 38 50)">
+    <!-- the sheet's thickness, peeking out left and below -->
+    <path d="M18.6 17.2c0-1.6 1.2-2.8 2.8-2.8h36.2l10.8 10.8v58.6c0 1.6-1.2 2.9-2.8 2.9H21.4c-1.6 0-2.8-1.3-2.8-2.9z" fill="#CDB9A2"/>
+    <path d="M21.6 15c0-1.6 1.2-2.8 2.8-2.8h36.4l10.6 10.6v58.4c0 1.6-1.3 2.9-2.9 2.9H24.4c-1.6 0-2.8-1.3-2.8-2.9z" fill="url(#inv-paper)"/>
+    <!-- folded corner -->
+    <path d="M60.8 12.2v8.2c0 1.3 1.1 2.4 2.4 2.4h8.2z" fill="#D3BFA8"/>
+    <!-- INVOICE -->
+    <g fill="none" stroke="#2A2A31" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M29 21v5.8"/>
+      <path d="M31.4 26.8V21l3.8 5.8V21"/>
+      <path d="M37.4 21l2.1 5.8 2.1-5.8"/>
+      <ellipse cx="45.9" cy="23.9" rx="2.1" ry="2.9"/>
+      <path d="M50.2 21v5.8"/>
+      <path d="M56.3 21.9a2.4 2.4 0 0 0-1.9-.9c-1.6 0-2.5 1.3-2.5 2.9s.9 2.9 2.5 2.9c.8 0 1.4-.3 1.9-.9"/>
+      <path d="M61.4 21h-3v5.8h3M58.4 23.9h2.7"/>
+    </g>
+    <!-- body lines -->
+    <g fill="none" stroke="#8C8781" stroke-width="2.1" stroke-linecap="round">
+      <path d="M28.4 34.4h35"/>
+      <path d="M28.4 40.6h35"/>
+      <path d="M28.4 46.8h19.4"/>
+      <path d="M28.4 53h24"/>
+      <path d="M28.4 59.2h16.4"/>
+      <path d="M58.6 46.8h4.8M58.6 53h4.8M58.6 59.2h4.8"/>
+      <path d="M54.2 76.4h9.2"/>
+    </g>
+    <path d="M45.4 70.4h18" fill="none" stroke="#3A3A42" stroke-width="2.1" stroke-linecap="round"/>
+  </g>
+</svg>

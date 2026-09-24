@@ -63,7 +63,7 @@ A minimal one looks like this:
       left:  { icon: 'alert', count: 3 },   // the "before" pile
       right: { icon: 'check', count: 1 },   // the "after"
       tone: 'blue'                          // or 'lime'
-    }
+    }                                       // { art: 'invoice', count: 5 } uses a picture
   },
 
   title: 'My Project',
@@ -90,39 +90,45 @@ A minimal one looks like this:
   body: ['First paragraph.', 'Second paragraph.'] }
 ```
 
-**`challenge`** — the illustrated before → after rectangle, then the
-*Why this happened* / *How I solved it* columns. This is the one that does the
-heavy lifting.
+**`challenge`** — the illustrated rectangle, then the *Why* / *How* columns.
+This is the one that does the heavy lifting.
 
 ```js
 {
   type: 'challenge',
   n: 1,
   diagram: {
-    alt: 'A plain-English description, for screen readers.',
-    before: {
-      tone: 'bad',
-      rows: [{ groups: [{ icon: 'doc', count: 5 }],
-               caption: '5 invoices the user needs to pay' }]
-    },
-    after: {
-      tone: 'good',
-      rows: [{ groups: [{ icon: 'check', count: 1 }],
-               caption: 'One clear amount' }]
-    }
+    rows: [{                                    // one row per arrow
+      from: { art: [{ name: 'invoice', count: 5 }], caption: '5 Invoices user needs to pay' },
+      to:   { art: [{ name: 'invoice', count: 1 }], caption: 'User pays only 1', emoji: 'confused' }
+    }]
   },
-  why: ['<b>The root cause.</b> Not the symptom.'],
-  how: ['What you changed, and why it addresses that cause.']
+  why: {
+    title: 'Why this happened?',
+    text: ['<b>Unable</b> to process <b>batch payments</b>, …']      // paragraphs
+  },
+  how: {
+    title: 'How I worked on solving this?',
+    text: ['Users can now <b>pay multiple invoices at once</b> …'],
+    image: { src: 'assets/img/work/…png', width: 777, height: 122,
+             alt: 'What the screenshot shows', caption: 'Public UI preview only…' }
+  }
 }
 ```
 
-- Icons available: `doc` `coin` `wallet` `sad` `happy` `check` `alert`
-- Four or more of the same icon automatically stacks into a neat 3-wide pile
-- Two groups in one row get a `+` between them. To suppress it — a reaction
-  face is a consequence, not a sum — add `join: false` to the second group
-- `why` and `how` accept `<b>` for emphasis
-- **`alt` is not optional.** The icons are decorative to a screen reader; that
-  sentence is the only way a blind recruiter gets your argument
+- **Pictures** live in `assets/img/art/`: `invoice`, `coins`, `wallet`,
+  `confused` (SVG) and `support-agent.png`. A bare name means `.svg`; write the
+  extension for anything else. To use your own drawing, drop the file in that
+  folder with the same name — nothing else changes
+- `count` piles copies up (5 → three over two, 4 → a diamond, 2 → a step)
+- Two pictures on one side get a `+` between them
+- `emoji` puts a small picture at the end of a caption
+- Use `text: [...]` for paragraphs or `points: [...]` for bullets. Both accept
+  `<b>` for emphasis
+- `how` can also take a `wireframe` (see Challenge 2 in `data.js`): a list of
+  bars per panel, where `'~'` draws a scribble placeholder
+- **`diagram.alt` is for screen readers.** The captions are read out, but the
+  pictures aren't. If a picture carries meaning the captions don't, say it here
 
 **`pull`** — a large serif pull-quote.
 
@@ -292,6 +298,7 @@ assets/
   js/
     config.js            ← yours
     data.js              ← yours
+    art.js               illustrations and how copies of one pile up
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
     board.js             pin cards, drift, tilt, the string between pins
@@ -300,6 +307,8 @@ assets/
     app.js               bootstrap
   fonts/                 woff2, latin + latin-ext
   img/                   photography + og-cover.png (the social card)
+    art/                 pictures for the challenge diagrams — swap freely
+    work/                screenshots used inside case studies
   cv/                    the PDF the Download CV button serves
 robots.txt               crawl rules + sitemap pointer
 sitemap.xml              the one URL, for Search Console

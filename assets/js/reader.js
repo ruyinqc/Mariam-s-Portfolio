@@ -63,46 +63,105 @@
   }
 
   function esc(s) {
-    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  var PLUS = '<span class="diagram__plus" aria-hidden="true">+</span>';
+  /* ---- The challenge rectangle -------------------------------------------
+     Each row reads left to right: what should happen → what actually
+     happens. The pictures and piles come from art.js.                        */
 
-  function iconGroup(groups) {
-    return groups.map(function (g, i) {
-      var out = '';
-      // A group can opt out of the "+" — a reaction face is a consequence,
-      // not another term in the sum.
-      if (i > 0 && g.join !== false) out += PLUS;
-      for (var n = 0; n < g.count; n++) out += icon(g.icon);
-      return out;
-    }).join('');
-  }
+  var PLUS = '<span class="flow__plus" aria-hidden="true">+</span>';
 
-  function renderSide(side) {
-    return '<div class="diagram__side diagram__side--' + (side.tone || 'bad') + '">' +
-      side.rows.map(function (row) {
-        // A single stack of four or more reads better as a deliberate pile
-        // than as whatever the flex wrap happens to produce.
-        var pile = row.groups.length === 1 && row.groups[0].count >= 4;
-        return '<div class="diagram__row">' +
-                 '<div class="diagram__icons' + (pile ? ' diagram__icons--pile' : '') + '">' +
-                   iconGroup(row.groups) +
-                 '</div>' +
-                 '<p class="diagram__cap">' + esc(row.caption) + '</p>' +
-               '</div>';
-      }).join('') +
+  function flowSide(side, cls) {
+    return '<div class="flow__side flow__side--' + cls + '">' +
+      '<div class="flow__art">' +
+        side.art.map(Art.pile).join(PLUS) +
+      '</div>' +
+      '<p class="flow__cap">' + esc(side.caption) +
+        (side.emoji
+          ? ' <img class="flow__emoji" src="' + esc(Art.src(side.emoji)) + '" alt="" decoding="async">'
+          : '') +
+      '</p>' +
     '</div>';
   }
 
+  var ARROW =
+    '<div class="flow__arrow" aria-hidden="true">' +
+      '<span class="flow__line"></span>' +
+      '<svg class="flow__head" viewBox="0 0 10 16"><path d="M1.5 1.5 8.5 8l-7 6.5"/></svg>' +
+    '</div>';
+
   function renderDiagram(d) {
-    // The icons are decorative; the captions and the figcaption carry the
-    // meaning, so a screen reader gets the argument rather than a glyph list.
-    return '<figure class="diagram">' +
-      renderSide(d.before) +
-      '<div class="diagram__arrow" aria-hidden="true">' + icon('arrow') + '</div>' +
-      renderSide(d.after) +
+    // The pictures are decorative. The captions carry the argument, and
+    // `alt` fills in whatever only the pictures say.
+    return '<figure class="flow">' +
+      d.rows.map(function (r) {
+        return '<div class="flow__row">' +
+          flowSide(r.from, 'from') + ARROW + flowSide(r.to, 'to') +
+        '</div>';
+      }).join('') +
       (d.alt ? '<figcaption class="sr-only">' + esc(d.alt) + '</figcaption>' : '') +
+    '</figure>';
+  }
+
+  /* ---- Why / How columns --------------------------------------------------- */
+
+  function renderCopy(c) {
+    var out = '';
+    if (c.text)   out += c.text.map(function (p) { return '<p>' + p + '</p>'; }).join('');
+    if (c.points) out += '<ul>' + c.points.map(function (p) { return '<li>' + p + '</li>'; }).join('') + '</ul>';
+    if (c.image) {
+      var im = c.image;
+      out += '<figure class="shot">' +
+        '<img src="' + esc(im.src) + '" alt="' + esc(im.alt || '') + '"' +
+          (im.width ? ' width="' + im.width + '" height="' + im.height + '"' : '') +
+          ' loading="lazy" decoding="async">' +
+        (im.caption ? '<figcaption>' + esc(im.caption) + '</figcaption>' : '') +
+      '</figure>';
+    }
+    if (c.wireframe) out += renderWireframe(c.wireframe);
+    return out;
+  }
+
+  /* ---- Wireframe ------------------------------------------------------------
+     A low-fidelity before/after, drawn from data. '~' is a scribble standing
+     in for text that does not matter to the point.                            */
+
+  var SCRIBBLE =
+    '<svg class="wf__scribble" viewBox="0 0 40 8" aria-hidden="true">' +
+      '<path d="M1.5 5.2c3-2.4 6-2.8 9-1.2s5.6 2.1 8.6.2 6-2.5 9-.9 5.4 1.9 10.4.3"/>' +
+    '</svg>';
+
+  function wfCell(t) {
+    return t === '~' ? SCRIBBLE : '<span>' + esc(t) + '</span>';
+  }
+
+  function wfPanel(p) {
+    return '<div class="wf__panel">' +
+      '<p class="wf__title">' + esc(p.title) + '</p>' +
+      '<div class="wf__rows">' +
+        p.rows.map(function (r) {
+          return '<div class="wf__bar' + (r.length > 2 ? ' wf__bar--spread' : '') + '">' +
+                   r.map(wfCell).join('') + '</div>';
+        }).join('') +
+        (p.button
+          ? '<div class="wf__btn"><span>' + esc(p.button) + '</span>' + icon('next') + '</div>'
+          : '') +
+      '</div>' +
+    '</div>';
+  }
+
+  function wfSide(side, cls) {
+    return '<div class="wf__side wf__side--' + cls + '">' +
+      '<div class="wf__panels">' + side.panels.map(wfPanel).join('') + '</div>' +
+      '<p class="wf__label">' + esc(side.label) + '</p>' +
+    '</div>';
+  }
+
+  function renderWireframe(w) {
+    return '<figure class="wf">' +
+      '<div class="wf__grid">' + wfSide(w.before, 'before') + wfSide(w.after, 'after') + '</div>' +
     '</figure>';
   }
 
@@ -119,14 +178,14 @@
         return '<section class="cs__section chal">' +
           '<h3 class="chal__label">Challenge<sup>0' + b.n + '</sup></h3>' +
           renderDiagram(b.diagram) +
-          '<div class="whyhow">' +
+          '<div class="whyhow' + (b.how.wireframe ? ' whyhow--wide' : '') + '">' +
             '<div class="whyhow__col whyhow__col--why">' +
-              '<h4>' + icon('alert') + 'Why this happened</h4>' +
-              '<ul>' + b.why.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' +
+              '<h4>' + esc(b.why.title || 'Why this happened?') + '</h4>' +
+              renderCopy(b.why) +
             '</div>' +
             '<div class="whyhow__col whyhow__col--how">' +
-              '<h4>' + icon('check') + 'How I solved it</h4>' +
-              '<ul>' + b.how.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ul>' +
+              '<h4>' + esc(b.how.title || 'How I worked on solving this?') + '</h4>' +
+              renderCopy(b.how) +
             '</div>' +
           '</div>' +
         '</section>';
