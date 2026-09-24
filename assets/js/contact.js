@@ -1,8 +1,9 @@
 /* ==========================================================================
    contact.js — validation, then delivery.
 
-   If a Web3Forms key is set in config.js the message is posted straight to
-   Mariam's inbox. If it isn't, the form degrades to a pre-filled mailto:
+   If a contact endpoint is set in config.js the message is posted to the
+   mail relay in worker/, which sends it on through Resend to Mariam's inbox.
+   If it isn't, the form degrades to a pre-filled mailto:
    rather than pretending to have sent something. A form that silently drops
    a recruiter's message is worse than no form.
    ========================================================================== */
@@ -16,7 +17,6 @@
   if (!form) return;
 
   var cfg = window.SITE || {};
-  var ENDPOINT = 'https://api.web3forms.com/submit';
 
   var RULES = {
     name:    { min: 2,  msg: 'Please tell me your name.' },
@@ -116,24 +116,16 @@
       message: form.elements.message.value.trim()
     };
 
-    if (!cfg.web3formsKey) { mailtoFallback(data); return; }
+    if (!cfg.contactEndpoint) { mailtoFallback(data); return; }
 
     submit.disabled = true;
     form.classList.add('is-sending');
     say('Sending…');
 
-    fetch(ENDPOINT, {
+    fetch(cfg.contactEndpoint, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        access_key: cfg.web3formsKey,
-        subject: '[Portfolio] ' + data.subject + ' — ' + data.name,
-        from_name: data.name,
-        replyto: data.email,
-        name: data.name,
-        email: data.email,
-        message: data.message
-      })
+      body: JSON.stringify(data)
     })
       .then(function (r) { return r.json().catch(function () { return {}; }); })
       .then(function (res) {
@@ -141,7 +133,7 @@
           form.reset();
           say('Got it — thank you. I reply to everything, usually within a day or two.', 'ok');
         } else {
-          throw new Error((res && res.message) || 'Web3Forms rejected the request');
+          throw new Error((res && res.message) || 'The mail relay rejected the request');
         }
       })
       .catch(function (err) {

@@ -12,7 +12,7 @@ don't need to touch anything else.
 
 | File | What's in it |
 |---|---|
-| `assets/js/config.js` | Contact-form key, your links, the certificate list |
+| `assets/js/config.js` | Contact-form address, your links, the certificate list |
 | `assets/js/data.js` | Every word of every case study |
 | `index.html` → *EXPERIENCE* | Your roles on the clothesline, and their photos |
 
@@ -21,23 +21,52 @@ don't need to touch anything else.
 ## 1. Turn the contact form on
 
 Right now the form works, but it opens the visitor's own email app instead of
-sending to you directly. That's the fallback. To make messages land in your
-inbox:
+sending to you directly. That's the fallback. Messages are delivered by
+[Resend](https://resend.com), through a tiny Cloudflare Worker that keeps the
+Resend key secret (a key in the page would be readable by anyone, and Resend
+refuses calls from browsers anyway). Both are free at this volume.
 
-1. Go to **https://web3forms.com**
-2. Type `marmaremad31@gmail.com` into the box and press **Create Access Key**
-3. They email you a key that looks like `c7f3a1b2-4d5e-6789-abcd-ef0123456789`
-4. Open `assets/js/config.js` and paste it here:
+**1. Resend** — sign up at **https://resend.com** with `marmaremad31@gmail.com`,
+then **API Keys → Create API Key** (permission: *Sending access*). Copy it.
+
+**2. The Worker** — at **https://dash.cloudflare.com** go to
+**Workers & Pages → Create → Create Worker**, name it `portfolio-contact`,
+deploy the starter, then **Edit code**, replace everything with the contents of
+`worker/contact.js`, and **Deploy**.
+
+**3. Its settings** — on the Worker, **Settings → Variables and Secrets**, add:
+
+| Name | Type | Value |
+| --- | --- | --- |
+| `RESEND_API_KEY` | Secret | the key from step 1 |
+| `TO_EMAIL` | Text | `marmaremad31@gmail.com` |
+| `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,http://localhost:8080` |
+| `FROM_EMAIL` | Text | optional — see below |
+
+**4. The site** — copy the Worker's address (looks like
+`https://portfolio-contact.your-name.workers.dev`) into `assets/js/config.js`:
 
 ```js
-web3formsKey: 'c7f3a1b2-4d5e-6789-abcd-ef0123456789',
+contactEndpoint: 'https://portfolio-contact.your-name.workers.dev',
 ```
 
-That's it. Free, no account, no card. Messages arrive as normal email with the
-sender's address in the reply-to, so you can just hit reply.
+That's it. Messages arrive with the sender's address in the reply-to, so you
+can just hit reply.
 
-If Web3Forms ever goes down or the key is wrong, the form quietly falls back to
-the email app rather than pretending to have sent something.
+**About `FROM_EMAIL`.** Left empty, mail comes from Resend's test sender,
+`onboarding@resend.dev`, which can only deliver to the address your Resend
+account signed up with — fine while `TO_EMAIL` is that same address. Once you
+own a domain, verify it in Resend (**Domains → Add Domain**) and set
+`FROM_EMAIL` to something like `Portfolio <hello@yourdomain.com>`.
+
+**If you move domains**, add the new address to `ALLOWED_ORIGINS`, or the
+Worker will refuse posts from it.
+
+Prefer the command line? `worker/wrangler.toml` is set up for
+`npx wrangler deploy` and `npx wrangler secret put RESEND_API_KEY`.
+
+If Resend or the Worker ever goes down, the form falls back to the email app
+rather than pretending to have sent something.
 
 ---
 
@@ -415,6 +444,9 @@ assets/
   cv/                    the PDF the Download CV button serves
   video/                 videos used inside case studies (H.264 MP4)
 robots.txt               crawl rules + sitemap pointer
+worker/
+  contact.js             the contact form's mail relay (Cloudflare Worker → Resend)
+  wrangler.toml          only for deploying it from the command line
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
