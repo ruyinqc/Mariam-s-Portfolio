@@ -518,20 +518,21 @@ window.WORK = [
       },
       after: {
         label: 'Beijing',
-        kicker: 'Chinese dashboard · dark · dense',
+        kicker: 'Asian-style UI · dark · dense',
         screen: 'dash-beijing',
-        alt: 'A dark, dense Chinese sales dashboard: a row of tabs and a notice ticker, eight ' +
-             'colourful headline tiles, four charts, a full customer table with coloured tags ' +
-             'and a live payment feed, all on one screen.',
+        alt: 'The same customer table in a dark, dense, colourful style: every filter shown as ' +
+             'chips, colour-coded status tabs with counts, an Export Excel button, and a small-type ' +
+             'table whose middle columns scroll sideways between a pinned customer column and a ' +
+             'pinned Actions column.',
         notes: [
-          '<b>Eight headline numbers, not three.</b> Each tile carries its value, year-on-year ' +
-          'and month-on-month change and a sparkline.',
+          '<b>Every filter is out in the open.</b> Period, region, industry, owner and dates ' +
+          'sit on screen as chips, not behind a Filters button.',
           '<b>Red means up.</b> On Chinese financial screens, gains are red and losses are ' +
           'green, the reverse of the Western convention.',
-          '<b>Everything on one screen.</b> Every column fits, with no horizontal scroll. The ' +
-          'type is smaller and colour does the grouping instead of white space.',
-          '<b>Every destination is visible.</b> Ten tabs with live badges, a notice ticker and ' +
-          'the time-range filters sit on screen rather than in menus.'
+          '<b>Colour does the grouping.</b> Status, region and credit rating each get their own ' +
+          'colour, with counts on every tab, instead of white space.',
+          '<b>More rows, more columns, pinned at both ends.</b> Smaller type fits 14 customers ' +
+          'per page. The middle columns scroll sideways while the customer and Actions columns stay put.'
         ]
       }
     },

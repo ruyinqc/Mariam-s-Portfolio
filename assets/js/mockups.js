@@ -270,30 +270,37 @@
     );
   }
 
-  /* ---- Beijing: dark, dense, every number on one screen ------------------ */
+  /* ---- Beijing: dark, dense, colour-coded, the same table ---------------- */
 
-  // 客户, 区域, 行业, 合同额(万), 已回款(万), 同比 %, 环比 %, [Q1, Q2, Q3 回款率], 账期(天), 状态, 负责人
+  // customer, region, industry, contract ¥K, paid ¥K, YoY %, MoM %, [Q1, Q2, Q3 collected %],
+  // invoices, days overdue, avg days to pay, last payment, next due, credit, status, owner
   var CN_ROWS = [
-    ['华辰科技', '华东', '通信', 862.4, 862.4,  18.2,  4.1, [100, 100, 100], 21, 'done', '王磊'],
-    ['远航物流', '华南', '物流', 645.0, 441.8,   9.6,  2.3, [100,  88,  51], 34, 'ing',  '李娜'],
-    ['鼎盛建设', '华北', '建筑', 528.7, 185.0,  -4.1, -6.8, [ 72,  40,  12], 58, 'late', '张伟'],
-    ['瑞丰食品', '西南', '快消', 476.3, 357.2,  22.7,  8.9, [100,  95,  60], 27, 'ing',  '刘洋'],
-    ['恒信医药', '华东', '医药', 412.9, 412.9,   6.3,  1.2, [100, 100, 100], 18, 'done', '陈静'],
-    ['天启能源', '西北', '能源', 389.5, 116.9, -12.5, -9.4, [ 60,  22,   0], 66, 'late', '杨帆'],
-    ['金桥贸易', '华中', '贸易', 341.2, 238.8,   3.8,  0.6, [100,  80,  35], 39, 'warn', '赵敏'],
-    ['星海电子', '华南', '电子', 318.6, 223.0,  11.0,  3.7, [100,  90,  48], 30, 'ing',  '黄强'],
-    ['博远汽车', '东北', '汽车', 296.4, 148.2,  -2.6, -1.9, [ 90,  60,  20], 45, 'warn', '周杰'],
-    ['嘉禾纺织', '华东', '纺织', 254.8, 254.8,   7.4,  2.8, [100, 100, 100], 24, 'done', '吴霞'],
-    ['云帆传媒', '华北', '传媒', 213.5, 106.8,  15.9,  6.2, [ 85,  55,  30], 41, 'new',  '孙鹏'],
-    ['中泰置业', '西南', '地产', 198.0,  39.6, -18.3, -11.0,[ 40,  15,   0], 72, 'late', '郑楠']
+    ['Huachen Technology',    'East',    'Telecom',      8624, 8624,  18.2,   4.1, [100, 100, 100], 12,  0, 21, '09-18', '—',     'AAA', 'done', 'Wang Lei'],
+    ['Yuanhang Logistics',    'South',   'Logistics',    6450, 4418,   9.6,   2.3, [100,  88,  51],  9,  0, 34, '09-12', '10-05', 'AA',  'ing',  'Li Na'],
+    ['Dingsheng Construction','North',   'Construction', 5287, 1850,  -4.1,  -6.8, [ 72,  40,  12],  7, 22, 58, '08-02', '09-02', 'BBB', 'late', 'Zhang Wei'],
+    ['Ruifeng Foods',         'SW',      'FMCG',         4763, 3572,  22.7,   8.9, [100,  95,  60],  6,  0, 27, '09-20', '10-20', 'AA',  'ing',  'Liu Yang'],
+    ['Hengxin Pharma',        'East',    'Healthcare',   4129, 4129,   6.3,   1.2, [100, 100, 100],  8,  0, 18, '09-09', '—',     'AAA', 'done', 'Chen Jing'],
+    ['Tianqi Energy',         'NW',      'Energy',       3895, 1169, -12.5,  -9.4, [ 60,  22,   0],  5, 38, 66, '07-14', '08-30', 'BB',  'late', 'Yang Fan'],
+    ['Jinqiao Trading',       'Central', 'Trading',      3412, 2388,   3.8,   0.6, [100,  80,  35],  4,  0, 39, '09-15', '10-12', 'A',   'warn', 'Zhao Min'],
+    ['Xinghai Electronics',   'South',   'Electronics',  3186, 2230,  11.0,   3.7, [100,  90,  48], 10,  0, 30, '09-21', '10-01', 'AA',  'ing',  'Huang Qiang'],
+    ['Boyuan Auto',           'NE',      'Automotive',   2964, 1482,  -2.6,  -1.9, [ 90,  60,  20],  6,  4, 45, '08-28', '09-20', 'A',   'warn', 'Zhou Jie'],
+    ['Jiahe Textiles',        'East',    'Textiles',     2548, 2548,   7.4,   2.8, [100, 100, 100],  7,  0, 24, '09-11', '—',     'AA',  'done', 'Wu Xia'],
+    ['Yunfan Media',          'North',   'Media',        2135, 1068,  15.9,   6.2, [ 85,  55,  30],  3,  0, 41, '09-16', '10-16', 'A',   'new',  'Sun Peng'],
+    ['Zhongtai Property',     'SW',      'Real estate',  1980,  396, -18.3, -11.0, [ 40,  15,   0],  4, 52, 72, '06-30', '08-01', 'BB',  'late', 'Zheng Nan'],
+    ['Lianchuang Semicon',    'East',    'Semiconductor',1846, 1292,  27.4,   9.8, [100,  92,  55],  5,  0, 29, '09-19', '10-19', 'AAA', 'ing',  'Qian Hui'],
+    ['Haoyun Retail',         'Central', 'Retail',       1523, 1066,   5.1,   1.4, [100,  84,  42], 11,  0, 33, '09-17', '10-08', 'A',   'ing',  'Ma Lin']
   ];
 
   var CN_STATUS = {
-    done: ['已结清', 'cyan'], ing: ['回款中', 'blue'], late: ['逾期', 'red'],
-    warn: ['预警', 'orange'], 'new': ['新签', 'purple']
+    done: ['Settled', 'cyan'], ing: ['Collecting', 'blue'], late: ['Overdue', 'red'],
+    warn: ['Warning', 'orange'], 'new': ['New', 'purple']
   };
-  var CN_REGION = { '华东': 'blue', '华南': 'cyan', '华北': 'purple', '西南': 'gold',
-                    '西北': 'orange', '华中': 'magenta', '东北': 'green' };
+  var CN_REGION = { East: 'blue', South: 'cyan', North: 'purple', SW: 'gold',
+                    NW: 'orange', Central: 'magenta', NE: 'green' };
+  var CN_CREDIT = { AAA: 'green', AA: 'cyan', A: 'blue', BBB: 'orange', BB: 'red' };
+  var CN_METHOD = ['Bank transfer', 'Bank draft', 'Bank transfer', 'Letter of credit', 'Bank transfer'];
+
+  function k(n) { return n.toLocaleString('en-US'); }
 
   // Red is up and green is down, as on every Chinese market screen.
   function cnDelta(v) {
@@ -302,15 +309,17 @@
   }
 
   function cnRow(r, i) {
-    var left = r[3] - r[4], pct = r[4] / r[3] * 100, st = CN_STATUS[r[9]];
-    return '<tr>' +
-      '<td><b class="cn-rank' + (i < 3 ? ' cn-rank--' + (i + 1) : '') + '">' + (i + 1) + '</b></td>' +
-      '<td class="cn-name">' + r[0] + '</td>' +
+    var left = r[3] - r[4], pct = r[4] / r[3] * 100, st = CN_STATUS[r[14]];
+    return '<tr' + (i === 2 ? ' class="is-picked"' : '') + '>' +
+      '<td class="cn-fix cn-fix--0"><i class="cn-check' + (i === 2 ? ' is-on' : '') + '"></i></td>' +
+      '<td class="cn-fix cn-fix--1"><b class="cn-rank' + (i < 3 ? ' cn-rank--' + (i + 1) : '') + '">' + (i + 1) + '</b></td>' +
+      '<td class="cn-fix cn-fix--2 cn-name">' + r[0] + '</td>' +
       '<td><span class="cn-tag cn-tag--' + CN_REGION[r[1]] + '">' + r[1] + '</span></td>' +
       '<td>' + r[2] + '</td>' +
-      '<td class="cn-n">' + r[3].toFixed(1) + '</td>' +
-      '<td class="cn-n cn-c-cyan">' + r[4].toFixed(1) + '</td>' +
-      '<td class="cn-n ' + (left > 0 ? 'cn-c-gold' : 'cn-dim') + '">' + left.toFixed(1) + '</td>' +
+      '<td class="cn-code">HT-2026-' + String(412 + i * 37).padStart(4, '0') + '</td>' +
+      '<td class="cn-n">' + k(r[3]) + '</td>' +
+      '<td class="cn-n cn-c-cyan">' + k(r[4]) + '</td>' +
+      '<td class="cn-n ' + (left > 0 ? 'cn-c-gold' : 'cn-dim') + '">' + k(left) + '</td>' +
       '<td><span class="cn-mini"><i style="width:' + pct.toFixed(0) + '%" class="' +
         (pct >= 99.9 ? 'is-cyan' : pct >= 60 ? 'is-blue' : pct >= 40 ? 'is-orange' : 'is-red') + '"></i></span>' +
         '<span class="cn-n">' + pct.toFixed(1) + '%</span></td>' +
@@ -319,174 +328,86 @@
       r[7].map(function (q) {
         return '<td class="cn-n cn-heat" style="--h:' + (q / 100).toFixed(2) + '">' + q + '%</td>';
       }).join('') +
-      '<td class="cn-n' + (r[8] > 45 ? ' cn-up' : '') + '">' + r[8] + '天</td>' +
+      '<td class="cn-n">' + r[8] + '</td>' +
+      '<td class="cn-n' + (r[9] ? ' cn-up cn-bold' : ' cn-dim') + '">' + (r[9] ? r[9] + 'd' : '—') + '</td>' +
+      '<td class="cn-n' + (r[10] > 45 ? ' cn-c-orange' : '') + '">' + r[10] + 'd</td>' +
+      '<td class="cn-n">2026-' + r[11] + '</td>' +
+      '<td class="cn-n' + (r[14] === 'late' ? ' cn-up' : '') + '">' + (r[12] === '—' ? '—' : '2026-' + r[12]) + '</td>' +
+      '<td>' + CN_METHOD[i % CN_METHOD.length] + '</td>' +
+      '<td><span class="cn-tag cn-tag--' + CN_CREDIT[r[13]] + '">' + r[13] + '</span></td>' +
       '<td><span class="cn-tag cn-tag--' + st[1] + ' cn-tag--solid">' + st[0] + '</span></td>' +
-      '<td>' + r[10] + '</td>' +
+      '<td>' + r[15] + '</td>' +
+      '<td class="cn-fix cn-fix--end"><span class="cn-link">View</span><span class="cn-link">' +
+        (r[14] === 'done' ? 'Invoice' : 'Remind') + '</span><span class="cn-link">More ▾</span></td>' +
     '</tr>';
   }
 
-  function cnKpi(label, value, unit, delta, color, points) {
-    return '<div class="cn-kpi cn-kpi--' + color + '">' +
-      '<p class="cn-kpi__label">' + label + '</p>' +
-      '<p class="cn-kpi__value">' + value + '<small>' + unit + '</small></p>' +
-      '<p class="cn-kpi__foot">同比 ' + cnDelta(delta[0]) + ' 环比 ' + cnDelta(delta[1]) + '</p>' +
-      spark(points, 'cn-spark') +
-    '</div>';
-  }
-
-  function cnPanel(title, extra, body, cls) {
-    return '<section class="cn-panel' + (cls ? ' ' + cls : '') + '">' +
-      '<header class="cn-ph"><b>' + title + '</b>' + (extra || '') + '</header>' + body +
-    '</section>';
-  }
-
-  function cnBars() {
-    var sales = [62, 58, 71, 66, 74, 80, 77, 85, 92, 0, 0, 0];
-    var paid  = [48, 51, 55, 57, 60, 66, 63, 70, 71, 0, 0, 0];
-    var target = [70, 70, 72, 72, 75, 78, 80, 82, 85, 88, 90, 95];
-    var out = '<svg class="cn-chart" viewBox="0 0 260 110" aria-hidden="true">' +
-      '<defs><linearGradient id="cnBarA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36CFFF"/><stop offset="1" stop-color="#1668DC" stop-opacity=".35"/></linearGradient>' +
-      '<linearGradient id="cnBarB" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFD666"/><stop offset="1" stop-color="#FA8C16" stop-opacity=".35"/></linearGradient></defs>';
-    [0, 25, 50, 75, 100].forEach(function (v) {
-      var y = 96 - v * 0.86;
-      out += '<line x1="18" x2="258" y1="' + y + '" y2="' + y + '" class="cn-grid"/>' +
-             '<text x="14" y="' + (y + 2) + '" class="cn-axis" text-anchor="end">' + v + '</text>';
-    });
-    var line = [];
-    for (var i = 0; i < 12; i++) {
-      var x = 24 + i * 19.6;
-      if (sales[i]) {
-        out += '<rect x="' + x + '" y="' + (96 - sales[i] * 0.86) + '" width="6.5" height="' + (sales[i] * 0.86) + '" fill="url(#cnBarA)"/>' +
-               '<rect x="' + (x + 7.5) + '" y="' + (96 - paid[i] * 0.86) + '" width="6.5" height="' + (paid[i] * 0.86) + '" fill="url(#cnBarB)"/>';
-      }
-      line.push((x + 7).toFixed(1) + ',' + (96 - target[i] * 0.86).toFixed(1));
-      out += '<text x="' + (x + 7) + '" y="106" class="cn-axis" text-anchor="middle">' + (i + 1) + '月</text>';
-    }
-    out += '<polyline points="' + line.join(' ') + '" class="cn-line"/>';
-    line.forEach(function (p) {
-      var xy = p.split(',');
-      out += '<circle cx="' + xy[0] + '" cy="' + xy[1] + '" r="1.6" class="cn-dot"/>';
-    });
-    out += '<text x="' + (24 + 8 * 19.6 + 7) + '" y="' + (96 - 92 * 0.86 - 3) + '" class="cn-callout" text-anchor="middle">92</text>';
-    return out + '</svg>';
-  }
-
-  function cnDonut() {
-    var parts = [['华东', 31, '#1677FF'], ['华南', 22, '#13C2C2'], ['华北', 16, '#9254DE'],
-                 ['西南', 12, '#FADB14'], ['华中', 8, '#EB2F96'], ['西北', 6, '#FA8C16'], ['东北', 5, '#52C41A']];
-    var c = 2 * Math.PI * 15.9, off = 0;
-    var svg = '<svg class="cn-donut" viewBox="0 0 42 42" aria-hidden="true">' +
-      '<circle cx="21" cy="21" r="15.9" class="cn-ring"/>';
-    parts.forEach(function (p) {
-      var len = c * p[1] / 100;
-      svg += '<circle cx="21" cy="21" r="15.9" fill="none" stroke="' + p[2] + '" stroke-width="5.5" ' +
-             'stroke-dasharray="' + (len - 0.4).toFixed(2) + ' ' + (c - len + 0.4).toFixed(2) + '" ' +
-             'stroke-dashoffset="' + (-off + c * 0.25).toFixed(2) + '"/>';
-      off += len;
-    });
-    svg += '<text x="21" y="20.5" text-anchor="middle" class="cn-donut__v">3,482</text>' +
-           '<text x="21" y="25.5" text-anchor="middle" class="cn-donut__l">万元</text></svg>';
-    return '<div class="cn-donutwrap">' + svg + '<ul class="cn-legend">' + parts.map(function (p, i) {
-      return '<li><i style="background:' + p[2] + '"></i>' + p[0] + '<b>' + p[1] + '%</b>' +
-        cnDelta([12.1, 8.4, -3.2, 15.7, 4.9, -6.1, 1.8][i]) + '</li>';
-    }).join('') + '</ul></div>';
-  }
-
-  function cnRanking() {
-    var list = [['华东一部', 1286, 108], ['华南二部', 1104, 97], ['华北一部', 982, 91], ['西南大区', 874, 88],
-                ['华中大区', 760, 79], ['华东二部', 698, 74], ['西北大区', 512, 62], ['东北大区', 431, 55]];
-    var colors = ['red', 'orange', 'gold', 'blue', 'blue', 'blue', 'blue', 'blue'];
-    return '<ol class="cn-rankl">' + list.map(function (r, i) {
-      return '<li><b class="cn-rank' + (i < 3 ? ' cn-rank--' + (i + 1) : '') + '">' + (i + 1) + '</b>' +
-        '<span>' + r[0] + '</span>' +
-        '<span class="cn-hbar"><i class="is-' + colors[i] + '" style="width:' + Math.min(r[2], 100) + '%"></i></span>' +
-        '<em class="cn-n">' + r[1] + '万</em><em class="cn-n ' + (r[2] >= 100 ? 'cn-up' : '') + '">' + r[2] + '%</em></li>';
-    }).join('') + '</ol>';
-  }
-
-  function cnGauge(label, pct, color) {
-    var c = 2 * Math.PI * 15;
-    return '<div class="cn-gauge"><svg viewBox="0 0 36 36" aria-hidden="true">' +
-      '<circle cx="18" cy="18" r="15" class="cn-ring"/>' +
-      '<circle cx="18" cy="18" r="15" fill="none" stroke="' + color + '" stroke-width="3.2" stroke-linecap="round" ' +
-        'stroke-dasharray="' + (c * pct / 100).toFixed(2) + ' ' + c.toFixed(2) + '" transform="rotate(-90 18 18)"/>' +
-      '<text x="18" y="20.5" text-anchor="middle" class="cn-gauge__v">' + pct + '%</text></svg>' +
-      '<span>' + label + '</span></div>';
-  }
-
-  function cnFeed() {
-    var feed = [['14:31', '华辰科技', '+86.2', 'cyan'], ['14:26', '瑞丰食品', '+42.0', 'cyan'],
-                ['14:12', '天启能源', '逾期 38天', 'red'], ['13:58', '星海电子', '+23.5', 'cyan'],
-                ['13:40', '云帆传媒', '新签 213.5', 'purple'], ['13:22', '金桥贸易', '预警 账期', 'orange'],
-                ['13:05', '远航物流', '+60.8', 'cyan'], ['12:47', '中泰置业', '逾期 52天', 'red'],
-                ['12:30', '恒信医药', '已结清', 'blue']];
-    return '<ul class="cn-feed">' + feed.map(function (f) {
-      return '<li><i class="is-' + f[3] + '"></i><time>' + f[0] + '</time><span>' + f[1] + '</span>' +
-        '<b class="cn-c-' + f[3] + '">' + f[2] + '</b></li>';
-    }).join('') + '</ul>';
+  function cnChips(label, items, on) {
+    return '<span class="cn-group"><em>' + label + '</em>' + items.map(function (t, i) {
+      return '<i' + (i === on ? ' class="is-on"' : '') + '>' + t + '</i>';
+    }).join('') + '</span>';
   }
 
   function dashBeijing() {
-    var cols = ['#', '客户名称', '区域', '行业', '合同额(万)', '已回款(万)', '待回款(万)', '回款率',
-                '同比', '环比', 'Q1', 'Q2', 'Q3', '账期', '状态', '负责人'];
+    var cols = ['', '#', 'Customer', 'Region', 'Industry', 'Contract no.', 'Contract ¥K', 'Paid ¥K', 'Remaining ¥K', 'Paid %',
+                'YoY', 'MoM', 'Q1', 'Q2', 'Q3', 'Invoices', 'Overdue', 'Avg. days', 'Last payment',
+                'Next due', 'Method', 'Credit', 'Status', 'Owner', 'Actions'];
+    var fix = { 0: 'cn-fix cn-fix--0', 1: 'cn-fix cn-fix--1', 2: 'cn-fix cn-fix--2', 24: 'cn-fix cn-fix--end' };
+    var totals = CN_ROWS.reduce(function (t, r) { t[0] += r[3]; t[1] += r[4]; return t; }, [0, 0]);
+
     return chrome(
-      '<div class="cn" lang="zh-CN">' +
-        '<header class="cn-top">' +
-          '<span class="cn-logo"><i></i>财务云</span>' +
-          '<nav class="cn-nav mk-rel">' + mark(4, 'good') +
-            '<span>首页</span><span class="is-on">销售看板</span><span>客户管理</span><span>合同</span>' +
-            '<span>回款<em>12</em></span><span>发票</span><span>财务报表</span><span>预警<em class="is-red">8</em></span>' +
-            '<span>审批<em>5</em></span><span>更多 ▾</span></nav>' +
-          '<h5 class="cn-title">销售回款数据中心</h5>' +
-          '<span class="cn-meta"><b>2026-09-24</b> 星期四 <b class="cn-clock">14:32:08</b></span>' +
-          '<span class="cn-meta">晴 23°C 北京</span>' +
-          '<span class="cn-bell"><svg viewBox="0 0 24 24" class="mk-ico mk-ico--line"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/></svg><em>99+</em></span>' +
-          '<span class="cn-avatar">王</span>' +
-        '</header>' +
-
-        '<div class="cn-ticker"><b>公告</b>' +
-          '<span>Q3回款冲刺 · 华东一部完成率 <em class="cn-up">108% ▲</em></span>' +
-          '<span>天启能源逾期 38 天，请跟进</span>' +
-          '<span>本月新签 48 家 <em class="cn-up">▲15.9%</em></span>' +
-          '<span class="cn-filters"><i class="is-on">今日</i><i>本周</i><i class="is-on">本月</i><i>本季</i><i>本年</i>' +
-          '<i>全部区域 ▾</i><i>全部行业 ▾</i><i>刷新 ⟳</i></span>' +
+      '<div class="cn">' +
+        '<div class="cn-head">' +
+          '<b class="cn-title">Customer Payment Details</b>' +
+          '<span class="cn-updated">Updated 2026-09-24 14:32:08 <i class="cn-live">● LIVE</i></span>' +
+          '<span class="cn-search"><svg viewBox="0 0 24 24" class="mk-ico mk-ico--line"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>Customer, owner, contract no.</span>' +
+          '<span class="cn-btn">Reset</span>' +
+          '<span class="cn-btn cn-btn--blue">Search</span>' +
+          '<span class="cn-btn cn-btn--export"><svg viewBox="0 0 24 24" class="mk-ico mk-ico--line"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Export Excel</span>' +
+          '<span class="cn-btn cn-btn--icon"><svg viewBox="0 0 24 24" class="mk-ico mk-ico--line"><path d="M4 6h16M4 12h16M4 18h16"/></svg></span>' +
         '</div>' +
 
-        '<div class="cn-kpis mk-rel">' + mark(1, 'good') +
-          cnKpi('销售总额', '3,482.6', '万', [12.4, 3.1], 'blue',   [22, 25, 24, 28, 31, 30, 34, 38]) +
-          cnKpi('已回款',   '2,431.9', '万', [9.8, 2.2],  'cyan',   [18, 19, 22, 21, 24, 26, 25, 29]) +
-          cnKpi('待回款',   '1,050.7', '万', [4.6, -1.8], 'gold',   [12, 11, 13, 14, 13, 12, 11, 10]) +
-          cnKpi('回款率',   '69.8',    '%',  [2.1, 0.9],  'green',  [61, 62, 64, 63, 66, 67, 68, 70]) +
-          cnKpi('客户数',   '1,286',   '家', [15.9, 3.9], 'purple', [30, 32, 33, 35, 36, 38, 40, 42]) +
-          cnKpi('逾期金额', '186.2',   '万', [3.1, -4.2], 'red',    [9, 12, 10, 14, 13, 16, 15, 13]) +
-          cnKpi('平均账期', '42',      '天', [-2.0, -1.1],'orange', [48, 47, 46, 46, 45, 44, 43, 42]) +
-          cnKpi('目标完成', '92.4',    '%',  [6.7, 2.5],  'magenta',[70, 74, 76, 80, 83, 86, 89, 92]) +
+        '<div class="cn-filters mk-rel">' + mark(1, 'good') +
+          cnChips('Period', ['Today', 'Week', 'Month', 'Quarter', 'Year'], 3) +
+          cnChips('Region', ['All', 'East', 'South', 'North', 'SW', 'NW', 'Central', 'NE'], 0) +
+          '<span class="cn-group"><em>Industry</em><i class="cn-select">All industries ▾</i></span>' +
+          '<span class="cn-group"><em>Owner</em><i class="cn-select">Anyone ▾</i></span>' +
+          '<span class="cn-group"><em>Date</em><i class="cn-select">2026-07-01 ~ 2026-09-30</i></span>' +
         '</div>' +
 
-        '<div class="cn-row">' +
-          cnPanel('月度销售与回款', '<span class="cn-keys"><i class="is-blue"></i>销售 <i class="is-gold"></i>回款 <i class="is-line"></i>目标</span>', cnBars()) +
-          cnPanel('区域销售占比', '<span class="cn-more">详情 ›</span>', cnDonut()) +
-          cnPanel('团队业绩排行 TOP8', '<span class="cn-seg"><i class="is-on">金额</i><i>完成率</i></span>', cnRanking()) +
-          cnPanel('回款进度', '<span class="cn-more">单位: %</span>',
-            '<div class="cn-gauges">' + cnGauge('本月', 71, '#13C2C2') + cnGauge('本季', 69, '#1677FF') +
-              cnGauge('本年', 58, '#FAAD14') + cnGauge('目标', 92, '#EB2F96') + '</div>' +
-            '<ul class="cn-stats"><li>应收<b class="cn-c-gold">1,050.7万</b></li><li>本周到期<b class="cn-c-orange">128.4万</b></li>' +
-              '<li>已开票<b class="cn-c-cyan">2,986.0万</b></li><li>坏账风险<b class="cn-up">3家</b></li></ul>') +
+        '<div class="cn-status">' +
+          '<span class="cn-tabs mk-rel">' + mark(3, 'good') +
+            '<i class="is-on">All <b>1,286</b></i>' +
+            '<i class="is-blue">Collecting <b>412</b></i>' +
+            '<i class="is-red">Overdue <b>37</b></i>' +
+            '<i class="is-orange">Warning <b>64</b></i>' +
+            '<i class="is-cyan">Settled <b>773</b></i>' +
+            '<i class="is-purple">New <b>48</b></i>' +
+          '</span>' +
+          '<span class="cn-legend mk-rel">' + mark(2, 'good') +
+            '<span class="cn-up">▲ Up</span><span class="cn-down">▼ Down</span></span>' +
         '</div>' +
 
-        '<div class="cn-row cn-row--bottom">' +
-          cnPanel('客户回款明细', '<span class="cn-keys mk-rel">' + mark(2, 'good') + '<span class="cn-up">▲ 上涨</span> <span class="cn-down">▼ 下降</span></span>' +
-            '<span class="cn-seg"><i class="is-on">全部 1286</i><i>回款中 412</i><i>逾期 37</i><i>预警 64</i><i>已结清 773</i></span>' +
-            '<span class="cn-more">导出 ⇩</span>',
-            '<table class="cn-table"><thead><tr>' + cols.map(function (c) { return '<th>' + c + '</th>'; }).join('') +
-            '</tr></thead><tbody>' + CN_ROWS.map(cnRow).join('') + '</tbody></table>' +
-            '<div class="cn-pager"><span>共 1,286 条 · 每页 12 条</span>' + mark(3, 'good') +
-              '<span><i>‹</i><i class="is-on">1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>…</i><i>108</i><i>›</i></span></div>',
-            'cn-panel--table') +
-          cnPanel('实时动态', '<span class="cn-live">● LIVE</span>', cnFeed(), 'cn-panel--feed') +
+        '<div class="cn-tablewrap mk-rel">' + mark(4, 'good') +
+          '<div class="cn-scroll" tabindex="-1">' +
+            '<table class="cn-table"><thead><tr>' + cols.map(function (c, i) {
+              return '<th class="' + (fix[i] || '') + '">' + (i === 0 ? '<i class="cn-check"></i>' : c) +
+                (c === 'Remaining ¥K' ? ' <span class="cn-sort">▼</span>' : '') + '</th>';
+            }).join('') + '</tr></thead><tbody>' + CN_ROWS.map(cnRow).join('') + '</tbody>' +
+            '<tfoot><tr><td class="cn-fix cn-fix--0"></td><td class="cn-fix cn-fix--1"></td>' +
+              '<td class="cn-fix cn-fix--2">Page total</td><td></td><td></td><td></td>' +
+              '<td class="cn-n">' + k(totals[0]) + '</td><td class="cn-n cn-c-cyan">' + k(totals[1]) + '</td>' +
+              '<td class="cn-n cn-c-gold">' + k(totals[0] - totals[1]) + '</td>' +
+              '<td class="cn-n">' + (totals[1] / totals[0] * 100).toFixed(1) + '%</td>' +
+              '<td colspan="14"></td><td class="cn-fix cn-fix--end"></td></tr></tfoot></table>' +
+          '</div>' +
         '</div>' +
+
+        '<div class="cn-pager"><span>Total 1,286 · 14 / page</span>' +
+          '<span><i>‹</i><i class="is-on">1</i><i>2</i><i>3</i><i>4</i><i>5</i><i>…</i><i>92</i><i>›</i>' +
+          '<em>Go to</em><i class="cn-goto">1</i></span></div>' +
       '</div>',
-      'after mk-frame--dash mk-frame--dark', 'app / 销售看板'
+      'after mk-frame--dash mk-frame--dark', 'app / payments / customers'
     );
   }
 
