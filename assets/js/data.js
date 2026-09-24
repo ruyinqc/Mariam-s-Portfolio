@@ -38,7 +38,7 @@ window.WORK = [
 
   title: 'Invoices & Payments Module',
   standfirst:
-    'Customers were receiving several invoices a month and paying only the one that ' +
+    'Ovarc customers were receiving several invoices a month and paying only the one that ' +
     'scared them most. The ones who did try to pay in full often sent the wrong amount. ' +
     'I rebuilt the payment flow so that the right number is the obvious number.',
 
@@ -46,7 +46,7 @@ window.WORK = [
     'Role':     { value: 'Product Designer', note: 'End-to-end design' },
     'Timeline': { value: '2.5 weeks' },
     'Status':   { value: 'Shipped', note: 'In production since November 2025' },
-    'Product':  { value: 'B2B SaaS', note: 'Fintech · Egypt' }
+    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
   },
 
   // shown full width right under the Role / Timeline / Status row
@@ -65,7 +65,7 @@ window.WORK = [
       num: '01',
       title: 'Where it started',
       body: [
-        'The platform bills its customers for several services at once — payroll, government ' +
+        'Ovarc bills its customers for several services at once — payroll, government ' +
         'fees, service charges. Each one arrives as its own invoice. In theory a customer ' +
         'opens the billing page and settles what is due. In practice, they did not.',
 
