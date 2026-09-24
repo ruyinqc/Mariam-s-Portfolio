@@ -40,7 +40,7 @@ window.WORK = [
 
   title: 'Invoices & Payments Module',
   standfirst:
-    'Ovarc customers were receiving several invoices a month and paying only the one that ' +
+    'Customers were receiving several invoices a month and paying only the one that ' +
     'scared them most. The ones who did try to pay in full often sent the wrong amount. ' +
     'I rebuilt the payment flow so that the right number is the obvious number.',
 
@@ -48,7 +48,8 @@ window.WORK = [
     'Role':     { value: 'Product Designer', note: 'End-to-end design' },
     'Timeline': { value: '2.5 weeks' },
     'Status':   { value: 'Shipped', note: 'In production since November 2025' },
-    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
+    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' },
+    'Outcome':  { value: '>90%', note: 'Completion rate' }
   },
 
   // shown full width right under the Role / Timeline / Status row
@@ -67,9 +68,8 @@ window.WORK = [
       num: '01',
       title: 'Where it started',
       body: [
-        'Ovarc bills its customers for several services at once — payroll, government ' +
-        'fees, service charges. Each one arrives as its own invoice. In theory a customer ' +
-        'opens the billing page and settles what is due. In practice, they did not.',
+        'In theory a customer opens the billing page and settles what is due. In practice, ' +
+        'they did not.',
 
         'Two behaviours showed up again and again: customers paid a single invoice and ' +
         'left the rest open, and customers who did pay in full transferred an amount that ' +
@@ -203,23 +203,6 @@ window.WORK = [
     {
       type: 'pull',
       text: 'People do not read a payment screen. They find a number and they send it.'
-    },
-
-    {
-      type: 'section',
-      num: '03',
-      title: 'What I would watch next',
-      body: [
-        'The redesign shipped in November 2025. The measures that matter are the ones ' +
-        'tied to the two behaviours it targeted: how many invoices get settled per ' +
-        'payment session, and how many payments arrive at an amount finance has to ' +
-        'correct by hand.',
-
-        'I would also want session recordings on the summary block specifically. The ' +
-        'hypothesis is that hierarchy fixed the wrong-amount problem — but hierarchy is ' +
-        'exactly the kind of fix that is easy to believe in and hard to prove without ' +
-        'watching someone use it.'
-      ]
     }
   ]
 },
@@ -283,10 +266,10 @@ window.WORK = [
       num: '02',
       title: 'Before and after',
       intro:
-        'Both screens are my own work. I designed the first version, then pressure-tested it ' +
-        'against what a founder actually has to do here, and the problems below are the ones ' +
-        'I found in it. The redesign keeps the same features, data and rules. What I changed ' +
-        'is how the pieces relate to each other, and that turned out to be the whole problem.',
+        'Both screens are my own work. I designed the first version, and the problems below ' +
+        'are the ones I found in it. The redesign keeps the same features, data and rules. ' +
+        'What I changed is how the pieces relate to each other, and that turned out to be ' +
+        'the whole problem.',
       before: {
         label: 'Before',
         kicker: 'My first version · two panels',
@@ -492,7 +475,7 @@ window.WORK = [
     'Format':     { value: 'UX argument' },
     'Context':    { value: 'Huawei Technologies', note: 'Financial dashboards · 2024' },
     'Background': { value: '5 years in China', note: 'B.Sc. in China' },
-    'Reading':    { value: '5 min' }
+    'Reading':    { value: '4 min' }
   },
 
   blocks: [
@@ -583,35 +566,21 @@ window.WORK = [
         'Put the two screens side by side and none of the differences are in the words. ' +
         'Four of them decide whether the dashboard feels right.',
 
-        '<b>Density reads as capability, not clutter.</b> The apps people in China use ' +
-        'every day, for payments, shopping, travel and public services, put dozens of entry ' +
-        'points on one screen, and people learn to scan dense screens fast. A dashboard ' +
-        'with eight rows and three big numbers does not read as calm there. It reads as a ' +
-        'tool that is hiding something, or one that is not finished. The Chinese screen ' +
-        'shows 14 customers across more than twenty columns, because that is what its ' +
-        'reader expects to take in at a glance.',
+        '<b>Density reads as capability, not clutter.</b> People in China scan dense apps ' +
+        'every day. A dashboard with three big numbers does not read as calm there. It ' +
+        'reads as unfinished.',
 
-        '<b>Hidden filters feel like missing features.</b> The Western screen uses progressive ' +
-        'disclosure: two dropdowns, and a Filters button for the rest. That keeps the page ' +
-        'quiet for someone asking one question at a time. The Chinese screen puts period, ' +
-        'region, industry, owner and dates on screen as chips. The filter bar doubles as a ' +
-        'summary of what the table is showing, and every change is one click, not a panel.',
+        '<b>Hidden filters feel like missing features.</b> Every filter sits on screen as a ' +
+        'chip, so the filter bar doubles as a summary of the table, and every change is ' +
+        'one click.',
 
-        '<b>Colour carries meaning before it carries style.</b> In China, red means up. ' +
-        'Stock tickers, sales reports and finance screens show gains in red and losses in ' +
-        'green, the reverse of the Western convention. A growth figure in green, the obvious ' +
-        'choice in the West, reads as a loss in China. Colour also does the grouping that ' +
-        'white space does on the Western screen: status, region and credit rating each get ' +
-        'their own colour, and every tab shows a count.',
+        '<b>Colour carries meaning before it carries style.</b> In China, red means up and ' +
+        'green means down, so a growth figure in green reads as a loss.',
 
         '<b>The data is expected to leave the screen.</b> Export Excel sits in the header, ' +
-        'not in a menu. The table ends with a page total, and the header shows the exact ' +
-        'time the data was last updated. Numbers on a screen like this usually end up in a ' +
-        'report, and the design treats exporting them as the main job, not an edge case.',
+        'not in a menu, because these numbers usually end up in a report.',
 
-        'None of this would come back from a translator. Every word on the Western screen ' +
-        'could be rendered perfectly in Chinese, and it would still feel like a product ' +
-        'built for somewhere else.'
+        'None of this would come back from a translator.'
       ]
     },
     {
