@@ -35,13 +35,43 @@
              (spec ? cluster(spec) : '') + '</span>';
   }
 
+  function thumb(t) {
+    // `zoom` shows a close-up of one of the study's own screens instead
+    if (t.zoom && window.Lens) {
+      return '<div class="pincard__thumb pincard__thumb--lens" aria-hidden="true">' +
+               Lens.html(t.zoom) +
+             '</div>';
+    }
+    // `image` is a picture of the project itself, cropped to fill the frame
+    if (t.image) {
+      return '<div class="pincard__thumb pincard__thumb--image" aria-hidden="true">' +
+               '<img src="' + t.image.src + '" alt="" width="' + t.image.width + '" ' +
+                 'height="' + t.image.height + '" loading="lazy" decoding="async">' +
+             '</div>';
+    }
+    return '<div class="pincard__thumb" aria-hidden="true">' +
+             '<div class="mini ' + (t.tone === 'lime' ? 'mini--lime' : '') + '">' +
+               miniCluster(t.left) +
+               '<span class="mini__arrow">' + icon('arrow') + '</span>' +
+               miniCluster(t.right) +
+             '</div>' +
+           '</div>';
+  }
+
+  // The status pill on each card, from `status` in data.js.
+  var PILLS = {
+    live:    { cls: 'tag--live',    text: 'Shipped' },
+    draft:   { cls: 'tag--wip',     text: 'In progress' },
+    concept: { cls: 'tag--concept', text: 'Concept' }
+  };
+
   /* ---- render ----------------------------------------------------------- */
 
   window.WORK.forEach(function (item, i) {
     if (item.published === false) return;
 
     var t = item.card.thumb || {};
-    var isDraft = item.status === 'draft';
+    var pill = PILLS[item.status] || PILLS.live;
     var id = 'pc-' + item.slug;
 
     var el = document.createElement('article');
@@ -51,18 +81,7 @@
     el.innerHTML =
       '<span class="pincard__pin" aria-hidden="true"></span>' +
 
-      // `zoom` shows a close-up of one of the study's own screens instead
-      (t.zoom && window.Lens
-        ? '<div class="pincard__thumb pincard__thumb--lens" aria-hidden="true">' +
-            Lens.html(t.zoom) +
-          '</div>'
-        : '<div class="pincard__thumb" aria-hidden="true">' +
-            '<div class="mini ' + (t.tone === 'lime' ? 'mini--lime' : '') + '">' +
-              miniCluster(t.left) +
-              '<span class="mini__arrow">' + icon('arrow') + '</span>' +
-              miniCluster(t.right) +
-            '</div>' +
-          '</div>') +
+      thumb(t) +
 
       '<div class="pincard__tags">' +
         '<span class="tag tag--kind">' + item.kind + '</span>' +
@@ -71,9 +90,7 @@
         (item.card.tags || []).slice(0, 1).map(function (tag) {
           return '<span class="tag">' + tag + '</span>';
         }).join('') +
-        '<span class="tag ' + (isDraft ? 'tag--wip' : 'tag--live') + '">' +
-          (isDraft ? 'In progress' : 'Shipped') +
-        '</span>' +
+        '<span class="tag ' + pill.cls + '">' + pill.text + '</span>' +
       '</div>' +
 
       '<h3 class="pincard__title" id="' + id + '">' + item.card.title + '</h3>' +

@@ -55,6 +55,7 @@ A minimal one looks like this:
   kind: 'Case study',            // or 'UX argument'
   published: true,               // false hides the card completely
   status: 'live',                // 'live' → "Shipped" pill · 'draft' → "In progress"
+                                 // 'concept' → "Concept": finished, designed but not built
 
   card: {                        // what shows on the pin board
     title: 'My Project',
@@ -67,6 +68,8 @@ A minimal one looks like this:
     }                                       // { art: 'invoice', count: 5 } uses a picture
                                             // or thumb: { zoom: {…}, tone } shows a close-up
                                             // of one of your screens (see "Close-ups" below)
+                                            // or thumb: { image: { src, width, height }, tone }
+                                            // fills the frame with a picture of the project
   },
 
   title: 'My Project',
@@ -82,6 +85,10 @@ A minimal one looks like this:
     src: 'assets/img/work/my-project.webp', width: 2000, height: 977,
     alt: 'What the screenshot shows'
   },
+  // or a video instead (Journey Guide Tracker does this). It never plays by
+  // itself and nothing downloads until someone presses play:
+  // cover: { video: 'assets/video/my-project.mp4', poster: 'assets/img/work/….webp',
+  //          width: 832, height: 464, alt: '…', caption: '…' }
 
   blocks: [ /* see below */ ]
 }
@@ -89,7 +96,7 @@ A minimal one looks like this:
 
 ### The blocks
 
-`blocks` is the body of the study, in order. Five kinds:
+`blocks` is the body of the study, in order. The kinds you'll use most:
 
 **`section`** — a heading and some paragraphs.
 
@@ -169,6 +176,23 @@ This is the one that does the heavy lifting.
 ```
 
 **`note`** — a small aside in a blue box. Accepts HTML.
+
+**`steps`** — a walkthrough in frames: a row of numbered stills, each with a
+short title and a sentence. Journey Guide Tracker uses frames from its video.
+
+```js
+{ type: 'steps', num: '02', title: 'How it works', intro: 'Optional sentence.',
+  items: [{ title: 'Scan and start', text: 'Accepts <b>HTML</b>.',
+            image: { src: 'assets/img/work/….webp', width: 220, height: 449, alt: '…' } }] }
+```
+
+**`chips`** — a short list of words as pills. `accent: true` picks one out,
+and `note` adds a small line under it.
+
+```js
+{ type: 'chips', num: '03', title: 'Where it works best',
+  items: [{ text: 'Museums', note: 'The prototype', accent: true }, 'City Tours'] }
+```
 
 ### Finishing a placeholder
 
@@ -288,8 +312,9 @@ broken. `tools/seo.js` checks for exactly that.
   `knowsLanguage`, `hasOccupation`, `alumniOf` and `worksFor`
 - Case studies and certificates are added to the structured data **at runtime
   from `data.js` and `config.js`**, so editing content updates the search
-  markup automatically. Only studies marked `status: 'live'` are described —
-  a placeholder full of `TODO` would be worse than nothing
+  markup automatically. Only finished studies (`status: 'live'` or
+  `'concept'`) are described — a placeholder full of `TODO` would be worse
+  than nothing
 - `robots.txt` and `sitemap.xml`
 
 **Once it is live**, submit it to Google: add the site at
@@ -380,6 +405,7 @@ assets/
                          placeholder: the comment next to "MW" in index.html
                          says what to add when his words and photo arrive
   cv/                    the PDF the Download CV button serves
+  video/                 videos used inside case studies (H.264 MP4)
 robots.txt               crawl rules + sitemap pointer
 sitemap.xml              the one URL, for Search Console
 tools/
