@@ -9,11 +9,12 @@
    Variables and Secrets:
 
      RESEND_API_KEY   secret. From resend.com → API Keys.
-     TO_EMAIL         where messages land, e.g. marmaremad31@gmail.com
+     TO_EMAIL         where messages land, e.g. ruyinqc@gmail.com. Several
+                      addresses can be comma-separated.
      FROM_EMAIL       optional. Defaults to Resend's test sender, which can
                       only mail the address the Resend account signed up
                       with. Once a domain is verified in Resend, use e.g.
-                      Portfolio <hello@yourdomain.com>
+                      Mariam's Portfolio <hello@yourdomain.com>
      ALLOWED_ORIGINS  comma-separated sites allowed to post, e.g.
                       https://ruyinqc.github.io,http://localhost:8080
    ========================================================================== */
@@ -85,10 +86,16 @@ export default {
     }
 
     const text = [message, '', '—', name, email].join('\n');
+    const row = (label, value) =>
+      '<tr><td style="color:#6b6b6b;padding:2px 16px 2px 0">' + label + '</td>' +
+      '<td style="padding:2px 0">' + value + '</td></tr>';
     const html =
-      '<p style="white-space:pre-wrap">' + escapeHtml(message) + '</p>' +
-      '<hr><p>' + escapeHtml(name) + '<br><a href="mailto:' + escapeHtml(email) + '">' +
-      escapeHtml(email) + '</a></p>';
+      '<table style="border-collapse:collapse;font:15px/1.5 sans-serif">' +
+      row('Name', '<strong>' + escapeHtml(name) + '</strong>') +
+      row('Email', '<a href="mailto:' + escapeHtml(email) + '">' + escapeHtml(email) + '</a>') +
+      row('About', escapeHtml(subject)) +
+      '</table>' +
+      '<p style="white-space:pre-wrap;font:15px/1.5 sans-serif">' + escapeHtml(message) + '</p>';
 
     const res = await fetch(RESEND_URL, {
       method: 'POST',
@@ -97,8 +104,8 @@ export default {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        from: env.FROM_EMAIL || 'Portfolio <onboarding@resend.dev>',
-        to: [env.TO_EMAIL],
+        from: env.FROM_EMAIL || "Mariam's Portfolio <onboarding@resend.dev>",
+        to: env.TO_EMAIL.split(',').map(s => s.trim()).filter(Boolean),
         reply_to: email,
         subject: '[Portfolio] ' + subject + ' — ' + name,
         text,
