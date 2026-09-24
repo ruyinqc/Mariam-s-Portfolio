@@ -38,7 +38,7 @@ window.WORK = [
 
   title: 'Invoices & Payments Module',
   standfirst:
-    'Ovarc customers were receiving several invoices a month and paying only the one that ' +
+    'Customers were receiving several invoices a month and paying only the one that ' +
     'scared them most. The ones who did try to pay in full often sent the wrong amount. ' +
     'I rebuilt the payment flow so that the right number is the obvious number.',
 
@@ -46,7 +46,7 @@ window.WORK = [
     'Role':     { value: 'Product Designer', note: 'End-to-end design' },
     'Timeline': { value: '2.5 weeks' },
     'Status':   { value: 'Shipped', note: 'In production since November 2025' },
-    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
+    'Product':  { value: 'B2B SaaS', note: 'Fintech · Egypt' }
   },
 
   // shown full width right under the Role / Timeline / Status row
@@ -65,7 +65,7 @@ window.WORK = [
       num: '01',
       title: 'Where it started',
       body: [
-        'Ovarc bills its customers for several services at once — payroll, government ' +
+        'The platform bills its customers for several services at once — payroll, government ' +
         'fees, service charges. Each one arrives as its own invoice. In theory a customer ' +
         'opens the billing page and settles what is due. In practice, they did not.',
 
@@ -227,7 +227,7 @@ window.WORK = [
 
   card: {
     title: 'Write It Once: Bilingual Company Naming',
-    sub: 'Egypt asks founders to register their company in Arabic and English. Now they only write one.',
+    sub: 'I designed the step where founders name their company in Arabic and English — then redesigned it so they only write one.',
     tags: ['Onboarding', 'B2B'],
     thumb: {
       left:  { icon: 'doc', count: 3 },
@@ -239,13 +239,14 @@ window.WORK = [
   title: 'Write It Once: Bilingual Company Naming',
   standfirst:
     'To register a company in Egypt, a founder has to submit several names, ranked, in both ' +
-    'Arabic and English. I redesigned the step so they write each name once, in the language ' +
-    'they know, and see exactly where it lands in their list.',
+    'Arabic and English. I designed this step from scratch, reviewed my own first version, ' +
+    'found where it failed, and redesigned it, so founders write each name once, in the ' +
+    'language they know, and see exactly where it lands in their list.',
 
   meta: {
-    'Role':    { value: 'Product Designer', note: 'End-to-end design' },
+    'Role':    { value: 'Product Designer', note: 'Sole designer · both versions' },
     'Scope':   { value: 'Company name step', note: 'Inside the incorporation flow' },
-    'Product': { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
+    'Product': { value: 'B2B SaaS', note: 'Incorporation · Egypt' }
   },
 
   blocks: [
@@ -261,8 +262,8 @@ window.WORK = [
 
         'So one small-looking step asks for a lot: multiple names, two languages and a clear ' +
         'order. The platform already removed the language barrier: you write the name in the ' +
-        'language you know, and it generates the other. My job was to make the step ' +
-        '<b>feel as simple as that promise</b>.'
+        'language you know, and it generates the other. I owned the design of this step ' +
+        'end to end, and my goal was to make it <b>feel as simple as that promise</b>.'
       ]
     },
 
@@ -271,14 +272,16 @@ window.WORK = [
       num: '02',
       title: 'Before and after',
       intro:
-        'Same features, same data, same rules. The only thing that changed is how the pieces ' +
-        'relate to each other, and that turned out to be the whole problem.',
+        'Both screens are my own work. I designed the first version, then pressure-tested it ' +
+        'against what a founder actually has to do here, and the problems below are the ones ' +
+        'I found in it. The redesign keeps the same features, data and rules. What I changed ' +
+        'is how the pieces relate to each other, and that turned out to be the whole problem.',
       before: {
         label: 'Before',
-        kicker: 'Two panels · three boxes',
+        kicker: 'My first version · two panels',
         screen: 'naming-before',
-        alt: 'The first design: a form on the left split into a language box and a name box with ' +
-             'a Generate button, and a separate Name priority list on the right labelled Top and Low.',
+        alt: 'My first design: a form on the left split into a language box and a name box with ' +
+             'a Generate button, and a separate Names List on the right labelled Top and Low.',
         notes: [
           '<b>No bridge between form and list.</b> Nothing tells you how a name you typed ' +
           'ends up on the right.',
@@ -288,9 +291,9 @@ window.WORK = [
       },
       after: {
         label: 'After',
-        kicker: 'One column · one flow',
+        kicker: 'My redesign · one flow',
         screen: 'naming-after',
-        alt: 'The redesign: one column. Pick the name language, type the name, and the other ' +
+        alt: 'My redesign: one column. Pick the name language, type the name, and the other ' +
              'language is generated beside it. An Add to list button puts the pair into a ' +
              'numbered list, where number one is the first choice.',
         notes: [
@@ -318,7 +321,7 @@ window.WORK = [
         }]
       },
       why: {
-        title: 'Why this happened?',
+        title: 'Where my first version fell short',
         points: [
           '<b>Two panels, no action between them.</b> The form lived on the left, the list on ' +
           'the right, and nothing explicitly moved a name across.',
@@ -349,7 +352,7 @@ window.WORK = [
         }]
       },
       why: {
-        title: 'Why this happened?',
+        title: 'Where my first version fell short',
         points: [
           '<b>Labels only on the ends.</b> “Top” and “Low” worked for the first and last names ' +
           'and left everything in between to interpretation.',
@@ -379,7 +382,7 @@ window.WORK = [
         }]
       },
       why: {
-        title: 'Why this happened?',
+        title: 'Where my first version fell short',
         points: [
           '<b>Every concern got its own box.</b> Choosing a language, writing a name and ' +
           'managing the list each had a container, so one decision looked like three.',
@@ -436,7 +439,8 @@ window.WORK = [
       num: '05',
       title: 'Takeaway',
       body: [
-        'A layout can include every feature and still fail to explain itself. Moving from two ' +
+        'Critiquing my own first version taught me the most here: a layout can include every ' +
+        'feature and still fail to explain itself. Moving from two ' +
         'panels to one flow did not add anything new. It made the relationships between the ' +
         'existing pieces visible, and that turned out to be the real fix.'
       ]

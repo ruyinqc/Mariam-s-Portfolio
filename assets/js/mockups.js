@@ -35,7 +35,7 @@
   function chrome(inner, tone) {
     return '<div class="mk-frame mk-frame--' + tone + '">' +
       '<div class="mk-bar" aria-hidden="true"><i></i><i></i><i></i>' +
-        '<span class="mk-url">ovarc.com/incorporate/company-name</span></div>' +
+        '<span class="mk-url">app / incorporate / company-name</span></div>' +
       '<div class="mk-screen">' + inner + '</div>' +
     '</div>';
   }
@@ -74,7 +74,7 @@
         '</div>' +
         '<div class="mk-gap mk-rel" aria-hidden="true">' + mark(1, 'bad') + '<span>?</span></div>' +
         '<div class="mk-box mk-list mk-rel">' +
-          '<p class="mk-q">Name priority list</p>' +
+          '<p class="mk-q">Names List</p>' +
           '<span class="mk-tag mk-rel">Top' + mark(2, 'bad') + '</span>' +
           '<div class="mk-item">' + GRIP +
             '<div><b dir="rtl" lang="ar">ساموراي</b><small>Samurai</small></div></div>' +
