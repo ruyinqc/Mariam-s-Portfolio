@@ -314,9 +314,9 @@ assets/
   img/                   photography + og-cover.png (the social card)
     art/                 pictures for the challenge diagrams — swap freely
     work/                screenshots used inside case studies
-    people/              testimonial photos. Randa's is still initials: save
-                         her photo as randa-mohammed.webp here and follow the
-                         comment next to "RM" in index.html
+    people/              testimonial photos. Mohamed Wael's card is a
+                         placeholder: the comment next to "MW" in index.html
+                         says what to add when his words and photo arrive
   cv/                    the PDF the Download CV button serves
 robots.txt               crawl rules + sitemap pointer
 sitemap.xml              the one URL, for Search Console
