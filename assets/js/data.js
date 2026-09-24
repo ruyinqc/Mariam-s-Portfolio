@@ -628,11 +628,11 @@ window.WORK = [
       intro: 'Each link opens in a new tab.',
       items: [
         { name: 'Mirayti',          url: 'https://mirayti.vercel.app/',
-          img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'] },
+          img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'], tool: 'Claude' },
         { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/',
-          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'] },
+          img: 'assets/img/vibe/match-and-attack.webp', badges: ['Freelance', 'Delivered'], tool: 'Claude' },
         { name: 'Sandra & Alex',    url: 'https://studio.ruyinqc.workers.dev/w/sandra-alex-1b532e/',
-          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'] }
+          img: 'assets/img/vibe/sandra-alex.webp',      badges: ['Freelance', 'Delivered'], tool: 'Claude' }
       ]
     }
   ]
@@ -680,8 +680,7 @@ window.WORK = [
     poster: 'assets/img/work/journey-guide-poster.webp',
     width: 960, height: 544,
     alt: 'Prototype walkthrough of Journey Guide Tracker: a visitor scans a QR code at a ' +
-         'museum entrance, the guide loads, and the map follows them room by room.',
-    caption: 'The prototype, from the QR code at the door to the last room.'
+         'museum entrance, the guide loads, and the map follows them room by room.'
   },
 
   blocks: [
