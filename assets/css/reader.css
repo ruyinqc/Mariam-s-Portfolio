@@ -909,3 +909,10 @@
   .mk-steps li:not(.is-on) span { display: none; }
   .mk-url { display: none; }
 }
+
+.scr__disclaimer {
+  margin-top: var(--s-3);
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: var(--muted);
+}

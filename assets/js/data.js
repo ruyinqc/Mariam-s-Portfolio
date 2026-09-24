@@ -304,7 +304,10 @@ window.WORK = [
           '<b>“Add to list” closes the loop.</b> One explicit action moves a name from the ' +
           'form into the list. Nothing is left to guess.',
           '<b>Every name has a number.</b> No more “Top” and “Low”. Drag to reorder and each ' +
-          'position stays unambiguous.'
+          'position stays unambiguous.',
+          '<b>Generate suggests more names.</b> Using AI, it proposes new names close to the ' +
+          'one you typed and to your business, each with its Arabic and English pair, so a ' +
+          'founder with one idea quickly has a full list of backups.'
         ]
       }
     },
@@ -421,22 +424,6 @@ window.WORK = [
     {
       type: 'section',
       num: '04',
-      title: 'What I would refine next',
-      body: [
-        '<b>A segmented AR | EN toggle instead of the dropdown.</b> With only two options, both ' +
-        'should be visible and one tap away.',
-
-        '<b>A short helper line on the order</b>, such as “#1 is your first choice”, so the ' +
-        'numbers carry meaning on their own.',
-
-        '<b>A single way to add names.</b> The current version has two add actions, the button ' +
-        'and the dashed row. Keeping one removes a moment of hesitation.'
-      ]
-    },
-
-    {
-      type: 'section',
-      num: '05',
       title: 'Takeaway',
       body: [
         'Critiquing my own first version taught me the most here: a layout can include every ' +

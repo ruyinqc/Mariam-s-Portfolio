@@ -113,7 +113,7 @@
             '<em>Samix<small class="mk-ai">' + SPARK + 'Generated</small></em>' + mark(2, 'good') + '</label>' +
         '</div>' +
         '<div class="mk-actions">' +
-          '<span class="mk-btn mk-btn--soft">' + SPARK + 'Generate</span>' +
+          '<span class="mk-btn mk-btn--soft mk-rel">' + SPARK + 'Generate' + mark(5, 'good') + '</span>' +
           '<span class="mk-btn mk-btn--primary mk-rel">' + PLUS + 'Add to list' + mark(3, 'good') + '</span>' +
         '</div>' +
       '</div>' +
