@@ -211,29 +211,8 @@
   50%      { transform: translate3d(0, -7px, 0); }
 }
 
-.hero__scroll {
-  position: absolute;
-  left: 50%;
-  bottom: clamp(1.25rem, 3vh, 2.5rem);
-  translate: -50% 0;
-  display: grid;
-  place-items: center;
-  width: 44px; height: 44px;
-  color: var(--muted);
-  border-radius: 50%;
-  z-index: 1;
-  animation: scroll-bob 2.6s var(--ease) infinite;
-}
-.hero__scroll:hover { color: var(--blue); }
-.hero__scroll .icon { width: 1.4rem; height: 1.4rem; }
-
-@keyframes scroll-bob {
-  0%, 100% { transform: translateY(0); opacity: .55; }
-  50%      { transform: translateY(6px); opacity: 1; }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .hero__tag, .hero__scroll { animation: none; }
+  .hero__tag { animation: none; }
 }
 
 @media (max-width: 900px) {
@@ -242,7 +221,6 @@
   .hero { min-height: 0; padding-block: clamp(2.5rem, 7vh, 4rem) clamp(2rem, 6vh, 3.5rem); }
   .hero__inner { grid-template-columns: 1fr; }
   .hero__portrait { order: -1; max-width: 26rem; }
-  .hero__scroll { display: none; }
 }
 
 /* Below this the three facts stop fitting on one line, and the separator
@@ -742,13 +720,29 @@
 .contact__direct .icon { color: var(--on-panel-soft); }
 .contact__direct a:hover .icon { color: var(--lime); }
 
+/* The photo stands beside the title, and the title sits on the photo's
+   bottom edge. The two are allowed to overlap: the text stays on top. */
+.contact__title-row {
+  display: flex;
+  align-items: flex-end;
+}
+.contact__title-row .section__title {
+  position: relative;
+  z-index: 1;
+  flex: 0 1 auto;
+}
+.contact__photo-wrap {
+  flex: 0 0 auto;
+  width: clamp(7rem, 16vw, 13rem);
+  margin-left: calc(clamp(1.5rem, 4vw, 3.5rem) * -1);
+}
 .contact__photo {
-  width: min(22rem, 70%);
-  margin-top: var(--s-6);
+  display: block;
+  width: 100%;
+  height: auto;
   filter: grayscale(1) contrast(1.06);
   opacity: 0.92;
 }
-@media (max-width: 860px) { .contact__photo { display: none; } }
 
 /* ==========================================================================
    Footer
