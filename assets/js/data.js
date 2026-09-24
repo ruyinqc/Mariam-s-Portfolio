@@ -55,7 +55,8 @@ window.WORK = [
     width: 2000, height: 977,
     alt: 'The Invoices & Payments page: Payments, Expense Claims, Transactions History ' +
          'and Wallet tabs, with Wallet Balance, Selected Invoices and POs, Amount To Pay ' +
-         'and the table of all invoices and POs.'
+         'and the table of all invoices.',
+    caption: 'Public UI preview only—no real data included (NDA).'
   },
 
   blocks: [
@@ -102,7 +103,7 @@ window.WORK = [
         ],
         image: {
           src: 'assets/img/work/invoices-ui-preview.webp',
-          width: 2000, height: 394,
+          width: 2000, height: 741,
           alt: 'The Payments tab: Wallet Balance, Selected Invoices and POs and Amount To ' +
                'Pay above the invoice table, with a Proceed To Payment button.',
           caption: 'Public UI preview only—no real data included (NDA).'

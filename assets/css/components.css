@@ -485,71 +485,97 @@
    Testimonials
    ========================================================================== */
 
-.words__grid {
+/* this title runs to two long lines */
+.words .section__head { max-width: 46rem; }
+
+/* Each quote is a speech bubble coming off the person's photo: the ring
+   around the photo is the bubble's own colour, so the two read as one shape.
+   They alternate left and right, like a conversation. */
+.words__list {
   list-style: none;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-  gap: var(--s-5);
-  align-items: start;
+  gap: clamp(2rem, 5vw, 3.5rem);
 }
 
 .quote {
-  position: relative;
-  padding: var(--s-6) var(--s-5) var(--s-5);
-  background: var(--paper-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--r-lg);
-  box-shadow: var(--sh-1);
+  --ring: clamp(5.25rem, 4rem + 4vw, 7rem);   /* the circle around the photo */
+  --bubble: var(--sage);
+  width: 100%;
+  max-width: 52rem;
 }
-.quote--lime { background: var(--lime-wash); border-color: var(--lime-deep); }
+.quote:nth-child(even) { justify-self: end; }
+.quote--blue { --bubble: var(--blue-wash); }
 
-.quote__mark {
-  width: 1.75rem; height: 1.75rem;
-  color: var(--blue);
-  opacity: .28;
-  margin-bottom: var(--s-3);
-}
-.quote--lime .quote__mark { color: var(--ink); opacity: .22; }
+.quote figure { position: relative; padding-top: calc(var(--ring) * 0.56); }
 
-.quote blockquote p {
-  font-size: var(--t-body);
-  color: var(--ink-soft);
-}
-.quote b { color: var(--ink); font-weight: 700; }
+.quote__by { display: contents; }
 
-.quote__by {
-  display: flex;
-  align-items: center;
-  gap: var(--s-3);
-  margin-top: var(--s-5);
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--line);
-}
-.quote--lime .quote__by { border-top-color: color-mix(in srgb, var(--lime-deep) 55%, transparent); }
-.quote__by b { display: block; font-size: var(--t-small); }
-.quote__by small {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--muted);
-}
 .quote__avatar {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 1;
   display: grid;
   place-items: center;
-  width: 2.5rem; height: 2.5rem;
-  flex: none;
+  width: var(--ring);
+  height: var(--ring);
+  background: var(--bubble);
+  border-radius: 50%;
+}
+.quote__avatar img,
+.quote__initials {
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.quote__initials {
+  display: grid;
+  place-items: center;
   background: var(--blue);
   color: #fff;
-  font-size: var(--t-meta);
+  font-size: calc(var(--ring) * 0.22);
   font-weight: 800;
-  letter-spacing: 0.04em;
-  border-radius: 10px;
+  letter-spacing: 0.02em;
 }
-.quote--lime .quote__avatar { background: var(--ink); }
+
+/* name and role sit beside the photo, above the bubble */
+.quote__who {
+  position: absolute;
+  top: calc(var(--ring) * 0.06);
+  left: calc(var(--ring) + 0.9rem);
+  right: 0;
+  display: grid;
+  gap: 0.15rem;
+  line-height: 1.25;
+}
+.quote__who b { font-size: var(--t-body); font-weight: 800; color: var(--ink); }
+.quote__who small { font-size: var(--t-small); font-weight: 700; color: var(--ink-soft); }
+.quote__who small span { white-space: nowrap; }   /* wrap between company and title, never inside "Front-End" */
+
+.quote__bubble {
+  margin: 0 0 0 calc(var(--ring) * 0.27);
+  /* text starts level with the name, clear of the photo */
+  padding: calc(var(--ring) * 0.44 + 0.5rem) clamp(1.25rem, 3.5vw, 2.5rem)
+           clamp(1.5rem, 3.5vw, 2.25rem) calc(var(--ring) * 0.73 + 0.9rem);
+  background: var(--bubble);
+  border-radius: var(--r-xl);
+}
+.quote__bubble p {
+  font-size: clamp(1.0625rem, 0.95rem + 0.55vw, 1.375rem);
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.quote__bubble b { font-weight: 800; font-style: italic; }
+
+/* narrow: the text drops below the photo and takes the full width */
+@media (max-width: 560px) {
+  .quote__bubble {
+    margin-left: 0;
+    padding: calc(var(--ring) * 0.44 + 1.1rem) 1.25rem 1.5rem;
+  }
+}
 
 /* ==========================================================================
    Chips
