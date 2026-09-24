@@ -329,7 +329,6 @@
           (it.badges ? '<span class="proj__badges">' + it.badges.map(function (t) {
             return '<span class="proj__badge' + (/delivered/i.test(t) ? ' proj__badge--done' : '') + '">' + esc(t) + '</span>';
           }).join('') + '</span>' : '') +
-          (it.tool ? '<span class="proj__tool">Tool: <b>' + esc(it.tool) + '</b></span>' : '') +
           (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
           (it.url ? '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' : '') +
         '</span>' +

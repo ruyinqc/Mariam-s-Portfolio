@@ -349,7 +349,6 @@
 }
 .proj__name { font-weight: 700; }
 .proj__name .icon { color: var(--blue); }
-.proj__tool { font-size: var(--t-small); color: var(--ink-soft); }
 .proj__text { font-size: var(--t-small); color: var(--ink-soft); }
 .proj__url {
   font-family: var(--font-mono);
