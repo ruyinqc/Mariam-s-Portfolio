@@ -481,6 +481,20 @@
 .mini__arrow .icon { width: 1.6rem; height: 1.6rem; }
 .mini--lime { color: var(--lime-deep); }
 
+/* a close-up of the study's own screen (lens.js), filling the thumbnail.
+   The lens itself is styled in reader.css, next to the screens it shows. */
+.pincard__thumb--lens { position: relative; display: block; }
+.pincard__thumb--lens .lens {
+  position: absolute;
+  inset: 0;
+  width: auto;
+  max-width: none;
+  aspect-ratio: auto;
+  border-radius: 0;
+  box-shadow: none;
+}
+.pincard__thumb--lens .lens__tag { display: none; }
+
 /* ==========================================================================
    Testimonials
    ========================================================================== */

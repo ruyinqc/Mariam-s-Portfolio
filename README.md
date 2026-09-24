@@ -65,6 +65,8 @@ A minimal one looks like this:
       right: { icon: 'check', count: 1 },   // the "after"
       tone: 'blue'                          // or 'lime'
     }                                       // { art: 'invoice', count: 5 } uses a picture
+                                            // or thumb: { zoom: {…}, tone } shows a close-up
+                                            // of one of your screens (see "Close-ups" below)
   },
 
   title: 'My Project',
@@ -129,6 +131,23 @@ This is the one that does the heavy lifting.
 - `count` piles copies up (5 → three over two, 4 → a diamond, 2 → a step)
 - Two pictures on one side get a `+` between them
 - `emoji` puts a small picture at the end of a caption
+- **Close-ups of your own screens.** Instead of `art`, a side can take `zoom`
+  to show part of one of the hi-fi screens (the Company Naming study does
+  this). The window zooms in from the whole screen to that part, rings it and
+  dims the rest:
+
+  ```js
+  from: { zoom: { screen: 'naming-before', frame: 'list', focus: 'ends' },
+          caption: '“Top” … ? … “Low”' }
+  ```
+
+  `screen` is a screen from `mockups.js`; names ending in `-after` get the
+  After look, the rest Before. `focus` is what gets the ring and `frame` is
+  what the window shows (it defaults to `focus`). Both are names from the
+  `data-focus="…"` hooks in `mockups.js`, and both can list several, separated
+  by spaces. To zoom closer than "fit the frame", add `span` (how much of the
+  screen's width to show: `0.5` is half) and `align: 'start'` or `'end'` to
+  hold the window to that side of the frame
 - Use `text: [...]` for paragraphs or `points: [...]` for bullets. Both accept
   `<b>` for emphasis
 - `how` can also take a `wireframe` (see Challenge 2 in `data.js`): a list of
@@ -343,6 +362,8 @@ assets/
     config.js            ← yours
     data.js              ← yours
     art.js               illustrations and how copies of one pile up
+    mockups.js           the hi-fi Before / After screens, drawn in HTML
+    lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
     board.js             pin cards, drift, tilt, the string between pins
