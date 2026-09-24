@@ -644,7 +644,8 @@ window.WORK = [
     'open it and try it.',
 
   meta: {
-    'Role':     { value: 'Designer & builder' },
+    'Role':     { value: 'Designer & builder', note: 'Idea owner' },
+    'AI tool':  { value: 'Claude.ai' },
     'Projects': { value: '3', note: 'All live' },
     'Type':     { value: 'Freelance', note: 'All delivered' },
     'Status':   { value: 'Live' }
@@ -704,11 +705,11 @@ window.WORK = [
     'Status':   { value: 'Concept', note: 'Prototype video' }
   },
 
-  // A vibe coding card under the meta row. The image is a placeholder:
-  // swap in a screenshot, and add `url` once there is a live link.
+  // A vibe coding card under the meta row. The picture is the app's logo,
+  // cropped from its loading screen. Add `url` once there is a live link.
   projects: [
-    { name: 'Journey Guide Tracker', img: 'assets/img/vibe/placeholder.svg',
-      badges: ['Vibe coding'], tool: 'claude.ai' }
+    { name: 'Journey Guide Tracker', img: 'assets/img/vibe/journey-guide-tracker.webp',
+      badges: ['Vibe coding'] }
   ],
 
   // the prototype walkthrough, shown full width under the meta row
@@ -777,13 +778,14 @@ window.WORK = [
           }
         },
         {
-          title: 'Follow the footprints',
-          text: 'A trail of footprints on the map shows the way. Here it heads for the ' +
-                '<b>Time Travelers’ Gallery</b>, with 20% of the visit done.',
+          title: 'On to the next stop',
+          text: 'Your next stop, the <b>Time Travelers’ Gallery</b>, comes into view on the ' +
+                'map, still <b>Not visited</b>, with 20% of the visit done.',
           image: {
             src: 'assets/img/work/journey-guide-step-4.webp', width: 418, height: 872,
-            alt: 'The map with a trail of footprints toward Time Travelers’ Gallery. The top ' +
-                 'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%.'
+            alt: 'The map with Time Travelers’ Gallery in view, flagged Not visited. The top ' +
+                 'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%. The card at ' +
+                 'the bottom shows Time Travelers’ Gallery: 9 min, Floor 1.'
           }
         },
         {

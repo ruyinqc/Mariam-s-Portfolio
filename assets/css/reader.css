@@ -276,7 +276,7 @@
 .proj__img {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: var(--r-sm);
   object-fit: cover;
   border: 1px solid var(--line-strong);
   background: var(--blue-wash);
