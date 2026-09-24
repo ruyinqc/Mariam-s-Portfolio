@@ -179,8 +179,9 @@
       '<div class="scr__stage"' + (side.alt ? ' role="img" aria-label="' + esc(side.alt) + '"' : '') + '>' +
         '<div aria-hidden="true">' + (draw ? draw() : '') + '</div>' +
       '</div>' +
-      '<p class="scr__disclaimer">Hi-fi recreation for this case study, not a screenshot of the ' +
-        'production product. Names and details are illustrative.</p>' +
+      '<p class="scr__disclaimer">' + esc(side.disclaimer ||
+        'Hi-fi recreation for this case study, not a screenshot of the production product. ' +
+        'Names and details are illustrative.') + '</p>' +
       (side.notes
         ? '<ol class="scr__notes">' + side.notes.map(function (n, i) {
             return '<li><span class="mk-mark mk-mark--' + tone + '" aria-hidden="true">' + (i + 1) + '</span>' +
