@@ -496,9 +496,64 @@ window.WORK = [
       type: 'pull',
       text: 'TODO — the one sentence you would want a reader to quote back to you.'
     },
+
+    // The two dashboards are drawn in HTML by assets/js/mockups.js.
+    // Same job, same kind of data: what each customer signed for, what they
+    // paid and what is left. The numbered notes match the markers on each screen.
+    {
+      type: 'screens',
+      num: '02',
+      title: 'One dashboard, two markets',
+      intro:
+        'Both screens do the same job: track sales, and for every customer, how much they ' +
+        'signed for, how much they have paid and how much is still left. The first is how ' +
+        'I would design it for a Western or Egyptian team. The second is how the same ' +
+        'dashboard is expected to look in China. <b>All the data on both screens is dummy ' +
+        'data</b>: the customers, names and numbers are made up, not real.',
+      before: {
+        label: 'Cairo',
+        kicker: 'Modern Western UI · light · calm',
+        screen: 'dash-cairo',
+        disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
+                    'dummy data, not real.',
+        alt: 'A light, spacious sales dashboard: three headline cards for total sales, ' +
+             'collected and still to collect, then a customer table with status tabs and ' +
+             'filters. The table has more columns than fit, with a horizontal scrollbar under it.',
+        notes: [
+          '<b>Three numbers up top.</b> Total sales, collected and still to collect, with ' +
+          'plenty of space around each one.',
+          '<b>Detail lives behind filters.</b> Region, owner and more filters narrow the table ' +
+          'down one question at a time.',
+          '<b>The table scrolls sideways.</b> The customer column stays pinned while contract ' +
+          'value, paid, remaining, % paid and quarter-by-quarter numbers scroll horizontally.'
+        ]
+      },
+      after: {
+        label: 'Beijing',
+        kicker: 'Asian-style UI · dark · dense',
+        screen: 'dash-beijing',
+        disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
+                    'dummy data, not real.',
+        alt: 'The same customer table in a dark, dense, colourful style: every filter shown as ' +
+             'chips, colour-coded status tabs with counts, an Export Excel button, and a small-type ' +
+             'table whose middle columns scroll sideways between a pinned customer column and a ' +
+             'pinned Actions column.',
+        notes: [
+          '<b>Every filter is out in the open.</b> Period, region, industry, owner and dates ' +
+          'sit on screen as chips, not behind a Filters button.',
+          '<b>Red means up.</b> On Chinese financial screens, gains are red and losses are ' +
+          'green, the reverse of the Western convention.',
+          '<b>Colour does the grouping.</b> Status, region and credit rating each get their own ' +
+          'colour, with counts on every tab, instead of white space.',
+          '<b>More rows, more columns, pinned at both ends.</b> Smaller type fits 14 customers ' +
+          'per page. The middle columns scroll sideways while the customer and Actions columns stay put.'
+        ]
+      }
+    },
+
     {
       type: 'section',
-      num: '02',
+      num: '03',
       title: 'The evidence',
       body: [
         'TODO — what did you see? Density expectations, information hierarchy, entry ' +
@@ -508,7 +563,7 @@ window.WORK = [
     },
     {
       type: 'section',
-      num: '03',
+      num: '04',
       title: 'What it changes about how I work',
       body: [
         'TODO — close with the practical consequence. What do you now do differently ' +
