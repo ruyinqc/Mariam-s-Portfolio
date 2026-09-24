@@ -17,7 +17,7 @@ window.SITE = {
      visitor's own mail app with the message pre-written. Nothing breaks,
      it's just a worse experience.
   */
-  contactEndpoint: '',
+  contactEndpoint: 'https://portfolio-contact.ruyinqc.workers.dev',
 
   email:     'marmaremad31@gmail.com',
   linkedin:  'https://www.linkedin.com/in/mariamemadnabih/',
