@@ -54,6 +54,8 @@ const PAIRS = [
   ['ink-soft',     'lime-wash',    4.5, 'paragraphs in the How panel'],
   ['muted',        'lime-wash',    4.5, 'screenshot caption in the How panel'],
   ['ink-soft',     'wire',         4.5, 'text on a wireframe bar'],
+  ['ink',          'sage',         4.5, 'testimonial text in a bubble'],
+  ['ink',          'blue-wash',    4.5, 'testimonial text in a blue bubble'],
   ['ink',          'paper-raised', 4.5, 'card text'],
   ['muted',        'paper-raised', 4.5, 'card meta'],
   ['ink',          'paper-sunk',   4.5, 'tag text'],

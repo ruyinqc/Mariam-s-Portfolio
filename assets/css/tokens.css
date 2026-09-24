@@ -33,6 +33,8 @@
   --lime:       #D9F24B;
   --lime-deep:  #C2DD2B;
   --lime-wash:  #F4FBD4;
+  --sage:       #EDF1DA;     /* testimonial bubbles — Mariam's #F1F5E3, one  */
+                             /* step deeper so the ring shows on --paper     */
 
   /* --line and --line-strong are decorative rules only: page hairlines, the
      timeline rail, the string between the pin cards. WCAG 1.4.11 exempts pure
