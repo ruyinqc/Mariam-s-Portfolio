@@ -624,8 +624,9 @@
 @media (min-width: 600px) { .steps { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1000px) { .steps { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
-/* The stills are frames from the prototype video, phone and all, so they are
-   never shown larger than the video drew them. */
+/* The stills are the prototype's screens with the phone frame drawn into
+   the file. They stay the size the phone is in the video, and carry about
+   twice the pixels, so they're sharp on high-density screens too. */
 .step__shot {
   display: block;
   width: 100%;

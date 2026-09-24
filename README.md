@@ -88,7 +88,7 @@ A minimal one looks like this:
   // or a video instead (Journey Guide Tracker does this). It never plays by
   // itself and nothing downloads until someone presses play:
   // cover: { video: 'assets/video/my-project.mp4', poster: 'assets/img/work/….webp',
-  //          width: 832, height: 464, alt: '…', caption: '…' }
+  //          width: 960, height: 544, alt: '…', caption: '…' }
 
   blocks: [ /* see below */ ]
 }
@@ -178,12 +178,12 @@ This is the one that does the heavy lifting.
 **`note`** — a small aside in a blue box. Accepts HTML.
 
 **`steps`** — a walkthrough in frames: a row of numbered stills, each with a
-short title and a sentence. Journey Guide Tracker uses frames from its video.
+short title and a sentence. Journey Guide Tracker uses its prototype's screens.
 
 ```js
 { type: 'steps', num: '02', title: 'How it works', intro: 'Optional sentence.',
   items: [{ title: 'Scan and start', text: 'Accepts <b>HTML</b>.',
-            image: { src: 'assets/img/work/….webp', width: 220, height: 449, alt: '…' } }] }
+            image: { src: 'assets/img/work/….webp', width: 418, height: 872, alt: '…' } }] }
 ```
 
 **`chips`** — a short list of words as pills. `accent: true` picks one out,
