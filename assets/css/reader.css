@@ -362,8 +362,12 @@
 }
 
 /* ---- Why / How two-column ----------------------------------------------- */
+/* side by side, the two columns are centred on each other, so the plain Why
+   text sits in the middle of the How panel's height rather than hanging off
+   its top edge */
 .whyhow {
   display: grid;
+  align-items: center;
   gap: clamp(1.5rem, 4vw, 3rem);
   margin-top: clamp(1.75rem, 4vw, 2.75rem);
 }
@@ -408,17 +412,8 @@
 }
 
 .whyhow__col--why { max-width: 36rem; }
-/* side by side, the Why column takes the How panel's inset so the two
-   headings share a baseline */
-@media (min-width: 820px) {
-  .whyhow:not(.whyhow--wide) .whyhow__col--why { padding-block: calc(clamp(1.25rem, 3vw, 1.75rem) + 1px); }
-}
-@media (min-width: 1100px) {
-  .whyhow--wide .whyhow__col--why { padding-block: calc(clamp(1.25rem, 3vw, 1.75rem) + 1px); }
-}
 
 .whyhow__col--how {
-  align-self: start;
   padding: clamp(1.25rem, 3vw, 1.75rem);
   background: var(--lime-wash);
   border: 1px solid color-mix(in srgb, var(--lime-deep) 45%, transparent);
@@ -438,7 +433,8 @@
   border-radius: var(--r-md);
   box-shadow: var(--sh-2);
 }
-.shot figcaption {
+.shot figcaption,
+.cs__cover figcaption {
   margin-top: var(--s-3);
   font-size: 0.8125rem;
   font-style: italic;

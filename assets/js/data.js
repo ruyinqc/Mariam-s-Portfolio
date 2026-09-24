@@ -55,7 +55,8 @@ window.WORK = [
     width: 2000, height: 977,
     alt: 'The Invoices & Payments page: Payments, Expense Claims, Transactions History ' +
          'and Wallet tabs, with Wallet Balance, Selected Invoices and POs, Amount To Pay ' +
-         'and the table of all invoices and POs.'
+         'and the table of all invoices and POs.',
+    caption: 'Public UI preview only—no real data included (NDA).'
   },
 
   blocks: [
