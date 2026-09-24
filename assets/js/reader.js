@@ -240,10 +240,16 @@
           '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
           (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
           '<ul class="proj">' + b.items.map(function (it) {
-            return '<li><a class="proj__link" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">' +
-              '<span class="proj__name">' + esc(it.name) + ' ' + icon('ext', 'icon--xs') + '</span>' +
-              (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
-              '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' +
+            return '<li><a class="proj__link' + (it.img ? ' proj__link--img' : '') + '" href="' + esc(it.url) + '" target="_blank" rel="noopener noreferrer">' +
+              (it.img ? '<img class="proj__img" src="' + esc(it.img) + '" alt="" width="120" height="120" loading="lazy" decoding="async">' : '') +
+              '<span class="proj__body">' +
+                '<span class="proj__name">' + esc(it.name) + ' ' + icon('ext', 'icon--xs') + '</span>' +
+                (it.badges ? '<span class="proj__badges">' + it.badges.map(function (t) {
+                  return '<span class="proj__badge' + (/delivered/i.test(t) ? ' proj__badge--done' : '') + '">' + esc(t) + '</span>';
+                }).join('') + '</span>' : '') +
+                (it.text ? '<span class="proj__text">' + esc(it.text) + '</span>' : '') +
+                '<span class="proj__url">' + esc(it.url.replace(/^https?:\/\//, '').replace(/\/$/, '')) + '</span>' +
+              '</span>' +
             '</a></li>';
           }).join('') + '</ul>' +
         '</section>';
