@@ -674,6 +674,13 @@ window.WORK = [
     'Status':   { value: 'Concept', note: 'Prototype video' }
   },
 
+  // A vibe coding card under the meta row. The image is a placeholder:
+  // swap in a screenshot, and add `url` once there is a live link.
+  projects: [
+    { name: 'Journey Guide Tracker', img: 'assets/img/vibe/placeholder.svg',
+      badges: ['Vibe coding'], tool: 'claude.ai' }
+  ],
+
   // the prototype walkthrough, shown full width under the meta row
   cover: {
     video: 'assets/video/journey-guide-tracker.mp4',

@@ -231,43 +231,6 @@
 }
 
 /* ==========================================================================
-   Pitch strip
-   ========================================================================== */
-
-.pitch { padding-block: clamp(2rem, 4vw, 4rem) 0; }
-
-.pitch__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-  gap: var(--s-4);
-}
-
-.pitch__card {
-  padding: var(--s-5);
-  background: var(--paper-raised);
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  box-shadow: var(--sh-1);
-}
-.pitch__k {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4em;
-  font-family: var(--font-mono);
-  font-size: var(--t-meta);
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--blue);
-}
-.pitch__k .icon { width: 1em; height: 1em; }
-.pitch__card p {
-  margin-top: var(--s-3);
-  font-size: var(--t-small);
-  color: var(--muted);
-}
-
-/* ==========================================================================
    Path / experience
    ========================================================================== */
 
@@ -370,9 +333,17 @@
   top: 0;
   height: 100vh;
   height: 100svh;
-  justify-content: center;
+  /* top, not centred: centring left a big empty band between the title
+     and the rope on tall screens */
+  justify-content: flex-start;
   /* the floating nav sits over the top of the screen */
   padding-block: clamp(4.5rem, 10vh, 6.5rem) var(--s-4);
+}
+/* That top padding only matters once the stage is stuck under the nav.
+   Before then it sat as a wide gap under the title, so pull the stage up
+   by the same amount. */
+@media (min-width: 881px) {
+  .line--pinned { margin-top: calc(var(--s-4) - clamp(4.5rem, 10vh, 6.5rem)); }
 }
 
 .line__view {
@@ -668,6 +639,8 @@
    Toolkit
    ========================================================================== */
 
+.toolkit { padding-bottom: clamp(2rem, 1rem + 3vw, 3.5rem); }
+
 .toolkit__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -769,9 +742,14 @@
   padding-block: var(--s-7) var(--s-6);
   border-top: 1px solid rgba(255,255,255,.08);
 }
-.footer__inner { display: grid; gap: var(--s-3); }
+.footer__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-3) var(--s-6);
+}
 .footer__name {
-  font-size: var(--t-h3);
+  font-size: 1.125rem;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--on-panel);
@@ -783,7 +761,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-5);
-  margin-top: var(--s-3);
 }
 .footer__links a {
   font-family: var(--font-mono);
@@ -802,7 +779,7 @@
 }
 .footer__links a:hover { color: var(--lime); }
 .footer__fine {
-  margin-top: var(--s-4);
+  margin-left: auto;
   font-size: var(--t-meta);
   font-family: var(--font-mono);
   letter-spacing: 0.06em;
