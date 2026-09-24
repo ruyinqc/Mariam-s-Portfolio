@@ -155,19 +155,19 @@
     '</svg>';
   }
 
-  /* ---- Cairo: calm, three numbers, one wide table ------------------------ */
+  /* ---- Western: calm, three numbers, one wide table ------------------------ */
 
   // name, sector, contract, paid, last payment, next due, overdue?, invoices,
   // avg days to pay, [Q1, Q2, Q3 collected %], YoY %, share of sales %, region, owner
   var DB_ROWS = [
-    ['Nile Logistics',    'Logistics',     482000, 482000, 'Sep 18', '—',      false, 12, 21, [100, 100, 100], 18.2, 10.0, 'Cairo',       'Sara M.'],
+    ['Nile Logistics',    'Logistics',     482000, 482000, 'Sep 18', '—',      false, 12, 21, [100, 100, 100], 18.2, 10.0, 'Suez',        'Sara M.'],
     ['Delta Foods',       'FMCG',          365400, 248470, 'Sep 12', 'Oct 05', false,  9, 34, [100,  88,  51],  9.6,  7.6, 'Mansoura',    'Omar K.'],
     ['Pyramid Textiles',  'Manufacturing', 298000, 104300, 'Aug 02', 'Sep 02', true,   7, 58, [ 72,  40,  12], -4.1,  6.2, 'Giza',        'Sara M.'],
     ['Red Sea Resorts',   'Hospitality',   256750, 192560, 'Sep 20', 'Oct 20', false,  6, 27, [100,  95,  60], 22.7,  5.3, 'Hurghada',    'Nour A.'],
     ['Alexandria Pharma', 'Healthcare',    221900, 221900, 'Sep 09', '—',      false,  8, 18, [100, 100, 100],  6.3,  4.6, 'Alexandria',  'Omar K.'],
     ['Sinai Energy',      'Energy',        198200,  59460, 'Jul 14', 'Aug 30', true,   5, 66, [ 60,  22,   0],-12.5,  4.1, 'Sharm',       'Nour A.'],
     ['Canal Build Co.',   'Construction',  176500, 123550, 'Sep 15', 'Oct 12', false,  4, 39, [100,  80,  35],  3.8,  3.7, 'Ismailia',    'Sara M.'],
-    ['Oasis Retail',      'Retail',        142300,  99610, 'Sep 21', 'Oct 01', false, 10, 30, [100,  90,  48], 11.0,  3.0, 'Cairo',       'Omar K.']
+    ['Oasis Retail',      'Retail',        142300,  99610, 'Sep 21', 'Oct 01', false, 10, 30, [100,  90,  48], 11.0,  3.0, 'Luxor',       'Omar K.']
   ];
 
   var DB_TINTS = ['#EDEAFE', '#E7F6EC', '#FDEEE6', '#E6F0FD', '#F3EAFB', '#FDF3DC', '#E9F4F4', '#FBE9EF'];
@@ -274,7 +274,7 @@
     );
   }
 
-  /* ---- Beijing: dark, dense, colour-coded, the same table ---------------- */
+  /* ---- Chinese: dark, dense, colour-coded, the same table ---------------- */
 
   // customer, region, industry, contract ¥K, paid ¥K, YoY %, MoM %, [Q1, Q2, Q3 collected %],
   // invoices, days overdue, avg days to pay, last payment, next due, credit, status, owner

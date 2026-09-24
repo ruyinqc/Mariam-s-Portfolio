@@ -471,10 +471,10 @@ window.WORK = [
 
   card: {
     title: 'Localisation is not translation',
-    sub: 'A perfectly translated dashboard can still feel wrong in Beijing. Here is what actually has to change.',
+    sub: 'A perfectly translated dashboard can still feel wrong in China. Here is what actually has to change.',
     tags: ['Cross-cultural', 'Localisation'],
     thumb: {
-      // the study's two dashboards, split down the middle: Cairo | Beijing.
+      // the study's two dashboards, split down the middle: Western | Chinese.
       // tools/make-thumbs.js draws it from mockups.js; re-run it if they change.
       image: { src: 'assets/img/work/localisation-card.webp', width: 1200, height: 750 },
       tone: 'lime'
@@ -483,7 +483,7 @@ window.WORK = [
 
   title: 'Localisation is not translation',
   standfirst:
-    'A dashboard that feels calm and clear in Cairo can feel empty in Beijing, without a ' +
+    'A dashboard that feels calm and clear in Egypt can feel empty in China, without a ' +
     'single word being mistranslated. I spent five years studying in China, then designed ' +
     'financial dashboards at Huawei, adapting them to Chinese design conventions. This is ' +
     'what had to change, and none of it was the words.',
@@ -491,7 +491,7 @@ window.WORK = [
   meta: {
     'Format':     { value: 'UX argument' },
     'Context':    { value: 'Huawei Technologies', note: 'Financial dashboards · 2024' },
-    'Background': { value: '5 years in China', note: 'B.Sc., Beijing Jiaotong University' },
+    'Background': { value: '5 years in China', note: 'B.Sc. in China' },
     'Reading':    { value: '5 min' }
   },
 
@@ -508,7 +508,7 @@ window.WORK = [
         'They are not. How much a screen is allowed to hold, where the eye starts and what ' +
         'red and green mean are all cultural. My position is simple: <b>a product is not ' +
         'localised until its layout has been designed for the market, not just its ' +
-        'words.</b> If a finance team in Beijing opens a perfectly translated dashboard and ' +
+        'words.</b> If a finance team in China opens a perfectly translated dashboard and ' +
         'still asks where everything is, the localisation has failed.',
 
         'Plenty of designers would disagree. One global design system is cheaper to build ' +
@@ -535,7 +535,7 @@ window.WORK = [
         'dashboard is expected to look in China. <b>All the data on both screens is dummy ' +
         'data</b>: the customers, names and numbers are made up, not real.',
       before: {
-        label: 'Cairo',
+        label: 'Western market',
         kicker: 'Modern Western UI · light · calm',
         screen: 'dash-cairo',
         disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
@@ -553,7 +553,7 @@ window.WORK = [
         ]
       },
       after: {
-        label: 'Beijing',
+        label: 'Chinese market',
         kicker: 'Asian-style UI · dark · dense',
         screen: 'dash-beijing',
         disclaimer: 'Hi-fi concept for this case study. All customers, names and numbers are ' +
@@ -587,21 +587,21 @@ window.WORK = [
         'every day, for payments, shopping, travel and public services, put dozens of entry ' +
         'points on one screen, and people learn to scan dense screens fast. A dashboard ' +
         'with eight rows and three big numbers does not read as calm there. It reads as a ' +
-        'tool that is hiding something, or one that is not finished. The Beijing screen ' +
+        'tool that is hiding something, or one that is not finished. The Chinese screen ' +
         'shows 14 customers across more than twenty columns, because that is what its ' +
         'reader expects to take in at a glance.',
 
-        '<b>Hidden filters feel like missing features.</b> The Cairo screen uses progressive ' +
+        '<b>Hidden filters feel like missing features.</b> The Western screen uses progressive ' +
         'disclosure: two dropdowns, and a Filters button for the rest. That keeps the page ' +
-        'quiet for someone asking one question at a time. The Beijing screen puts period, ' +
+        'quiet for someone asking one question at a time. The Chinese screen puts period, ' +
         'region, industry, owner and dates on screen as chips. The filter bar doubles as a ' +
         'summary of what the table is showing, and every change is one click, not a panel.',
 
         '<b>Colour carries meaning before it carries style.</b> In China, red means up. ' +
         'Stock tickers, sales reports and finance screens show gains in red and losses in ' +
         'green, the reverse of the Western convention. A growth figure in green, the obvious ' +
-        'choice in Cairo, reads as a loss in Beijing. Colour also does the grouping that ' +
-        'white space does on the Cairo screen: status, region and credit rating each get ' +
+        'choice in the West, reads as a loss in China. Colour also does the grouping that ' +
+        'white space does on the Western screen: status, region and credit rating each get ' +
         'their own colour, and every tab shows a count.',
 
         '<b>The data is expected to leave the screen.</b> Export Excel sits in the header, ' +
@@ -609,7 +609,7 @@ window.WORK = [
         'time the data was last updated. Numbers on a screen like this usually end up in a ' +
         'report, and the design treats exporting them as the main job, not an edge case.',
 
-        'None of this would come back from a translator. Every word on the Cairo screen ' +
+        'None of this would come back from a translator. Every word on the Western screen ' +
         'could be rendered perfectly in Chinese, and it would still feel like a product ' +
         'built for somewhere else.'
       ]
