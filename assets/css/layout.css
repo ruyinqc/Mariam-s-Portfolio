@@ -302,9 +302,15 @@
   box-shadow: inset 0 0 0 1px rgba(20, 20, 26, .14);
 }
 
-/* Two by two on a phone, instead of three and an orphan. */
+/* All four on one line on a phone: tighter chips whose type follows the
+   screen width, so even a narrow phone keeps them in a single row. */
 @media (max-width: 480px) {
-  .spoken { display: grid; grid-template-columns: repeat(2, max-content); }
+  .spoken { flex-wrap: nowrap; gap: 0.25rem; }
+  .spoken li {
+    gap: 0.35em;
+    padding: 0.35rem 0.55rem 0.35rem 0.4rem;
+    font-size: clamp(0.62rem, 3.1vw, 0.85rem);
+  }
 }
 
 /* ---- The clothesline ----------------------------------------------------
