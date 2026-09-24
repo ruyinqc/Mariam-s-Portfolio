@@ -75,6 +75,11 @@ A minimal one looks like this:
     'Status':   { value: 'Shipped', note: 'In production since March 2026' }
   },
 
+  cover: {                       // optional: a screenshot under the meta row
+    src: 'assets/img/work/my-project.webp', width: 2000, height: 977,
+    alt: 'What the screenshot shows'
+  },
+
   blocks: [ /* see below */ ]
 }
 ```
@@ -110,7 +115,7 @@ This is the one that does the heavy lifting.
   how: {
     title: 'How I worked on solving this?',
     text: ['Users can now <b>pay multiple invoices at once</b> …'],
-    image: { src: 'assets/img/work/…png', width: 777, height: 122,
+    image: { src: 'assets/img/work/…webp', width: 2000, height: 394,   // shown full width
              alt: 'What the screenshot shows', caption: 'Public UI preview only…' }
   }
 }
