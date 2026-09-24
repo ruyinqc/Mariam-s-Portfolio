@@ -634,7 +634,8 @@ window.WORK = [
    --------------------------------------------------------------------------
    `status: 'concept'` gives the card a "Concept" pill instead of "Shipped":
    this one was designed, not built. The video is the prototype walkthrough,
-   and the five stills under "How it works" are frames from it, in order.
+   and the five stills under "How it works" are its screens, exported from
+   the design at full size and set in a phone frame.
    ========================================================================== */
 {
   slug: 'journey-guide-tracker',
@@ -647,7 +648,7 @@ window.WORK = [
     sub: 'A museum guide that ticks off every room you visit and shows you where to go next.',
     tags: ['Tourism'],
     thumb: {
-      image: { src: 'assets/img/work/journey-guide-card.webp', width: 742, height: 464 },
+      image: { src: 'assets/img/work/journey-guide-card.webp', width: 870, height: 544 },
       tone: 'lime'
     }
   },
@@ -668,7 +669,7 @@ window.WORK = [
   cover: {
     video: 'assets/video/journey-guide-tracker.mp4',
     poster: 'assets/img/work/journey-guide-poster.webp',
-    width: 832, height: 464,
+    width: 960, height: 544,
     alt: 'Prototype walkthrough of Journey Guide Tracker: a visitor scans a QR code at a ' +
          'museum entrance, the guide loads, and the map follows them room by room.',
     caption: 'The prototype, from the QR code at the door to the last room.'
@@ -698,26 +699,26 @@ window.WORK = [
       type: 'steps',
       num: '02',
       title: 'How it works',
-      intro: 'Five moments from the prototype, in order. Each one is a frame from the video above.',
+      intro: 'Five moments from the prototype. Each one is a screen from the video above.',
       items: [
         {
           title: 'Scan and start',
           text: 'Visitors scan a QR code at the entrance, and their journey guide for ' +
                 '<b>The Meridian Archive</b> loads.',
           image: {
-            src: 'assets/img/work/journey-guide-step-1.webp', width: 220, height: 449,
+            src: 'assets/img/work/journey-guide-step-1.webp', width: 418, height: 872,
             alt: 'Loading screen: The Meridian Archive, Your Journey Guide, Loading your journey guide.'
           }
         },
         {
           title: 'See where you are',
           text: 'A blue dot marks you on the map, and the top bar names the room you are in. ' +
-                'Every room starts out <b>Not visited</b>.',
+                'Rooms you haven’t seen yet are flagged <b>Not visited</b>.',
           image: {
-            src: 'assets/img/work/journey-guide-step-2.webp', width: 220, height: 449,
-            alt: 'Museum map. The top bar reads: You are at Pharaohs Room, Visit progress 0%. ' +
-                 'Rooms are flagged Not visited. A card at the bottom describes Pharaohs Room: ' +
-                 '30 min, Floor 1, Extra fees.'
+            src: 'assets/img/work/journey-guide-step-2.webp', width: 418, height: 872,
+            alt: 'Museum map. The top bar reads: You are at Footprints of the Past, Visit ' +
+                 'progress 10%. Pharaohs Room has a Visited tick and the other rooms are flagged ' +
+                 'Not visited. A card at the bottom describes Footprints of the Past: 7 min, Floor 1.'
           }
         },
         {
@@ -725,9 +726,9 @@ window.WORK = [
           text: 'Leave a room and it turns <b>Visited</b>. Your visit progress goes up, and the ' +
                 'top bar moves on to the next stop.',
           image: {
-            src: 'assets/img/work/journey-guide-step-3.webp', width: 220, height: 449,
-            alt: 'Pharaohs Room now has a Visited tick. The top bar reads: Next is Footprints ' +
-                 'of the Past, Visit progress 10%.'
+            src: 'assets/img/work/journey-guide-step-3.webp', width: 418, height: 872,
+            alt: 'Footprints of the Past and Pharaohs Room both have a Visited tick. The top bar ' +
+                 'reads: Next is Time Travelers’ Gallery, Visit progress 20%.'
           }
         },
         {
@@ -735,7 +736,7 @@ window.WORK = [
           text: 'A trail of footprints on the map shows the way. Here it heads for the ' +
                 '<b>Time Travelers’ Gallery</b>, with 20% of the visit done.',
           image: {
-            src: 'assets/img/work/journey-guide-step-4.webp', width: 220, height: 449,
+            src: 'assets/img/work/journey-guide-step-4.webp', width: 418, height: 872,
             alt: 'The map with a trail of footprints toward Time Travelers’ Gallery. The top ' +
                  'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%.'
           }
@@ -745,7 +746,7 @@ window.WORK = [
           text: 'Pull the card up to see every room, floor by floor, with its tour time and ' +
                 'any extra fees.',
           image: {
-            src: 'assets/img/work/journey-guide-step-5.webp', width: 220, height: 449,
+            src: 'assets/img/work/journey-guide-step-5.webp', width: 418, height: 872,
             alt: 'The card pulled up into a list with tabs for All, Floor 1, Floor 2 and Floor 3. ' +
                  'Floor 1 lists Pharaohs Room (30 min tour, extra fees), Footprints of the Past ' +
                  '(7 min tour) and Time Travelers’ Gallery.'
