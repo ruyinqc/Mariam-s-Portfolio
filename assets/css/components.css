@@ -381,6 +381,9 @@
 .tag--kind { background: var(--blue-wash); color: var(--blue-deep); }
 .tag--live { background: var(--lime); color: var(--ink); }
 .tag--wip  { background: var(--paper-sunk); color: var(--muted); }
+/* designed, not built: a lighter lime than Shipped, outlined so it holds its
+   shape on the white card */
+.tag--concept { background: var(--lime-wash); color: var(--ink); box-shadow: inset 0 0 0 1px var(--lime-deep); }
 
 .pincard__title {
   font-size: 1.1875rem;
@@ -494,6 +497,15 @@
   box-shadow: none;
 }
 .pincard__thumb--lens .lens__tag { display: none; }
+
+/* a picture of the project itself (thumb.image in data.js), filling the frame */
+.pincard__thumb--image { display: block; }
+.pincard__thumb--image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
 /* ==========================================================================
    Testimonials

@@ -9,6 +9,8 @@
    status    : 'live'  → green "Shipped" pill
                'draft' → grey "In progress" pill + a note at the top of the
                          study telling the reader it isn't finished yet
+               'concept' → pale lime "Concept" pill, for finished work that
+                         was designed but not built
    Pictures you can use in a challenge diagram live in assets/img/art/:
      invoice · coins · wallet · confused · support-agent.png
    Drop any new SVG or PNG in that folder and use its name.
@@ -624,61 +626,155 @@ window.WORK = [
 },
 
 /* ==========================================================================
-   5 — JOURNEY GUIDE TRACKER  (tourism UI/UX project, from Behance)
+   5 — JOURNEY GUIDE TRACKER  (tourism concept, complete)
    --------------------------------------------------------------------------
-   ⚠️ Mariam: paste the project text from Behance into the TODO sections
-   below, then switch `status` to 'live' and delete `draft: true`.
+   `status: 'concept'` gives the card a "Concept" pill instead of "Shipped":
+   this one was designed, not built. The video is the prototype walkthrough,
+   and the five stills under "How it works" are frames from it, in order.
    ========================================================================== */
 {
   slug: 'journey-guide-tracker',
   kind: 'Case study',
   published: true,
-  status: 'draft',
-  draft: true,
+  status: 'concept',
 
   card: {
     title: 'Journey Guide Tracker',
-    sub: 'A UI/UX project for tourism: keeping travellers and their guides on the same route.',
+    sub: 'A museum guide that ticks off every room you visit and shows you where to go next.',
     tags: ['Tourism'],
     thumb: {
-      left:  { icon: 'alert', count: 3 },
-      right: { icon: 'check', count: 1 },
+      image: { src: 'assets/img/work/journey-guide-card.webp', width: 742, height: 464 },
       tone: 'lime'
     }
   },
 
-  title: 'Journey Guide Tracker',
+  title: 'Your Journey Guide Tracker',
   standfirst:
-    'A UI/UX project for the tourism industry. The full project, with every screen, is on ' +
-    'Behance.',
+    'From your first step to your last stop, it keeps track of every place you visit. ' +
+    'Never forget where you’ve been, and get guided to where to go next.',
 
   meta: {
-    'Role':     { value: 'UI/UX Designer' },
-    'Industry': { value: 'Tourism' },
-    'Status':   { value: 'In progress', note: 'Write-up coming' }
+    'Role':     { value: 'UI/UX Designer', note: 'Solo project' },
+    'Platform': { value: 'Mobile app' },
+    'Industry': { value: 'Tourism', note: 'Museums & venues' },
+    'Status':   { value: 'Concept', note: 'Prototype video' }
+  },
+
+  // the prototype walkthrough, shown full width under the meta row
+  cover: {
+    video: 'assets/video/journey-guide-tracker.mp4',
+    poster: 'assets/img/work/journey-guide-poster.webp',
+    width: 832, height: 464,
+    alt: 'Prototype walkthrough of Journey Guide Tracker: a visitor scans a QR code at a ' +
+         'museum entrance, the guide loads, and the map follows them room by room.',
+    caption: 'The prototype, from the QR code at the door to the last room.'
   },
 
   blocks: [
     {
-      type: 'projects',
+      type: 'section',
       num: '01',
+      title: 'The idea',
+      body: [
+        'Journey Guide Tracker is a mobile guide for places you explore on foot. It keeps a ' +
+        'record of every stop you make and points you to the next one, so you never have to ' +
+        'wonder which rooms you have already seen or where to go now.',
+
+        'The prototype is set in a museum, <b>The Meridian Archive</b>. You scan a QR code at ' +
+        'the entrance, and the guide follows you room by room until your last stop.'
+      ]
+    },
+
+    {
+      type: 'pull',
+      text: 'Never forget where you’ve been.'
+    },
+
+    {
+      type: 'steps',
+      num: '02',
+      title: 'How it works',
+      intro: 'Five moments from the prototype, in order. Each one is a frame from the video above.',
+      items: [
+        {
+          title: 'Scan and start',
+          text: 'Visitors scan a QR code at the entrance, and their journey guide for ' +
+                '<b>The Meridian Archive</b> loads.',
+          image: {
+            src: 'assets/img/work/journey-guide-step-1.webp', width: 220, height: 449,
+            alt: 'Loading screen: The Meridian Archive, Your Journey Guide, Loading your journey guide.'
+          }
+        },
+        {
+          title: 'See where you are',
+          text: 'A blue dot marks you on the map, and the top bar names the room you are in. ' +
+                'Every room starts out <b>Not visited</b>.',
+          image: {
+            src: 'assets/img/work/journey-guide-step-2.webp', width: 220, height: 449,
+            alt: 'Museum map. The top bar reads: You are at Pharaohs Room, Visit progress 0%. ' +
+                 'Rooms are flagged Not visited. A card at the bottom describes Pharaohs Room: ' +
+                 '30 min, Floor 1, Extra fees.'
+          }
+        },
+        {
+          title: 'Ticked off as you go',
+          text: 'Leave a room and it turns <b>Visited</b>. Your visit progress goes up, and the ' +
+                'top bar moves on to the next stop.',
+          image: {
+            src: 'assets/img/work/journey-guide-step-3.webp', width: 220, height: 449,
+            alt: 'Pharaohs Room now has a Visited tick. The top bar reads: Next is Footprints ' +
+                 'of the Past, Visit progress 10%.'
+          }
+        },
+        {
+          title: 'Follow the footprints',
+          text: 'A trail of footprints on the map shows the way. Here it heads for the ' +
+                '<b>Time Travelers’ Gallery</b>, with 20% of the visit done.',
+          image: {
+            src: 'assets/img/work/journey-guide-step-4.webp', width: 220, height: 449,
+            alt: 'The map with a trail of footprints toward Time Travelers’ Gallery. The top ' +
+                 'bar reads: Next is Time Travelers’ Gallery, Visit progress 20%.'
+          }
+        },
+        {
+          title: 'Plan the rest by floor',
+          text: 'Pull the card up to see every room, floor by floor, with its tour time and ' +
+                'any extra fees.',
+          image: {
+            src: 'assets/img/work/journey-guide-step-5.webp', width: 220, height: 449,
+            alt: 'The card pulled up into a list with tabs for All, Floor 1, Floor 2 and Floor 3. ' +
+                 'Floor 1 lists Pharaohs Room (30 min tour, extra fees), Footprints of the Past ' +
+                 '(7 min tour) and Time Travelers’ Gallery.'
+          }
+        }
+      ]
+    },
+
+    {
+      type: 'chips',
+      num: '03',
+      title: 'Where it works best',
+      intro: 'The prototype is set in a museum, but the same guide fits any place you explore ' +
+             'stop by stop.',
+      items: [
+        { text: 'Museums', note: 'The prototype', accent: true },
+        'Exhibitions',
+        'Historical Sites',
+        'University Open Days',
+        'Shopping Malls or Markets',
+        'City Tours'
+      ]
+    },
+
+    {
+      type: 'projects',
+      num: '04',
       title: 'See the full project',
       items: [
         { name: 'Journey Guide Tracker on Behance',
+          text: 'The full project, with every screen.',
           url: 'https://www.behance.net/gallery/232930537/Journey-Gide-Tracker-UIUX-Project-Tourism' }
       ]
-    },
-    {
-      type: 'section',
-      num: '02',
-      title: 'The problem',
-      body: ['TODO — paste the problem statement from Behance.']
-    },
-    {
-      type: 'section',
-      num: '03',
-      title: 'The solution',
-      body: ['TODO — paste the solution and key screens from Behance.']
     }
   ]
 }
