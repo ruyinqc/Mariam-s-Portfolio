@@ -456,40 +456,43 @@ window.WORK = [
 },
 
 /* ==========================================================================
-   3 — UX ARGUMENT   ⚠️ PLACEHOLDER — Mariam to replace
+   3 — UX ARGUMENT: LOCALISATION  (complete)
    --------------------------------------------------------------------------
    This one is not a case study — it is a position. Same structure, but the
    `pull` and `section` blocks carry the weight instead of `challenge`.
+   `status: 'concept'` because the two dashboards in it are hi-fi concepts
+   drawn for this piece, with dummy data, not the real Huawei screens.
    ========================================================================== */
 {
   slug: 'ux-argument-localisation',
   kind: 'UX argument',
   published: true,
-  status: 'draft',
-  draft: true,
+  status: 'concept',
 
   card: {
     title: 'Localisation is not translation',
-    sub: 'What I learned redesigning a Huawei dashboard for Chinese users — from inside Beijing.',
-    tags: ['Argument', 'Cross-cultural'],
+    sub: 'A perfectly translated dashboard can still feel wrong in Beijing. Here is what actually has to change.',
+    tags: ['Cross-cultural', 'Localisation'],
     thumb: {
-      left:  { icon: 'sad', count: 1 },
-      right: { icon: 'happy', count: 1 },
+      // the study's two dashboards, split down the middle: Cairo | Beijing.
+      // tools/make-thumbs.js draws it from mockups.js; re-run it if they change.
+      image: { src: 'assets/img/work/localisation-card.webp', width: 1200, height: 750 },
       tone: 'lime'
     }
   },
 
   title: 'Localisation is not translation',
   standfirst:
-    'A layout that tests well in Cairo can fail in Beijing without a single word being ' +
-    'mistranslated. I spent five years studying in China and then redesigned a product ' +
-    'for that market — here is what actually had to change.',
+    'A dashboard that feels calm and clear in Cairo can feel empty in Beijing, without a ' +
+    'single word being mistranslated. I spent five years studying in China, then designed ' +
+    'financial dashboards at Huawei, adapting them to Chinese design conventions. This is ' +
+    'what had to change, and none of it was the words.',
 
   meta: {
-    'Format':  { value: 'UX argument' },
-    'Context': { value: 'Huawei Technologies', note: 'Cairo & Beijing' },
-    'Reading': { value: 'TODO min' },
-    'Status':  { value: 'In progress' }
+    'Format':     { value: 'UX argument' },
+    'Context':    { value: 'Huawei Technologies', note: 'Financial dashboards · 2024' },
+    'Background': { value: '5 years in China', note: 'B.Sc., Beijing Jiaotong University' },
+    'Reading':    { value: '5 min' }
   },
 
   blocks: [
@@ -498,14 +501,24 @@ window.WORK = [
       num: '01',
       title: 'The claim',
       body: [
-        'TODO — state your position in two or three sentences. A UX argument earns its ' +
-        'place by being arguable: if nobody could disagree with it, it is an observation, ' +
-        'not an argument.'
+        'Most teams treat localisation as the last step of a project. The product is ' +
+        'designed once, the strings go to a translator, and the layout, the density and ' +
+        'the colours stay exactly as they were, because everyone assumes they are neutral.',
+
+        'They are not. How much a screen is allowed to hold, where the eye starts and what ' +
+        'red and green mean are all cultural. My position is simple: <b>a product is not ' +
+        'localised until its layout has been designed for the market, not just its ' +
+        'words.</b> If a finance team in Beijing opens a perfectly translated dashboard and ' +
+        'still asks where everything is, the localisation has failed.',
+
+        'Plenty of designers would disagree. One global design system is cheaper to build ' +
+        'and easier to maintain, and minimalism is often treated as universal good taste. ' +
+        'I think that is one market’s taste, applied as a rule everywhere.'
       ]
     },
     {
       type: 'pull',
-      text: 'TODO — the one sentence you would want a reader to quote back to you.'
+      text: 'You can translate every word correctly and still ship a screen that feels foreign.'
     },
 
     // The two dashboards are drawn in HTML by assets/js/mockups.js.
@@ -567,9 +580,38 @@ window.WORK = [
       num: '03',
       title: 'The evidence',
       body: [
-        'TODO — what did you see? Density expectations, information hierarchy, entry ' +
-        'points, how much a screen is allowed to hold before it reads as cluttered. ' +
-        'Concrete examples beat adjectives here.'
+        'Put the two screens side by side and none of the differences are in the words. ' +
+        'Four of them decide whether the dashboard feels right.',
+
+        '<b>Density reads as capability, not clutter.</b> The apps people in China use ' +
+        'every day, for payments, shopping, travel and public services, put dozens of entry ' +
+        'points on one screen, and people learn to scan dense screens fast. A dashboard ' +
+        'with eight rows and three big numbers does not read as calm there. It reads as a ' +
+        'tool that is hiding something, or one that is not finished. The Beijing screen ' +
+        'shows 14 customers across more than twenty columns, because that is what its ' +
+        'reader expects to take in at a glance.',
+
+        '<b>Hidden filters feel like missing features.</b> The Cairo screen uses progressive ' +
+        'disclosure: two dropdowns, and a Filters button for the rest. That keeps the page ' +
+        'quiet for someone asking one question at a time. The Beijing screen puts period, ' +
+        'region, industry, owner and dates on screen as chips. The filter bar doubles as a ' +
+        'summary of what the table is showing, and every change is one click, not a panel.',
+
+        '<b>Colour carries meaning before it carries style.</b> In China, red means up. ' +
+        'Stock tickers, sales reports and finance screens show gains in red and losses in ' +
+        'green, the reverse of the Western convention. A growth figure in green, the obvious ' +
+        'choice in Cairo, reads as a loss in Beijing. Colour also does the grouping that ' +
+        'white space does on the Cairo screen: status, region and credit rating each get ' +
+        'their own colour, and every tab shows a count.',
+
+        '<b>The data is expected to leave the screen.</b> Export Excel sits in the header, ' +
+        'not in a menu. The table ends with a page total, and the header shows the exact ' +
+        'time the data was last updated. Numbers on a screen like this usually end up in a ' +
+        'report, and the design treats exporting them as the main job, not an edge case.',
+
+        'None of this would come back from a translator. Every word on the Cairo screen ' +
+        'could be rendered perfectly in Chinese, and it would still feel like a product ' +
+        'built for somewhere else.'
       ]
     },
     {
@@ -577,8 +619,26 @@ window.WORK = [
       num: '04',
       title: 'What it changes about how I work',
       body: [
-        'TODO — close with the practical consequence. What do you now do differently ' +
-        'on day one of a project?'
+        'I no longer treat the market as a translation task at the end of a project. It ' +
+        'goes into the brief on day one, next to the persona, and it shapes three things ' +
+        'before I draw a single screen.',
+
+        '<b>I design from the user’s own tools, not from design galleries.</b> Before ' +
+        'wireframes, I collect screens from the products my users already work in every ' +
+        'day. Those set the density, the entry points and the patterns to follow, instead ' +
+        'of my own taste.',
+
+        '<b>I check what colours mean, not only their contrast.</b> Red, green and gold ' +
+        'carry different meanings in different markets. Which way is up, and what counts ' +
+        'as a warning, gets agreed before the palette is final.',
+
+        '<b>I plan for density from the start.</b> Row height, type size and what is ' +
+        'visible by default are decisions, not constants. When one product serves more ' +
+        'than one market, I design its components to be compact or comfortable without ' +
+        'being redesigned.',
+
+        'Translation makes a product readable. Localisation makes it feel like it was ' +
+        'built for the person using it.'
       ]
     }
   ]
@@ -601,8 +661,9 @@ window.WORK = [
     sub: 'Three things I designed and built myself, end to end, with AI as my pair programmer.',
     tags: [],
     thumb: {
-      left:  { icon: 'doc', count: 3 },
-      right: { icon: 'layers', count: 1 },
+      // the projects below, as browser windows. tools/make-thumbs.js draws it
+      // from this entry; re-run it after changing a project's image or link.
+      image: { src: 'assets/img/work/vibe-coding-card.webp', width: 1200, height: 750 },
       tone: 'blue'
     }
   },

@@ -43,9 +43,7 @@ the email app rather than pretending to have sent something.
 
 ## 2. Add or finish a case study
 
-Open `assets/js/data.js`. Each case study is one object in the list. Two of the
-three are placeholders — search for `TODO` to find every line that needs your
-words.
+Open `assets/js/data.js`. Each case study is one object in the list.
 
 A minimal one looks like this:
 
@@ -366,6 +364,16 @@ node tools/make-og.js       # rebuild the 1200x630 social image
 ```
 
 ```bash
+node tools/make-thumbs.js   # rebuild two work-card thumbnails
+```
+
+Two cards use pictures drawn from the site's own content: *Localisation is
+not translation* (its Cairo and Beijing dashboards, split down the middle) and
+*Vibe Coding Projects* (the projects listed in `data.js`, as browser windows).
+Re-run this after changing a dashboard in `mockups.js`, or a vibe coding
+project's image or link.
+
+```bash
 bash tools/fetch-fonts.sh   # only if you change which fonts are used
 ```
 
@@ -399,7 +407,7 @@ assets/
   fonts/                 woff2, latin + latin-ext
   img/                   photography + og-cover.png (the social card)
     art/                 pictures for the challenge diagrams — swap freely
-    work/                screenshots used inside case studies
+    work/                screenshots used inside case studies, and card thumbnails
     path/                one photo per stop on the clothesline
     people/              testimonial photos. Mohamed Wael's card is a
                          placeholder: the comment next to "MW" in index.html
@@ -413,6 +421,7 @@ tools/
   check.js               58 browser checks (accessibility, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
+  make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
   fetch-fonts.sh         re-downloads the webfonts
 ```
 
