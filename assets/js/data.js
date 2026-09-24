@@ -214,40 +214,39 @@ window.WORK = [
 },
 
 /* ==========================================================================
-   2 — INCORPORATION PRODUCT   ⚠️ PLACEHOLDER — Mariam to replace
+   2 — BILINGUAL COMPANY NAMING  (real, complete)
    --------------------------------------------------------------------------
-   The structure below is ready. Replace the copy and the diagram captions
-   with the real story, then change `status` to 'live' and delete the
-   `draft: true` line. Everything else keeps working.
+   The Before / After screens are drawn in HTML by assets/js/mockups.js.
+   The numbered notes under each screen match the numbered markers on it.
    ========================================================================== */
 {
-  slug: 'incorporation',
+  slug: 'bilingual-company-naming',
   kind: 'Case study',
   published: true,
-  status: 'draft',
-  draft: true,
+  status: 'live',
 
   card: {
-    title: 'Company Incorporation Flow',
-    sub: 'Turning a lawyer-shaped paperwork process into something a founder can finish alone.',
+    title: 'Write It Once: Bilingual Company Naming',
+    sub: 'I designed the step where founders name their company in Arabic and English — then redesigned it so they only write one.',
     tags: ['Onboarding', 'B2B'],
     thumb: {
-      left:  { icon: 'alert', count: 3 },
+      left:  { icon: 'doc', count: 3 },
       right: { icon: 'check', count: 1 },
-      tone: 'blue'
+      tone: 'lime'
     }
   },
 
-  title: 'Company Incorporation Flow',
+  title: 'Write It Once: Bilingual Company Naming',
   standfirst:
-    'I led the end-to-end design of Ovarc\'s incorporation product — from user research ' +
-    'and flow definition through to implementation.',
+    'To register a company in Egypt, a founder has to submit several names, ranked, in both ' +
+    'Arabic and English. I designed this step from scratch, reviewed my own first version, ' +
+    'found where it failed, and redesigned it, so founders write each name once, in the ' +
+    'language they know, and see exactly where it lands in their list.',
 
   meta: {
-    'Role':     { value: 'Product Designer', note: 'End-to-end design' },
-    'Timeline': { value: 'TODO' },
-    'Status':   { value: 'TODO' },
-    'Product':  { value: 'Ovarc', note: 'B2B SaaS · Egypt' }
+    'Role':    { value: 'Product Designer', note: 'Sole designer · both versions' },
+    'Scope':   { value: 'Company name step', note: 'Inside the incorporation flow' },
+    'Product': { value: 'B2B SaaS', note: 'Incorporation · Egypt' }
   },
 
   blocks: [
@@ -256,34 +255,195 @@ window.WORK = [
       num: '01',
       title: 'Where it started',
       body: [
-        'TODO — what was the situation before you touched it? Who was struggling, ' +
-        'and what did that cost the business?'
+        'Egyptian law asks for every company name in <b>both Arabic and English</b>. That is a ' +
+        'real barrier: plenty of founders are comfortable in one of the two languages and not the ' +
+        'other. On top of that, they have to submit <b>several names ranked by preference</b>, in ' +
+        'case their first choice is already taken.',
+
+        'So one small-looking step asks for a lot: multiple names, two languages and a clear ' +
+        'order. The platform already removed the language barrier: you write the name in the ' +
+        'language you know, and it generates the other. I owned the design of this step ' +
+        'end to end, and my goal was to make it <b>feel as simple as that promise</b>.'
       ]
     },
+
+    {
+      type: 'screens',
+      num: '02',
+      title: 'Before and after',
+      intro:
+        'Both screens are my own work. I designed the first version, then pressure-tested it ' +
+        'against what a founder actually has to do here, and the problems below are the ones ' +
+        'I found in it. The redesign keeps the same features, data and rules. What I changed ' +
+        'is how the pieces relate to each other, and that turned out to be the whole problem.',
+      before: {
+        label: 'Before',
+        kicker: 'My first version · two panels',
+        screen: 'naming-before',
+        alt: 'My first design: a form on the left split into a language box and a name box with ' +
+             'a Generate button, and a separate Names List on the right labelled Top and Low.',
+        notes: [
+          '<b>No bridge between form and list.</b> Nothing tells you how a name you typed ' +
+          'ends up on the right.',
+          '<b>“Top” and “Low” only label the ends.</b> Every name in the middle has no exact rank.',
+          '<b>Three boxes for one decision.</b> Language, name and list each feel like a separate task.'
+        ]
+      },
+      after: {
+        label: 'After',
+        kicker: 'My redesign · one flow',
+        screen: 'naming-after',
+        alt: 'My redesign: one column. Pick the name language, type the name, and the other ' +
+             'language is generated beside it. An Add to list button puts the pair into a ' +
+             'numbered list, where number one is the first choice.',
+        notes: [
+          '<b>Read top to bottom.</b> Enter, add, see it in the list. Cause and effect sit on ' +
+          'one line of sight, and the layout already works on mobile.',
+          '<b>Write once, review both.</b> The generated name appears right next to yours, so ' +
+          'you check the pair before saving it.',
+          '<b>“Add to list” closes the loop.</b> One explicit action moves a name from the ' +
+          'form into the list. Nothing is left to guess.',
+          '<b>Every name has a number.</b> No more “Top” and “Low”. Drag to reorder and each ' +
+          'position stays unambiguous.'
+        ]
+      }
+    },
+
     {
       type: 'challenge',
       n: 1,
       diagram: {
-        alt: 'Placeholder diagram — replace with the real before and after.',
+        alt: 'Left: the user types a name in the form. Right: they cannot tell how it gets into ' +
+             'the list, and are confused.',
         rows: [{
-          from: { art: [{ icon: 'alert', count: 3 }], caption: 'TODO — what went wrong, in one line' },
-          to:   { art: [{ icon: 'check', count: 1 }], caption: 'TODO — what happens now instead' }
+          from: { art: [{ icon: 'doc', count: 1 }], caption: 'User types a name in the form' },
+          to:   { art: [{ icon: 'layers', count: 1 }], caption: '…and has to guess how it reaches the list', emoji: 'confused' }
         }]
       },
       why: {
-        title: 'Why this happened?',
+        title: 'Where my first version fell short',
         points: [
-          '<b>TODO.</b> The root cause, not the symptom.',
-          '<b>TODO.</b> A second contributing cause.'
+          '<b>Two panels, no action between them.</b> The form lived on the left, the list on ' +
+          'the right, and nothing explicitly moved a name across.',
+          '<b>Side by side reads as “separate”.</b> Parallel panels suggest two independent ' +
+          'things, not one causing the other.'
         ]
       },
       how: {
         title: 'How I worked on solving this?',
         points: [
-          'TODO — what you changed, and why that change addresses the cause above.',
-          'TODO — a second move.'
+          'I stacked everything into <b>one column</b>, so the name you type sits directly above ' +
+          'the list it goes into. Your eye follows the same path as the data.',
+          'An explicit <b>“Add to list”</b> button completes the loop. Press it, and the pair ' +
+          'appears below. Cause and effect are visible in one glance.'
         ]
       }
+    },
+
+    {
+      type: 'challenge',
+      n: 2,
+      diagram: {
+        alt: 'Left: a list labelled only Top and Low. Right: a numbered list where every name ' +
+             'has an exact rank.',
+        rows: [{
+          from: { art: [{ icon: 'alert', count: 3 }], caption: '“Top” … ? … “Low”' },
+          to:   { art: [{ icon: 'check', count: 3 }], caption: '#1, #2, #3: an exact rank for every name' }
+        }]
+      },
+      why: {
+        title: 'Where my first version fell short',
+        points: [
+          '<b>Labels only on the ends.</b> “Top” and “Low” worked for the first and last names ' +
+          'and left everything in between to interpretation.',
+          '<b>The order has legal weight.</b> If #1 is taken, the registry moves on to #2. A ' +
+          'vague order means a founder might get a name they ranked lower than they thought.'
+        ]
+      },
+      how: {
+        title: 'How I worked on solving this?',
+        points: [
+          '<b>Numbers replace labels.</b> Every name carries its exact rank, and the first ' +
+          'choice is highlighted so it reads as the one that matters most.',
+          '<b>Drag to reorder</b> keeps changing your mind cheap. The numbers update as you ' +
+          'move, so the list always says exactly what will be submitted.'
+        ]
+      }
+    },
+
+    {
+      type: 'challenge',
+      n: 3,
+      diagram: {
+        alt: 'Left: three separate boxes for language, name and list. Right: a single task.',
+        rows: [{
+          from: { art: [{ icon: 'doc', count: 3 }], caption: 'Language + name + list = 3 tasks' },
+          to:   { art: [{ icon: 'doc', count: 1 }], caption: 'One task: name your company' }
+        }]
+      },
+      why: {
+        title: 'Where my first version fell short',
+        points: [
+          '<b>Every concern got its own box.</b> Choosing a language, writing a name and ' +
+          'managing the list each had a container, so one decision looked like three.',
+          '<b>The language choice took a whole section</b> for what is really a single setting ' +
+          'on the input.'
+        ]
+      },
+      how: {
+        title: 'How I worked on solving this?',
+        points: [
+          'I <b>folded the language choice into the input row</b>: language, your name, the ' +
+          'generated name, side by side. One section disappeared entirely.',
+          'The screen now reads as <b>one task</b> with one primary action, instead of three ' +
+          'boxes competing for attention.'
+        ]
+      }
+    },
+
+    {
+      type: 'outcome',
+      num: '03',
+      title: 'What changed',
+      items: [
+        { value: '1',      label: 'Language a founder has to write in, instead of two' },
+        { value: '3 → 1',  label: 'Boxes to understand before starting' },
+        { value: '#1–#n',  label: 'An exact rank for every name, not “Top” and “Low”' },
+        { value: '1 tap',  label: 'From a typed name to a name on the list' }
+      ]
+    },
+
+    {
+      type: 'pull',
+      text: 'The new layout added nothing. It made the relationships visible.'
+    },
+
+    {
+      type: 'section',
+      num: '04',
+      title: 'What I would refine next',
+      body: [
+        '<b>A segmented AR | EN toggle instead of the dropdown.</b> With only two options, both ' +
+        'should be visible and one tap away.',
+
+        '<b>A short helper line on the order</b>, such as “#1 is your first choice”, so the ' +
+        'numbers carry meaning on their own.',
+
+        '<b>A single way to add names.</b> The current version has two add actions, the button ' +
+        'and the dashed row. Keeping one removes a moment of hesitation.'
+      ]
+    },
+
+    {
+      type: 'section',
+      num: '05',
+      title: 'Takeaway',
+      body: [
+        'Critiquing my own first version taught me the most here: a layout can include every ' +
+        'feature and still fail to explain itself. Moving from two ' +
+        'panels to one flow did not add anything new. It made the relationships between the ' +
+        'existing pieces visible, and that turned out to be the real fix.'
+      ]
     }
   ]
 },

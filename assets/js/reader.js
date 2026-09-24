@@ -167,6 +167,27 @@
     '</figure>';
   }
 
+  /* ---- Screens: a high-fidelity before and after ---------------------------
+     The screens come from mockups.js. Each note's number matches a marker
+     drawn on the screen itself.                                             */
+
+  function screenSide(side, tone) {
+    var draw = window.Mockups && window.Mockups[side.screen];
+    return '<figure class="scr scr--' + tone + '">' +
+      '<figcaption class="scr__label"><span>' + esc(side.label) + '</span>' +
+        (side.kicker ? '<small>' + esc(side.kicker) + '</small>' : '') + '</figcaption>' +
+      '<div class="scr__stage"' + (side.alt ? ' role="img" aria-label="' + esc(side.alt) + '"' : '') + '>' +
+        '<div aria-hidden="true">' + (draw ? draw() : '') + '</div>' +
+      '</div>' +
+      (side.notes
+        ? '<ol class="scr__notes">' + side.notes.map(function (n, i) {
+            return '<li><span class="mk-mark mk-mark--' + tone + '" aria-hidden="true">' + (i + 1) + '</span>' +
+                   '<p>' + n + '</p></li>';
+          }).join('') + '</ol>'
+        : '') +
+    '</figure>';
+  }
+
   function renderBlock(b) {
     switch (b.type) {
 
@@ -192,6 +213,13 @@
             // the screen gets the full width of the challenge, under both columns
             (b.how.image ? renderShot(b.how.image, 'shot', true) : '') +
           '</div>' +
+        '</section>';
+
+      case 'screens':
+        return '<section class="cs__section scrs">' +
+          '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
+          (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '') +
+          screenSide(b.before, 'bad') + screenSide(b.after, 'good') +
         '</section>';
 
       case 'pull':
