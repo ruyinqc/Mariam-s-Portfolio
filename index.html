@@ -55,12 +55,12 @@
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-normal-latin.woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/mariam-frame.webp" fetchpriority="high">
 
-<link rel="stylesheet" href="assets/css/fonts.css">
-<link rel="stylesheet" href="assets/css/tokens.css">
-<link rel="stylesheet" href="assets/css/base.css">
-<link rel="stylesheet" href="assets/css/layout.css">
-<link rel="stylesheet" href="assets/css/components.css">
-<link rel="stylesheet" href="assets/css/reader.css">
+<link rel="stylesheet" href="assets/css/fonts.css?v=17">
+<link rel="stylesheet" href="assets/css/tokens.css?v=17">
+<link rel="stylesheet" href="assets/css/base.css?v=17">
+<link rel="stylesheet" href="assets/css/layout.css?v=17">
+<link rel="stylesheet" href="assets/css/components.css?v=17">
+<link rel="stylesheet" href="assets/css/reader.css?v=17">
 
 <!-- Structured data. The case studies and certificates are added at runtime
      by app.js, straight from data.js and config.js, so they can never drift
@@ -309,12 +309,15 @@
         <p class="eyebrow"><span>01</span> The path</p>
         <h2 class="section__title">My Experience <br><em>&amp;</em> Education</h2>
       </div>
-      <ul class="spoken" aria-label="Languages I speak">
-        <li><span class="flag" aria-hidden="true"><svg><use href="#flag-eg"/></svg></span>Arabic</li>
-        <li><span class="flag" aria-hidden="true"><svg><use href="#flag-gb"/></svg></span>English</li>
-        <li><span class="flag" aria-hidden="true"><svg><use href="#flag-cn"/></svg></span>Chinese</li>
-        <li><span class="flag" aria-hidden="true"><svg><use href="#flag-es"/></svg></span>Spanish</li>
-      </ul>
+      <div class="spoken-wrap">
+        <p class="spoken__label" id="spokenLabel">Spoken languages</p>
+        <ul class="spoken" aria-labelledby="spokenLabel">
+          <li><span class="flag" aria-hidden="true"><svg width="24" height="16"><use href="#flag-eg"/></svg></span>Arabic</li>
+          <li><span class="flag" aria-hidden="true"><svg width="24" height="16"><use href="#flag-gb"/></svg></span>English</li>
+          <li><span class="flag" aria-hidden="true"><svg width="24" height="16"><use href="#flag-cn"/></svg></span>Chinese</li>
+          <li><span class="flag" aria-hidden="true"><svg width="24" height="16"><use href="#flag-es"/></svg></span>Spanish</li>
+        </ul>
+      </div>
     </header>
   </div>
 
@@ -448,21 +451,6 @@
     </div>
   </div>
 
-  <div class="shell">
-    <div class="path__side">
-      <div class="langs" data-reveal>
-        <h3 class="mini-title">Languages</h3>
-        <ul class="langs__list">
-          <li><span class="langs__code">AR</span> Arabic <small>Native</small></li>
-          <li><span class="langs__code">EN</span> English <small>Fluent</small></li>
-          <li><span class="langs__code">ZH</span> Chinese <small>Fluent</small></li>
-          <li><span class="langs__code langs__code--soft">ES</span> Spanish <small>A1.1</small></li>
-          <li><span class="langs__code langs__code--soft">HY</span> Armenian <small>Beginner</small></li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
 </section>
 
 <!-- ============ PITCH STRIP ============ -->
@@ -796,17 +784,17 @@
   </div>
 </div>
 
-<script src="assets/js/config.js"></script>
-<script src="assets/js/data.js"></script>
-<script src="assets/js/art.js"></script>
-<script src="assets/js/mockups.js"></script>
-<script src="assets/js/lens.js"></script>
-<script src="assets/js/motion.js"></script>
-<script src="assets/js/nav.js"></script>
-<script src="assets/js/board.js"></script>
-<script src="assets/js/line.js"></script>
-<script src="assets/js/reader.js"></script>
-<script src="assets/js/contact.js"></script>
-<script src="assets/js/app.js"></script>
+<script src="assets/js/config.js?v=17"></script>
+<script src="assets/js/data.js?v=17"></script>
+<script src="assets/js/art.js?v=17"></script>
+<script src="assets/js/mockups.js?v=17"></script>
+<script src="assets/js/lens.js?v=17"></script>
+<script src="assets/js/motion.js?v=17"></script>
+<script src="assets/js/nav.js?v=17"></script>
+<script src="assets/js/board.js?v=17"></script>
+<script src="assets/js/line.js?v=17"></script>
+<script src="assets/js/reader.js?v=17"></script>
+<script src="assets/js/contact.js?v=17"></script>
+<script src="assets/js/app.js?v=17"></script>
 </body>
 </html>
