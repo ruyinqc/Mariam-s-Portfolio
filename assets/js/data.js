@@ -316,11 +316,14 @@ window.WORK = [
       type: 'challenge',
       n: 1,
       diagram: {
-        alt: 'Left: the user types a name in the form. Right: they cannot tell how it gets into ' +
-             'the list, and are confused.',
+        alt: 'Left: a close-up of my first version, where the user types a name in the form. ' +
+             'Right: the gap between the form and the list, where nothing shows how the name ' +
+             'gets across.',
         rows: [{
-          from: { art: [{ icon: 'doc', count: 1 }], caption: 'User types a name in the form' },
-          to:   { art: [{ icon: 'layers', count: 1 }], caption: '…and has to guess how it reaches the list', emoji: 'confused' }
+          from: { zoom: { screen: 'naming-before', focus: 'name' },
+                  caption: 'User types a name in the form' },
+          to:   { zoom: { screen: 'naming-before', focus: 'gap', span: 0.46 },
+                  caption: '…and has to guess how it reaches the list', emoji: 'confused' }
         }]
       },
       why: {
@@ -347,11 +350,13 @@ window.WORK = [
       type: 'challenge',
       n: 2,
       diagram: {
-        alt: 'Left: a list labelled only Top and Low. Right: a numbered list where every name ' +
-             'has an exact rank.',
+        alt: 'Left: a close-up of my first version’s list, labelled only Top and Low. Right: a ' +
+             'close-up of the redesign’s list, where every name has a number.',
         rows: [{
-          from: { art: [{ icon: 'alert', count: 3 }], caption: '“Top” … ? … “Low”' },
-          to:   { art: [{ icon: 'check', count: 3 }], caption: '#1, #2, #3: an exact rank for every name' }
+          from: { zoom: { screen: 'naming-before', frame: 'list', focus: 'ends' },
+                  caption: '“Top” … ? … “Low”' },
+          to:   { zoom: { screen: 'naming-after', frame: 'list', focus: 'num', span: 0.52, align: 'start' },
+                  caption: '#1, #2, #3: an exact rank for every name' }
         }]
       },
       why: {
@@ -378,10 +383,14 @@ window.WORK = [
       type: 'challenge',
       n: 3,
       diagram: {
-        alt: 'Left: three separate boxes for language, name and list. Right: a single task.',
+        alt: 'Left: a close-up of my first version, with separate boxes for language, name and ' +
+             'list. Right: a close-up of the redesign, where one question heads a single card ' +
+             'and the language choice sits in the same row as the name.',
         rows: [{
-          from: { art: [{ icon: 'doc', count: 3 }], caption: 'Language + name + list = 3 tasks' },
-          to:   { art: [{ icon: 'doc', count: 1 }], caption: 'One task: name your company' }
+          from: { zoom: { screen: 'naming-before', focus: 'box', span: 0.72, align: 'start' },
+                  caption: 'Language + name + list = 3 tasks' },
+          to:   { zoom: { screen: 'naming-after', frame: 'ask task', focus: 'task', span: 0.64, align: 'start' },
+                  caption: 'One task: name your company' }
         }]
       },
       why: {

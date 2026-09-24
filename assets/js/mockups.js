@@ -5,6 +5,10 @@
    Each screen is a function that returns markup. Numbered markers
    (mark(n)) line up with the numbered notes printed under the screen, so
    the reader can match a problem or a fix to the exact spot it lives.
+
+   data-focus="…" names a part of a screen, so a challenge diagram can zoom
+   in on it (lens.js, and `zoom` in data.js). One element can carry several
+   names, and one name can sit on several elements.
    ========================================================================== */
 
 (function () {
@@ -55,33 +59,33 @@
       steps(1) +
       '<h5 class="mk-h">What is your company name?</h5>' +
       '<div class="mk-split">' +
-        '<div class="mk-col">' +
-          '<div class="mk-box mk-rel">' + mark(3, 'bad') +
+        '<div class="mk-col" data-focus="form">' +
+          '<div class="mk-box mk-rel" data-focus="box lang">' + mark(3, 'bad') +
             '<p class="mk-q">In which language is your company name?</p>' +
             '<div class="mk-radios">' +
               '<span class="mk-radio is-on"><i></i>English</span>' +
               '<span class="mk-radio"><i></i>Arabic</span>' +
             '</div>' +
           '</div>' +
-          '<div class="mk-box mk-rel">' +
+          '<div class="mk-box mk-rel" data-focus="box name">' +
             '<p class="mk-q">Write your company name</p>' +
             '<div class="mk-pair">' +
-              '<label class="mk-field"><span>English name</span><em>Samurai</em></label>' +
+              '<label class="mk-field" data-focus="typed"><span>English name</span><em>Samurai</em></label>' +
               '<label class="mk-field"><span>Arabic name</span><em class="mk-empty">—</em></label>' +
             '</div>' +
             '<span class="mk-btn mk-btn--ghost">Generate</span>' +
           '</div>' +
         '</div>' +
-        '<div class="mk-gap mk-rel" aria-hidden="true">' + mark(1, 'bad') + '<span>?</span></div>' +
-        '<div class="mk-box mk-list mk-rel">' +
+        '<div class="mk-gap mk-rel" aria-hidden="true">' + mark(1, 'bad') + '<span data-focus="gap">?</span></div>' +
+        '<div class="mk-box mk-list mk-rel" data-focus="box list">' +
           '<p class="mk-q">Names List</p>' +
-          '<span class="mk-tag mk-rel">Top' + mark(2, 'bad') + '</span>' +
+          '<span class="mk-tag mk-rel" data-focus="ends">Top' + mark(2, 'bad') + '</span>' +
           '<div class="mk-item">' + GRIP +
             '<div><b dir="rtl" lang="ar">ساموراي</b><small>Samurai</small></div></div>' +
           '<div class="mk-item">' + GRIP +
             '<div><b dir="rtl" lang="ar">سام ديجيتال</b><small>Sam Digital</small></div></div>' +
           '<div class="mk-item mk-item--ghost"></div>' +
-          '<span class="mk-tag">Low</span>' +
+          '<span class="mk-tag" data-focus="ends">Low</span>' +
         '</div>' +
       '</div>',
       'before'
@@ -92,7 +96,7 @@
 
   function rankRow(n, en, ar) {
     return '<div class="mk-rank">' + GRIP +
-      '<span class="mk-num">' + n + '</span>' +
+      '<span class="mk-num" data-focus="num">' + n + '</span>' +
       '<span class="mk-cell">' + en + '</span>' +
       '<span class="mk-cell mk-cell--ar" dir="rtl" lang="ar">' + ar + '</span>' +
     '</div>';
@@ -101,25 +105,25 @@
   function namingAfter() {
     return chrome(
       steps(1) +
-      '<h5 class="mk-h mk-rel">What is your company name?' + mark(1, 'good') + '</h5>' +
+      '<h5 class="mk-h mk-rel" data-focus="ask">What is your company name?' + mark(1, 'good') + '</h5>' +
       '<p class="mk-sub">Write it in the language you know best. We\'ll write the other one for you.</p>' +
-      '<div class="mk-card">' +
-        '<div class="mk-inputs">' +
-          '<label class="mk-field mk-field--select"><span>Name language</span>' +
+      '<div class="mk-card" data-focus="task">' +
+        '<div class="mk-inputs" data-focus="row">' +
+          '<label class="mk-field mk-field--select" data-focus="lang"><span>Name language</span>' +
             '<em>Arabic (AR)' + CARET + '</em></label>' +
-          '<label class="mk-field mk-field--focus"><span>Company name (AR)</span>' +
+          '<label class="mk-field mk-field--focus" data-focus="own"><span>Company name (AR)</span>' +
             '<em dir="rtl" lang="ar">سامكس</em></label>' +
-          '<label class="mk-field mk-field--gen mk-rel"><span>Company name (EN)</span>' +
+          '<label class="mk-field mk-field--gen mk-rel" data-focus="gen"><span>Company name (EN)</span>' +
             '<em>Samix<small class="mk-ai">' + SPARK + 'Generated</small></em>' + mark(2, 'good') + '</label>' +
         '</div>' +
         '<div class="mk-actions">' +
           '<span class="mk-btn mk-btn--soft mk-rel">' + SPARK + 'Generate' + mark(5, 'good') + '</span>' +
-          '<span class="mk-btn mk-btn--primary mk-rel">' + PLUS + 'Add to list' + mark(3, 'good') + '</span>' +
+          '<span class="mk-btn mk-btn--primary mk-rel" data-focus="add">' + PLUS + 'Add to list' + mark(3, 'good') + '</span>' +
         '</div>' +
       '</div>' +
-      '<div class="mk-listhead mk-rel"><p class="mk-q">Your preferred names</p>' +
+      '<div class="mk-listhead mk-rel" data-focus="list"><p class="mk-q">Your preferred names</p>' +
         '<small>Drag to reorder</small>' + mark(4, 'good') + '</div>' +
-      '<div class="mk-ranks">' +
+      '<div class="mk-ranks" data-focus="list">' +
         rankRow(1, 'Samix', 'سامكس') +
         rankRow(2, 'Samurai', 'ساموراي') +
         rankRow(3, 'Sam Digital', 'سام ديجيتال') +
