@@ -8,20 +8,16 @@ window.SITE = {
   /* ----------------------------------------------------------------------
      CONTACT FORM
      ----------------------------------------------------------------------
-     The form needs a free Web3Forms access key to deliver mail. Get one in
-     about two minutes, no account and no card:
-
-       1. Go to  https://web3forms.com
-       2. Type marmaremad31@gmail.com into the box and press "Create Access Key"
-       3. They email you a key that looks like
-          c7f3a1b2-4d5e-6789-abcd-ef0123456789
-       4. Paste it between the quotes below and save the file.
+     Messages are sent through Resend by a tiny Cloudflare Worker (the code
+     is in worker/contact.js — the README's section 1 walks through setting
+     it up). Paste the Worker's address between the quotes below, e.g.
+       https://portfolio-contact.your-name.workers.dev
 
      Until you do, the form still works — it falls back to opening the
      visitor's own mail app with the message pre-written. Nothing breaks,
-     it's just a worse experience, so it is worth the two minutes.
+     it's just a worse experience.
   */
-  web3formsKey: '',
+  contactEndpoint: 'https://portfolio-contact.ruyinqc.workers.dev',
 
   email:     'marmaremad31@gmail.com',
   linkedin:  'https://www.linkedin.com/in/mariamemadnabih/',

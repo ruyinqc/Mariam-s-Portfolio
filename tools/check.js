@@ -20,6 +20,7 @@
 const { chromium } = require('playwright');
 
 const BASE = process.env.BASE_URL || 'http://localhost:8080/';
+const RELAY = 'https://relay.test/';
 const EXE = process.env.BROWSER_PATH || undefined;
 
 const results = [];
@@ -233,22 +234,22 @@ async function run() {
   check('the error clears the moment it is fixed',
     await page.evaluate(() => document.querySelectorAll('.field[data-invalid]').length) === 0);
 
-  // With no access key configured, delivery must fall back to the visitor's
+  // With no endpoint configured, delivery must fall back to the visitor's
   // mail client rather than silently dropping the message.
-  const keySet = await page.evaluate(() => !!window.SITE.web3formsKey);
+  const keySet = await page.evaluate(() => !!window.SITE.contactEndpoint);
   if (!keySet) {
     await page.click('#formSubmit');
     await page.waitForTimeout(500);
     const st = await page.evaluate(() => document.getElementById('formStatus').textContent);
-    check('with no key, the form falls back to a mail client',
+    check('with no endpoint, the form falls back to a mail client',
       /email app/i.test(st), st);
   }
 
-  // And with a key, it posts to Web3Forms and reports success.
-  await page.route('https://api.web3forms.com/submit', route =>
+  // And with an endpoint, it posts to the relay and reports success.
+  await page.route(RELAY, route =>
     route.fulfill({ status: 200, contentType: 'application/json',
                     body: JSON.stringify({ success: true, message: 'ok' }) }));
-  await page.evaluate(() => { window.SITE.web3formsKey = 'test-key-0000'; });
+  await page.evaluate(() => { window.SITE.contactEndpoint = 'https://relay.test/'; });
   await page.fill('#f-name', 'Jane Okafor');
   await page.fill('#f-email', 'jane@company.com');
   await page.fill('#f-msg', 'We are hiring a senior product designer for our billing team.');
@@ -259,7 +260,7 @@ async function run() {
     tone: document.getElementById('formStatus').getAttribute('data-tone'),
     name: document.getElementById('f-name').value
   }));
-  check('with a key, a successful send is confirmed and the form resets',
+  check('with an endpoint, a successful send is confirmed and the form resets',
     sent.tone === 'ok' && sent.name === '', sent.status);
 
   // Everything up to here should have been silent. Snapshot now, because the
@@ -270,8 +271,8 @@ async function run() {
   const errorsBeforeFailureTest = pageErrors.length;
 
   // A server failure must not swallow the message either.
-  await page.unroute('https://api.web3forms.com/submit');
-  await page.route('https://api.web3forms.com/submit', route =>
+  await page.unroute(RELAY);
+  await page.route(RELAY, route =>
     route.fulfill({ status: 500, contentType: 'application/json',
                     body: JSON.stringify({ success: false, message: 'boom' }) }));
   await page.fill('#f-name', 'Jane Okafor');

@@ -120,8 +120,11 @@
    thing a recruiter on a phone is most likely to want. */
 @media (max-width: 880px) {
   /* Clear the fixed bar so the last thing on the page is never trapped
-     underneath it. */
-  body { padding-bottom: 5.5rem; }
+     underneath it. The room goes on the footer rather than the body, so
+     it stays the footer's dark colour instead of a strip of paper. */
+  .footer {
+    padding-bottom: calc(var(--s-6) + 5.5rem + env(safe-area-inset-bottom));
+  }
 
   .nav {
     top: auto;
