@@ -130,14 +130,17 @@ const HTML = `<!DOCTYPE html>
     document.getElementById('cairo').innerHTML = Mockups['dash-cairo']();
     document.getElementById('beijing').innerHTML = Mockups['dash-beijing']();
 
-    // The first three projects that have a picture, fanned out left, centre, right.
+    // The first three projects that have a picture, fanned out: the first in
+    // the big centre window, the next two either side of it. The pill counts
+    // every live one, shown or not.
     var vibe = WORK.filter(function (w) { return w.slug === 'vibe-coding'; })[0];
-    var items = [].concat.apply([], vibe.blocks.map(function (b) {
+    var all = [].concat.apply([], vibe.blocks.map(function (b) {
       return b.type === 'projects' ? b.items : [];
-    })).filter(function (p) { return p.img; }).slice(0, 3);
-    var live = items.filter(function (p) { return p.url; }).length;
+    }));
+    var items = all.filter(function (p) { return p.img; }).slice(0, 3);
+    var live = all.filter(function (p) { return p.url; }).length;
     document.getElementById('vibe').innerHTML = items.map(function (p, i) {
-      return '<figure class="win win--' + (i + 1) + '">' +
+      return '<figure class="win win--' + [2, 1, 3][i] + '">' +
         '<div class="win__bar"><i></i><i></i><i></i><span>' +
           (p.url || p.name).replace(/^https?:\\/\\//, '').replace(/\\/$/, '') + '</span></div>' +
         '<img src="' + p.img + '" alt="">' +
