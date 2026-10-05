@@ -627,7 +627,7 @@ window.WORK = [
 
   card: {
     title: 'Vibe Coding Projects',
-    sub: 'Three things I designed and built myself, end to end, with AI as my pair programmer.',
+    sub: 'Four things I designed and built myself, end to end, with AI as my pair programmer.',
     tags: [],
     thumb: {
       // the projects below, as browser windows. tools/make-thumbs.js draws it
@@ -646,8 +646,8 @@ window.WORK = [
   meta: {
     'Role':     { value: 'Designer & builder', note: 'Idea owner' },
     'AI tool':  { value: 'Claude.ai' },
-    'Projects': { value: '3', note: 'All live' },
-    'Type':     { value: 'Freelance', note: 'All delivered' },
+    'Projects': { value: '4', note: 'All live' },
+    'Type':     { value: 'Freelance & personal', note: '3 delivered, 1 own game' },
     'Status':   { value: 'Live' }
   },
 
@@ -660,6 +660,9 @@ window.WORK = [
       // `view` is a screenshot of the site as it is used: device 'mobile' or
       // 'desktop'. A card without one shows its square `img` instead.
       items: [
+        { name: 'Klaxs',            url: 'https://ruyinqc.com/klaxs/',
+          img: 'assets/img/vibe/klaxs.webp',            badges: ['Personal project', 'Live'],
+          view: { src: 'assets/img/vibe/klaxs-mobile.webp', width: 400, height: 667, device: 'mobile' } },
         { name: 'Mirayti',          url: 'https://mirayti.vercel.app/',
           img: 'assets/img/vibe/mirayti.webp',          badges: ['Freelance', 'Delivered'] },
         { name: 'Match and Attack', url: 'https://ruyiemad.github.io/match-and-attack/',
