@@ -189,7 +189,8 @@ This is the one that does the heavy lifting.
 - **`diagram.alt` is for screen readers.** The captions are read out, but the
   pictures aren't. If a picture carries meaning the captions don't, say it here
 
-**`pull`** — a large serif pull-quote.
+**`pull`** — a large serif pull-quote. `ar` adds the same line in Arabic
+above it (Klaxs does this).
 
 ```js
 { type: 'pull', text: 'The one sentence you want quoted back to you.' }
@@ -234,6 +235,52 @@ view*. Screenshots live in `assets/img/vibe/`.
             img: 'assets/img/vibe/sandra-alex.webp', badges: ['Freelance', 'Delivered'],
             view: { src: 'assets/img/vibe/sandra-alex-mobile.webp',
                     width: 400, height: 599, device: 'mobile' } }] }
+```
+
+The Klaxs study added four more. Arabic in them is set in the game's own
+typeface (Baloo Bhaijaan 2, self-hosted, Arabic letters only). For a word of
+Arabic inside an English sentence, write
+`<span class="ar" lang="ar" dir="rtl">دوشة</span>`.
+
+**`horns`** — a vocabulary of rhythms. Each word is drawn as its beeps
+(`'s'` short, `'L'` long, `'|'` a pause), then its Arabic and English.
+`listen` marks a word you only learn to recognise.
+
+```js
+{ type: 'horns', num: '02', title: 'Writing the language down',
+  items: [{ rhythm: 's s | s s s', repeat: '× 3–4', ar: 'الزفّة',
+            en: 'The wedding', when: 'The bride’s car rolls by.' }] }
+```
+
+**`decisions`** — design decisions, one per row: a phone still on the
+left, the UX idea as a small tag, a title, paragraphs, and optionally
+`said`, a line of the product's own copy in Arabic with its English.
+
+```js
+{ type: 'decisions', num: '05', title: 'The UX behind the fun',
+  items: [{ concept: 'Natural mapping', title: 'The horn is where your thumb already is',
+            text: ['Accepts <b>HTML</b>.'],
+            said: { ar: '…', en: '…', by: 'Osta Abdo' },
+            image: { src: 'assets/img/klaxs/….webp', width: 420, height: 872, alt: '…' } }] }
+```
+
+**`copy`** — UX writing, line by line: where the line lives, the line in
+Arabic with its English, and why it is worded that way (`why` accepts HTML).
+
+```js
+{ type: 'copy', num: '06', title: 'UX writing',
+  items: [{ where: 'Start button', ar: 'دوّر العربية', en: 'Start the car',
+            why: 'The first tap already happens inside the world.' }] }
+```
+
+**`feedback`** — screenshots of real messages, each with its translation
+underneath (`en`, one entry per line) and an optional `note`. Blur people's
+profile pictures before adding a screenshot.
+
+```js
+{ type: 'feedback', num: '09', title: 'What players told me',
+  items: [{ image: { src: 'assets/img/klaxs/dm-….webp', width: 760, height: 200, alt: '…' },
+            en: ['Dangerous! 🤣🤣🤣'], note: 'Accepts <b>HTML</b>.' }] }
 ```
 
 ### Finishing a placeholder
@@ -452,6 +499,8 @@ assets/
   img/                   photography + og-cover.png (the social card)
     art/                 pictures for the challenge diagrams — swap freely
     work/                screenshots used inside case studies, and card thumbnails
+    klaxs/               the Klaxs study: the game's screens in a phone frame, and
+                         players' messages with their profile pictures blurred
     path/                one photo per stop on the clothesline
     people/              testimonial photos. Mohamed Wael's card is a
                          placeholder: the comment next to "MW" in index.html

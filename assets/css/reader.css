@@ -840,6 +840,198 @@
 /* a single result stays tile-sized instead of stretching into a banner */
 .outcome li:only-child { max-width: 20rem; }
 
+/* ---- Arabic lines (the Klaxs case study) -------------------------------- */
+/* Each Arabic line is set right to left, so its punctuation lands where it
+   should, but sits on the left edge like the English around it, so a column
+   that mixes the two still reads as one column. */
+.cs__pull-ar, .horn__ar, .said__ar, .copy__ar { font-family: var(--font-ar); text-align: left; }
+/* a word of Arabic inside an English sentence */
+.ar { font-family: var(--font-ar); font-weight: 700; }
+
+.cs__pull-ar {
+  display: block;
+  margin-bottom: 0.4em;
+  font-size: 1.12em;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+/* ---- Horns: a vocabulary of rhythms ------------------------------------- */
+.horns {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 14.5rem), 1fr));
+  gap: var(--s-4);
+  margin-top: var(--s-5);
+}
+.horn {
+  display: grid;
+  align-content: start;
+  gap: var(--s-1);
+  padding: var(--s-5);
+  background: var(--sand);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-md);
+}
+.horn--listen { border: 1.5px dashed var(--edge); }
+.horn__ar { margin-top: var(--s-3); font-size: 1.45rem; font-weight: 800; line-height: 1.35; color: var(--ink); }
+.horn__en { font-weight: 700; color: var(--ink-soft); }
+.horn__when { margin-top: var(--s-2); font-size: var(--t-small); color: var(--muted); }
+.horn__tag {
+  justify-self: start;
+  margin-top: var(--s-3);
+  padding: 0.15rem 0.6rem;
+  border: 1px solid var(--edge);
+  border-radius: var(--r-pill);
+  font-size: var(--t-meta);
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* the rhythm itself: a short beep is a dot, a long one a bar, and a pause
+   is a wider gap. Left to right is time, so it stays LTR. */
+.beeps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 1.25rem;
+  direction: ltr;
+}
+.beeps__b {
+  width: 1.05rem;
+  height: 1.05rem;
+  background: var(--mustard);
+  border: 2px solid var(--ink);
+  border-radius: var(--r-pill);
+}
+.beeps__b--long { width: 3.4rem; }
+.beeps__pause { width: 0.7rem; }
+.beeps__x {
+  margin-left: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+/* ---- Decisions: a screen, the idea, what it looks like ------------------ */
+.dec {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  margin-top: var(--s-6);
+}
+.dec__item { display: grid; gap: var(--s-5); align-items: start; }
+@media (min-width: 720px) {
+  .dec__item { grid-template-columns: 13.75rem minmax(0, 1fr); gap: clamp(1.75rem, 4vw, 3.5rem); }
+}
+/* the same phone stills as the walkthrough, frame drawn into the file */
+.dec__shot {
+  display: block;
+  width: 100%;
+  max-width: 13.75rem;
+  height: auto;
+  margin-inline: auto;
+  filter: drop-shadow(0 10px 18px rgba(20,20,26,.16));
+}
+.dec__body { max-width: 40rem; }
+.dec__concept {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  background: var(--blue-wash);
+  color: var(--blue-deep);
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 6px;
+}
+.dec__t {
+  margin-top: var(--s-3);
+  font-size: clamp(1.15rem, 1.05rem + 0.45vw, 1.4rem);
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+.dec__p { margin-top: var(--s-3); color: var(--ink-soft); }
+.dec__p b { color: var(--ink); }
+
+/* a line of the game's own copy, Arabic over English */
+.said {
+  margin: var(--s-5) 0 0;
+  padding: var(--s-1) 0 var(--s-1) var(--s-5);
+  border-left: 3px solid var(--mustard);
+}
+.said__ar { font-size: 1.3rem; font-weight: 700; line-height: 1.5; color: var(--ink); }
+.said__en { margin-top: var(--s-1); font-style: italic; color: var(--ink-soft); }
+.said__by { margin-top: var(--s-2); font-size: var(--t-small); font-weight: 600; color: var(--muted); }
+
+/* ---- Copy: UX writing, line by line ------------------------------------- */
+.copy {
+  list-style: none;
+  padding: 0;
+  margin-top: var(--s-5);
+  border-bottom: 1px solid var(--line);
+}
+.copy__row {
+  display: grid;
+  gap: var(--s-2) var(--s-6);
+  padding-block: var(--s-5);
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 820px) {
+  .copy__row { grid-template-columns: 9rem minmax(0, 1fr) minmax(0, 1.25fr); align-items: start; }
+}
+.copy__where {
+  padding-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-meta);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.copy__ar { font-size: 1.4rem; font-weight: 800; line-height: 1.45; color: var(--ink); }
+.copy__en { font-style: italic; font-weight: 600; color: var(--ink-soft); }
+.copy__why { padding-top: 0.45rem; font-size: var(--t-small); color: var(--ink-soft); }
+.copy__why b { color: var(--ink); }
+
+/* ---- Feedback: real messages, translated -------------------------------- */
+.fb {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2rem);
+  margin-top: var(--s-5);
+  align-items: start;
+}
+@media (min-width: 760px) { .fb { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.fb__fig { margin: 0; display: grid; gap: var(--s-3); }
+.fb__shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+  background: var(--panel);
+}
+.fb__cap { display: grid; gap: var(--s-2); }
+.fb__en {
+  display: grid;
+  gap: 0.2rem;
+  padding: var(--s-3) var(--s-4);
+  background: var(--sage);
+  border-radius: var(--r-md);
+  font-weight: 700;
+  color: var(--ink);
+}
+.fb__note { font-size: var(--t-small); color: var(--ink-soft); }
+.fb__note b { color: var(--ink); }
+
 /* ---- Draft banner ------------------------------------------------------- */
 .cs__draft {
   display: flex;

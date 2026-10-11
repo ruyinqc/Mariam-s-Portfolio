@@ -244,7 +244,10 @@
         '</section>';
 
       case 'pull':
-        return '<p class="cs__pull">' + esc(b.text) + '</p>';
+        // `ar` puts the line in Arabic above its English
+        return '<p class="cs__pull">' +
+          (b.ar ? '<span class="cs__pull-ar" lang="ar" dir="rtl">' + esc(b.ar) + '</span>' : '') +
+          esc(b.text) + '</p>';
 
       case 'note':
         return '<p class="cs__note">' + b.text + '</p>';
@@ -293,9 +296,113 @@
           }).join('') + '</ul>' +
         '</section>';
 
+      case 'horns':
+        // A vocabulary of rhythms: each word drawn as its beeps, then its
+        // name in Arabic and English. `listen` marks a word you only learn
+        // to recognise.
+        return sectionHead(b) +
+          '<ul class="horns">' + b.items.map(function (w) {
+            return '<li class="horn' + (w.listen ? ' horn--listen' : '') + '">' +
+              rhythm(w.rhythm, w.repeat) +
+              '<p class="horn__ar" lang="ar" dir="rtl">' + esc(w.ar) + '</p>' +
+              '<p class="horn__en">' + esc(w.en) + '</p>' +
+              (w.when ? '<p class="horn__when">' + w.when + '</p>' : '') +
+              (w.listen ? '<p class="horn__tag">' + esc(w.listen) + '</p>' : '') +
+            '</li>';
+          }).join('') + '</ul>' +
+        '</section>';
+
+      case 'decisions':
+        // Design decisions: a screen from the product, the idea behind it,
+        // and what it looks like in practice. `said` adds a line of the
+        // product's own copy, in Arabic with its English.
+        return sectionHead(b) +
+          '<ol class="dec">' + b.items.map(function (d) {
+            return '<li class="dec__item">' +
+              (d.image
+                ? '<img class="dec__shot" src="' + esc(d.image.src) + '" alt="' + esc(d.image.alt || '') + '"' +
+                  ' width="' + d.image.width + '" height="' + d.image.height + '" loading="lazy" decoding="async">'
+                : '') +
+              '<div class="dec__body">' +
+                '<p class="dec__concept">' + esc(d.concept) + '</p>' +
+                '<h4 class="dec__t">' + esc(d.title) + '</h4>' +
+                d.text.map(function (p) { return '<p class="dec__p">' + p + '</p>'; }).join('') +
+                (d.said ? said(d.said) : '') +
+              '</div>' +
+            '</li>';
+          }).join('') + '</ol>' +
+        '</section>';
+
+      case 'copy':
+        // UX writing: where a line lives, the line itself in Arabic with its
+        // English, and why it is worded that way.
+        return sectionHead(b) +
+          '<ul class="copy">' + b.items.map(function (c) {
+            return '<li class="copy__row">' +
+              '<p class="copy__where">' + esc(c.where) + '</p>' +
+              '<div class="copy__line">' +
+                '<p class="copy__ar" lang="ar" dir="rtl">' + esc(c.ar) + '</p>' +
+                '<p class="copy__en">' + esc(c.en) + '</p>' +
+              '</div>' +
+              '<p class="copy__why">' + c.why + '</p>' +
+            '</li>';
+          }).join('') + '</ul>' +
+        '</section>';
+
+      case 'feedback':
+        // Messages from real people, as screenshots, with their English
+        // underneath. The screenshot's alt says what it is; the translation
+        // is the text everyone reads.
+        return sectionHead(b) +
+          '<ul class="fb">' + b.items.map(function (f) {
+            return '<li class="fb__item"><figure class="fb__fig">' +
+              '<img class="fb__shot" src="' + esc(f.image.src) + '" alt="' + esc(f.image.alt || '') + '"' +
+                ' width="' + f.image.width + '" height="' + f.image.height + '" loading="lazy" decoding="async">' +
+              '<figcaption class="fb__cap">' +
+                '<span class="fb__en">' + f.en.map(function (l) {
+                  return '<span>' + esc(l) + '</span>';
+                }).join('') + '</span>' +
+                (f.note ? '<span class="fb__note">' + f.note + '</span>' : '') +
+              '</figcaption>' +
+            '</figure></li>';
+          }).join('') + '</ul>' +
+        '</section>';
+
       default:
         return '';
     }
+  }
+
+  // The opening of a section: its number, title and intro line. The caller
+  // closes the <section>.
+  function sectionHead(b) {
+    return '<section class="cs__section">' +
+      '<h3 class="cs__h">' + (b.num ? '<span>' + esc(b.num) + '</span>' : '') + esc(b.title) + '</h3>' +
+      (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '');
+  }
+
+  // A horn rhythm drawn as beeps. Notation: 's' short, 'L' long, '|' a pause.
+  var BEEP = { s: 'short', L: 'long', '|': 'pause' };
+
+  function rhythm(notation, repeat) {
+    var toks = notation.split(' ');
+    return '<p class="beeps" role="img" aria-label="Rhythm: ' +
+        toks.map(function (t) { return BEEP[t]; }).join(', ') + (repeat ? ', ' + esc(repeat) : '') + '">' +
+      toks.map(function (t) {
+        return t === '|' ? '<i class="beeps__pause"></i>'
+                         : '<i class="beeps__b' + (t === 'L' ? ' beeps__b--long' : '') + '"></i>';
+      }).join('') +
+      (repeat ? '<span class="beeps__x" aria-hidden="true">' + esc(repeat) + '</span>' : '') +
+    '</p>';
+  }
+
+  // A line of the product's own copy: Arabic first, then its English.
+  function said(l) {
+    return '<blockquote class="said">' +
+      '<p class="said__ar" lang="ar" dir="rtl">' + esc(l.ar) + '</p>' +
+      '<p class="said__en">' + esc(l.en) + '</p>' +
+      (l.by ? '<footer class="said__by">' + esc(l.by) + '</footer>' : '') +
+    '</blockquote>';
   }
 
   // A row of project cards. With a url the card opens it in a new tab;
