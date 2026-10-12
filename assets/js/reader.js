@@ -303,11 +303,21 @@
         '</section>';
 
       case 'outcome':
+        // `image` puts a screenshot of where the numbers come from beside the tiles
+        var tiles = '<ul class="outcome">' + b.items.map(function (it) {
+          return '<li><b>' + esc(it.value) + '</b><span>' + esc(it.label) + '</span></li>';
+        }).join('') + '</ul>';
         return '<section class="cs__section">' +
           '<h3 class="cs__h"><span>' + esc(b.num || '') + '</span>' + esc(b.title || 'Outcome') + '</h3>' +
-          '<ul class="outcome">' + b.items.map(function (it) {
-            return '<li><b>' + esc(it.value) + '</b><span>' + esc(it.label) + '</span></li>';
-          }).join('') + '</ul>' +
+          (b.image
+            ? '<div class="outcome-wrap">' + tiles +
+                '<figure class="outcome__shot">' +
+                  '<img src="' + esc(b.image.src) + '" alt="' + esc(b.image.alt || '') + '"' +
+                    ' width="' + b.image.width + '" height="' + b.image.height + '" loading="lazy" decoding="async">' +
+                  (b.image.caption ? '<figcaption>' + esc(b.image.caption) + '</figcaption>' : '') +
+                '</figure>' +
+              '</div>'
+            : tiles) +
         '</section>';
 
       case 'horns':

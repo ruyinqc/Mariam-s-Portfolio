@@ -853,6 +853,23 @@
 /* a single result stays tile-sized instead of stretching into a banner */
 .outcome li:only-child { max-width: 20rem; }
 
+/* tiles beside the screenshot they come from */
+.outcome-wrap { display: grid; gap: var(--s-6); margin-top: var(--s-5); align-items: start; }
+.outcome-wrap .outcome { margin-top: 0; }
+@media (min-width: 820px) {
+  .outcome-wrap { grid-template-columns: minmax(0, 1fr) 16rem; }
+  .outcome-wrap .outcome { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.outcome__shot { margin: 0; justify-self: center; width: 100%; max-width: 16rem; }
+.outcome__shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-2);
+}
+.outcome__shot figcaption { margin-top: var(--s-3); font-size: var(--t-small); color: var(--ink-soft); }
+
 /* ---- Arabic lines (the Klaxs case study) -------------------------------- */
 /* Each Arabic line is set right to left, so its punctuation lands where it
    should. A line that fits sits on the left edge like the English around it,

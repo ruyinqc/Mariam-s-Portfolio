@@ -205,6 +205,9 @@ above it (Klaxs does this).
   items: [{ value: '-42%', label: 'Support tickets about payments' }] }
 ```
 
+Add `image: { src, width, height, alt, caption }` to show the screenshot the
+numbers come from beside the tiles (Klaxs shows its players board).
+
 **`note`** — a small aside in a blue box. Accepts HTML.
 
 **`steps`** — a walkthrough in frames: a row of numbered stills, each with a

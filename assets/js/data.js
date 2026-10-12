@@ -633,8 +633,17 @@ window.WORK = [
       items: [
         { value: '41', label: 'Players on the board, as of 12 October 2026' },
         { value: '5×', label: 'Growth since a player’s story showed 8 players on the board' },
-        { value: '3+', label: 'Countries on the board, including Egypt, Lebanon and China' }
-      ]
+        { value: '3+', label: 'Countries on the board, including Egypt, Lebanon and China' },
+        { value: '105k → 353k', label: 'The #1 score, from the story at 16 players to today. ' +
+                                       'The same player still holds it.' }
+      ],
+      image: {
+        src: 'assets/img/klaxs/players-board.webp', width: 600, height: 1047,
+        alt: 'The players board in the live game at ruyinqc.com: “You’re #31 of 41 players”. ' +
+             'The top ten, all from Egypt, run from Marvey with 353,049 points to Martina with ' +
+             '76,044, and my own row, Ruyi, is #31 with 4,097.',
+        caption: 'The live board on 12 October 2026: 41 players, and I’m #31 in my own game.'
+      }
     },
 
     {
