@@ -664,6 +664,16 @@
 .cs__projects { margin-top: clamp(1.75rem, 4vw, 2.75rem); }
 .cs__cover video { background: var(--paper-sunk); }
 
+/* a pair of pictures as the cover: equal heights, because each one's share of
+   the row is its own aspect ratio (--ar, set by reader.js) */
+.cs__cover--pair { display: flex; align-items: flex-start; gap: var(--s-4); }
+.cs__pair { flex: var(--ar) 1 0; min-width: 0; margin: 0; }
+@media (max-width: 640px) {
+  .cs__cover--pair { flex-direction: column; align-items: center; }
+  .cs__pair { flex: none; width: 100%; }
+  .cs__pair--tall { max-width: 20rem; }
+}
+
 /* ---- Steps: a walkthrough told in frames -------------------------------- */
 .steps {
   list-style: none;

@@ -240,10 +240,10 @@ window.WORK = [
     'street tests you on them.',
 
   meta: {
-    'Role':     { value: 'Product Designer & builder', note: 'Idea, UX, UX writing, art direction, built with AI' },
+    'Role':     { value: 'Product Designer & builder', note: 'Idea, UX, UX writing, art direction' },
     'Timeline': { value: '9 days', note: 'First line of code to the version people shared' },
     'Platform': { value: 'Web game', note: 'Phone first · Egyptian Arabic & English' },
-    'Players':  { value: '16 on the board', note: 'In its first week' },
+    'Players':  { value: '41', note: 'On the players board' },
     'Status':   { value: 'Live', note: 'ruyinqc.com/klaxs' }
   },
 
@@ -253,10 +253,18 @@ window.WORK = [
       text: 'Best on a phone, with the sound on.' }
   ],
 
+  // the game's cover beside me in the game, one row at the same height
   cover: {
-    src: 'assets/img/klaxs/cover.webp', width: 1200, height: 630,
-    alt: 'The Klaxs cover: the game’s logo over a sunny, crowded Cairo street with a ' +
-         'tuk-tuk, a microbus and a donkey cart, and a “Designed by ruyinqc” badge.'
+    pair: [
+      { src: 'assets/img/klaxs/cover.webp', width: 1200, height: 630,
+        alt: 'The Klaxs cover: the game’s logo over a sunny, crowded Cairo street with a ' +
+             'tuk-tuk, a microbus and a donkey cart, and a “Designed by ruyinqc” badge.' },
+      { src: 'assets/img/klaxs/me-in-klaxs.webp', width: 720, height: 1039,
+        alt: 'Me, smiling behind the wheel of a cartoon car on the game’s Cairo street, ' +
+             'under the Klaxs logo and a prompt that asks “How’s the road today?” in ' +
+             'English and Arabic.',
+        caption: 'That’s me, in the driver’s seat of my own game.' }
+    ]
   },
 
   blocks: [
@@ -593,8 +601,8 @@ window.WORK = [
                         'their answer. The translation is below.' },
           en: ['Me: What is this score?! Respect 🤣😍😎',
                'Player: Honestly, this game is so sweet ❤️❤️❤️'],
-          note: 'A player posted the board on their story: <b>#1 of 16 players, with 105,027 ' +
-                'points</b>.'
+          note: 'A player posted the board on their story when it had 16 players: <b>#1, ' +
+                'with 105,027 points</b>.'
         }
       ]
     },
@@ -604,10 +612,10 @@ window.WORK = [
       num: '08',
       title: 'Real players, real numbers',
       items: [
-        { value: '16',      label: 'Players on the board in its first week' },
-        { value: '8 → 16',  label: 'The board doubled between two stories players posted' },
-        { value: '3',       label: 'Countries in the top ten: Egypt, Lebanon and China' },
-        { value: '105,027', label: 'Top score. Someone kept playing until they were #1' }
+        { value: '41',      label: 'Players on the board' },
+        { value: '8 → 41',  label: 'Players on the board: 8 when one player posted their story, 41 now' },
+        { value: '3+',      label: 'Countries on the board, including Egypt, Lebanon and China' },
+        { value: '105,027', label: 'The #1 score a player posted on their story' }
       ]
     },
 
@@ -667,10 +675,7 @@ window.WORK = [
 
         '<b>Sharing has to be designed.</b> The rank, the story image and the link preview ' +
         'were all planned. Within days, players were posting their rank on their stories ' +
-        'and tagging me.',
-
-        '<b>Next:</b> more of the city, starting with the Nile corniche at sunset, and more ' +
-        'words for the dictionary.'
+        'and tagging me.'
       ]
     },
 

@@ -112,6 +112,8 @@ A minimal one looks like this:
     src: 'assets/img/work/my-project.webp', width: 2000, height: 977,
     alt: 'What the screenshot shows'
   },
+  // or two pictures side by side at the same height (Klaxs does this):
+  // cover: { pair: [{ src, width, height, alt }, { src, width, height, alt, caption }] }
   // or a video instead (Journey Guide Tracker does this). It never plays by
   // itself and nothing downloads until someone presses play:
   // cover: { video: 'assets/video/my-project.mp4', poster: 'assets/img/work/….webp',

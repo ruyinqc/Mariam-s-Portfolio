@@ -144,6 +144,20 @@
     '</figure>';
   }
 
+  /** Two pictures in one row at the same height: each takes a share of the row
+      equal to its own width ÷ height, so a portrait sits beside a landscape
+      without cropping either. On a phone they stack. */
+  function renderPair(list) {
+    return '<div class="cs__cover cs__cover--pair">' + list.map(function (im) {
+      var ar = im.width / im.height;
+      return '<figure class="cs__pair' + (ar < 1 ? ' cs__pair--tall' : '') + '" style="--ar:' + ar.toFixed(4) + '">' +
+        '<img src="' + esc(im.src) + '" alt="' + esc(im.alt || '') + '"' +
+          ' width="' + im.width + '" height="' + im.height + '" decoding="async">' +
+        (im.caption ? '<figcaption>' + esc(im.caption) + '</figcaption>' : '') +
+      '</figure>';
+    }).join('') + '</div>';
+  }
+
   /* ---- Wireframe ------------------------------------------------------------
      A low-fidelity before/after, drawn from data. '~' is a scribble standing
      in for text that does not matter to the point.                            */
@@ -473,7 +487,9 @@
       renderMeta(it.meta) +
       (it.projects ? '<div class="cs__projects">' + renderProjects(it.projects) + '</div>' : '') +
       (it.cover
-        ? (it.cover.video ? renderVideo(it.cover, 'cs__cover') : renderShot(it.cover, 'cs__cover', false))
+        ? (it.cover.video ? renderVideo(it.cover, 'cs__cover')
+          : it.cover.pair ? renderPair(it.cover.pair)
+          : renderShot(it.cover, 'cs__cover', false))
         : '') +
       it.blocks.map(renderBlock).join('') +
 
