@@ -77,6 +77,12 @@ const PAIRS = [
   ['graphic-bad',  'paper-raised', 3.0, 'the "before" state in a diagram'],
   ['blue',         'paper-raised', 3.0, 'the "after" state in a diagram'],
   ['field-placeholder', 'panel-soft', 4.5, 'form placeholder text'],
+
+  /* The Klaxs case study: horn tiles on sand, beeps outlined in ink */
+  ['ink',          'sand',         4.5, 'horn word on a sand tile'],
+  ['ink-soft',     'sand',         4.5, 'horn meaning on a sand tile'],
+  ['muted',        'sand',         4.5, '"when" line on a sand tile'],
+  ['ink',          'sand',         3.0, 'beep outline on a sand tile'],
 ];
 
 const WHITE = '#FFFFFF';

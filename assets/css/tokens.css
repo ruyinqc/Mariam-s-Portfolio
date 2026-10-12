@@ -36,6 +36,11 @@
   --sage:       #EDF1DA;     /* testimonial bubbles — Mariam's #F1F5E3, one  */
                              /* step deeper so the ring shows on --paper     */
 
+  /* Klaxs, the horn game: its warm paper and its mustard. Mustard is a FILL
+     ONLY, like lime — it sits inside an ink outline and never carries text. */
+  --sand:       #FFF3DC;
+  --mustard:    #EDA836;
+
   /* --line and --line-strong are decorative rules only: page hairlines and
      the timeline rail. WCAG 1.4.11 exempts pure decoration, and darkening
      them would make the whole page feel heavier.
@@ -66,6 +71,9 @@
   --font-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
                 Consolas, monospace;
   --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  /* Arabic lines in the Klaxs case study: the game's own typeface */
+  --font-ar:    "Baloo Bhaijaan 2", "Geeza Pro", "Noto Sans Arabic", Tahoma,
+                "Segoe UI", sans-serif;
 
   /* Fluid scale, 1.25 ratio, clamped so nothing breaks at 320px or 2560px. */
   --t-display: clamp(2.75rem, 1.5rem + 5vw, 5.5rem);
