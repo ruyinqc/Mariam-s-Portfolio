@@ -312,8 +312,8 @@
 
       case 'horns':
         // A vocabulary of rhythms: each word drawn as its beeps, then its
-        // name in Arabic and English. `listen` marks a word you only learn
-        // to recognise.
+        // name in Arabic and English. `listen` is the tag text for a word you
+        // only learn to recognise.
         return sectionHead(b) +
           '<ul class="horns">' + b.items.map(function (w) {
             return '<li class="horn' + (w.listen ? ' horn--listen' : '') + '">' +
@@ -395,13 +395,18 @@
       (b.intro ? '<p class="cs__p">' + b.intro + '</p>' : '');
   }
 
-  // A horn rhythm drawn as beeps. Notation: 's' short, 'L' long, '|' a pause.
+  // A horn rhythm drawn as beeps. Notation: 's' short, 'L' long, '|' a pause,
+  // separated by spaces, as in the game's own words.js.
   var BEEP = { s: 'short', L: 'long', '|': 'pause' };
 
   function rhythm(notation, repeat) {
-    var toks = notation.split(' ');
-    return '<p class="beeps" role="img" aria-label="Rhythm: ' +
-        toks.map(function (t) { return BEEP[t]; }).join(', ') + (repeat ? ', ' + esc(repeat) : '') + '">' +
+    var toks = notation.trim().split(/\s+/);
+    // '× 3–4' is shorthand for the eye; a screen reader hears it in words
+    var times = repeat && /^\s*×?\s*(\d+)(?:\s*[–-]\s*(\d+))?\s*$/.exec(repeat);
+    var label = 'Rhythm: ' + toks.map(function (t) { return BEEP[t] || BEEP.s; }).join(', ') +
+      (times ? ', repeated ' + times[1] + (times[2] ? ' to ' + times[2] : '') + ' times'
+             : repeat ? ', ' + repeat : '');
+    return '<p class="beeps" role="img" aria-label="' + esc(label) + '">' +
       toks.map(function (t) {
         return t === '|' ? '<i class="beeps__pause"></i>'
                          : '<i class="beeps__b' + (t === 'L' ? ' beeps__b--long' : '') + '"></i>';
@@ -410,13 +415,16 @@
     '</p>';
   }
 
-  // A line of the product's own copy: Arabic first, then its English.
+  // A line of the product's own copy: Arabic first, then its English, with who
+  // says it as the caption, outside the quote, as the HTML standard asks.
   function said(l) {
-    return '<blockquote class="said">' +
-      '<p class="said__ar" lang="ar" dir="rtl">' + esc(l.ar) + '</p>' +
-      '<p class="said__en">' + esc(l.en) + '</p>' +
-      (l.by ? '<footer class="said__by">' + esc(l.by) + '</footer>' : '') +
-    '</blockquote>';
+    return '<figure class="said">' +
+      '<blockquote>' +
+        '<p class="said__ar" lang="ar" dir="rtl">' + esc(l.ar) + '</p>' +
+        '<p class="said__en">' + esc(l.en) + '</p>' +
+      '</blockquote>' +
+      (l.by ? '<figcaption class="said__by">' + esc(l.by) + '</figcaption>' : '') +
+    '</figure>';
   }
 
   // A row of project cards. With a url the card opens it in a new tab;

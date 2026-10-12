@@ -668,6 +668,9 @@
    the row is its own aspect ratio (--ar, set by reader.js) */
 .cs__cover--pair { display: flex; align-items: flex-start; gap: var(--s-4); }
 .cs__pair { flex: var(--ar) 1 0; min-width: 0; margin: 0; }
+/* the ratio on the whole box, border included, so the 1px border can't make
+   the two heights differ */
+.cs__pair img { aspect-ratio: var(--ar); object-fit: cover; }
 @media (max-width: 640px) {
   .cs__cover--pair { flex-direction: column; align-items: center; }
   .cs__pair { flex: none; width: 100%; }
@@ -852,9 +855,15 @@
 
 /* ---- Arabic lines (the Klaxs case study) -------------------------------- */
 /* Each Arabic line is set right to left, so its punctuation lands where it
-   should, but sits on the left edge like the English around it, so a column
-   that mixes the two still reads as one column. */
-.cs__pull-ar, .horn__ar, .said__ar, .copy__ar { font-family: var(--font-ar); text-align: left; }
+   should. A line that fits sits on the left edge like the English around it,
+   so a column that mixes the two still reads as one column; a line that wraps
+   fills the column, so each of its lines starts on the right, as Arabic does. */
+.cs__pull-ar, .horn__ar, .said__ar, .copy__ar {
+  font-family: var(--font-ar);
+  width: fit-content;
+  max-width: 100%;
+  text-align: start;
+}
 /* a word of Arabic inside an English sentence */
 .ar { font-family: var(--font-ar); font-weight: 700; }
 
@@ -977,6 +986,7 @@
   padding: var(--s-1) 0 var(--s-1) var(--s-5);
   border-left: 3px solid var(--mustard);
 }
+.said blockquote { margin: 0; }
 .said__ar { font-size: 1.3rem; font-weight: 700; line-height: 1.5; color: var(--ink); }
 .said__en { margin-top: var(--s-1); font-style: italic; color: var(--ink-soft); }
 .said__by { margin-top: var(--s-2); font-size: var(--t-small); font-weight: 600; color: var(--muted); }

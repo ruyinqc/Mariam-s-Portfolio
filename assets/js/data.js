@@ -210,7 +210,7 @@ window.WORK = [
 /* ==========================================================================
    KLAXS · كلاكس  (own product, live, real players)
    --------------------------------------------------------------------------
-   The phone stills are the live game's own screens, in Arabic, framed
+   The phone stills are the game's own screens, in Arabic, framed
    in the file like the Journey Guide stills. The chat screenshots are real
    messages from players, with their profile pictures blurred; `en` is the
    translation shown under each one.
@@ -224,8 +224,8 @@ window.WORK = [
 
   card: {
     title: 'Klaxs: Learn to Speak Horn',
-    sub: 'I moved to Cairo and realised the car horns were talking. So I designed a game that teaches their language, and people played it.',
-    tags: ['Game design'],
+    sub: 'I moved to Cairo and realised the car horns were talking. So I designed and built a game that teaches their language, and 41 players are on its board.',
+    tags: ['Game design', 'UX writing'],
     thumb: {
       image: { src: 'assets/img/work/klaxs-card.webp', width: 1008, height: 630 },
       tone: 'lime'
@@ -274,7 +274,7 @@ window.WORK = [
       title: 'Where it started',
       body: [
         'I moved to Cairo, and the first thing the city gave me was a headache. Microbuses, ' +
-        'taxis, tuk-tuks, all honking, all day, all at once. For weeks it was just ' +
+        'taxis, tuk-tuks, all honking, all day, all at once. At first it was just ' +
         '<span class="ar" lang="ar" dir="rtl">دوشة</span>, noise.',
 
         'Then I started actually listening. One light beep when someone lets you into a ' +
@@ -283,8 +283,8 @@ window.WORK = [
         'same rhythm together.',
 
         'It wasn’t noise. Most of the time it meant something. Every Egyptian driver speaks ' +
-        'horn fluently, nobody ever wrote it down, and nobody teaches it to the people who ' +
-        'just arrived, people like me. <b>That is where Klaxs started.</b>'
+        'horn fluently, but nobody teaches it to the people who just arrived, people like me. ' +
+        '<b>That is where Klaxs started.</b>'
       ]
     },
 
@@ -323,12 +323,10 @@ window.WORK = [
       num: '03',
       title: 'Who it’s for',
       intro:
-        'I designed it for the person I was a few months ago, and for everyone who already ' +
+        'I designed it for the person I was when I first arrived, and for everyone who already ' +
         'speaks horn and wants to laugh at how true it all is.',
       items: [
         { text: 'People new to Cairo', note: 'Like me', accent: true },
-        'Expats and students',
-        'Egyptians abroad',
         'Families, kids in the back seat',
         'Every Egyptian who already speaks horn'
       ]
@@ -340,13 +338,14 @@ window.WORK = [
       title: 'How it plays',
       intro:
         'Learn with Osta, then drive. Every screen is in Egyptian Arabic first, with English ' +
-        'one tap away. These are the live game’s own screens.',
+        'one tap away. These are the game’s own screens.',
       items: [
         {
           title: 'Start the car',
-          text: 'The first button isn’t “Start”. It’s <span class="ar" lang="ar" dir="rtl">' +
-                'دوّر العربية</span>, “start the car”, so your very first tap puts you in ' +
-                'the driver’s seat.',
+          text: 'The first button says <span class="ar" lang="ar" dir="rtl">دوّر العربية' +
+                '</span>, “start the car”. The first time you press it, the game asks who’s ' +
+                'driving (name, boy or girl, email and country), so your rounds are saved and ' +
+                'you can join the players board.',
           image: {
             src: 'assets/img/klaxs/screen-start.webp', width: 420, height: 872,
             alt: 'The Klaxs start screen: the logo, the line “Learn to speak horn, the ' +
@@ -355,8 +354,10 @@ window.WORK = [
         },
         {
           title: 'Meet Osta Abdo',
-          text: 'An old taxi driver with thirty years on Cairo’s streets. He is the teacher, ' +
-                'the coach and the voice of the whole game.',
+          text: 'An old taxi driver with thirty years on Cairo’s streets. ' +
+                '<span class="ar" lang="ar" dir="rtl">أسطى</span>, Osta, is what Egyptians ' +
+                'call a driver, or any master of a trade. He is the teacher, the coach and the ' +
+                'voice of the whole game.',
           image: {
             src: 'assets/img/klaxs/screen-osta.webp', width: 420, height: 872,
             alt: 'The driver’s seat on a downtown Cairo street. Osta Abdo, a cartoon taxi ' +
@@ -416,8 +417,8 @@ window.WORK = [
             'short beep, hold for a long one.</b> If you have ever sat in a car, there is ' +
             'nothing new to learn. On a computer, it’s the space bar.',
 
-            'Osta’s very first lesson isn’t a word at all. It teaches the control, one light ' +
-            'tap and then one long press, and only then does the language start.'
+            'Osta’s first lesson teaches the control: one light tap, then one long press. ' +
+            'The words come after.'
           ],
           said: { ar: 'الكلاكس في نص الدريكسيون. دوسة خفيفة كده… بيب!',
                   en: 'The horn is in the middle of the wheel. Give it a light tap… beep!',
@@ -437,8 +438,8 @@ window.WORK = [
             'honks fill a second row right under it</b>, so you can see exactly where you ' +
             'drifted.',
 
-            'When you miss, Osta never just says “wrong”. He names the mistake, one beep ' +
-            'short, held too long, no breath in the middle, and tells you what to do about it.'
+            'When you miss, Osta names the mistake (one beep short, held too long, no breath ' +
+            'in the middle) and tells you what to do about it.'
           ],
           said: { ar: 'ناقصة زمارة… اسمع تاني.', en: 'You’re missing a beep. Listen again.' },
           image: {
@@ -457,8 +458,8 @@ window.WORK = [
 
             'On the street, the help fades. From level 3 the rhythm disappears and you honk ' +
             'from memory, for a bonus. You can still peek, but peeking costs you the bonus. ' +
-            'One player described this exact moment to me: <b>“now I understand and reply ' +
-            'without reading.”</b>'
+            'And the street remembers your mistakes: a word you miss comes up more often for ' +
+            'the rest of the round.'
           ],
           said: { ar: 'من هنا ورايح من غير غش… الإيقاع مش هيظهر.',
                   en: 'From now on, no cheat sheet. The rhythm won’t show.' },
@@ -470,32 +471,40 @@ window.WORK = [
         },
         {
           concept: 'Peak–end rule',
-          title: 'Make the best moment unforgettable',
+          title: 'A peak in the middle, a verdict at the end',
           text: [
-            'Every few moments a wedding convoy drives by. You honk the zaffa with them, three ' +
-            'rounds in a row, and the street answers with confetti and a ' +
-            '<span class="ar" lang="ar" dir="rtl">زغروطة</span>. Weddings pay double, and a ' +
-            'good one can even give you back a heart you lost.',
+            'A round has a high point and an ending, and I designed both. The high point is ' +
+            'the wedding: it’s the third moment of every round, and it comes back at least ' +
+            'once every seven moments after that. You honk the zaffa with the convoy three ' +
+            'times, and the street answers with confetti and a ' +
+            '<span class="ar" lang="ar" dir="rtl">زغروطة</span>, the joyful ululation of an ' +
+            'Egyptian wedding. Weddings pay double, and winning two of the three gives you ' +
+            'back a heart you lost.',
 
-            'It’s the moment people remember, and it couldn’t be more Cairo.'
+            'The ending is Osta’s verdict: what kind of driver you turned out to be, from ' +
+            '<span class="ar" lang="ar" dir="rtl">رخصة تعليم</span>, a learner’s permit, to ' +
+            '<span class="ar" lang="ar" dir="rtl">أسطى الأسطوات</span>, master of the road. ' +
+            'Below the top rank, the sheet also tells you how many points the next one needs.'
           ],
           said: { ar: 'الفرح جبر بخاطرك… قلب زيادة!', en: 'Weddings mend hearts. You got one back!' },
           image: {
             src: 'assets/img/klaxs/screen-wedding.webp', width: 420, height: 872,
             alt: 'The wedding moment. The prompt reads “A zaffa! Honk along, round 2 of 3”, ' +
-                 'with the wedding rhythm as pills and the player’s first honk filling in.'
+                 'with the wedding rhythm as pills and the player’s five honks filling the row ' +
+                 'under it, the last one still sounding.'
           }
         },
         {
-          concept: 'Values in the design',
+          concept: 'Value-sensitive design',
           title: 'Teach the curse, but never let anyone say it',
           text: [
             'The real horn vocabulary includes a curse, and leaving it out would teach people ' +
             'the wrong street. So you learn to <b>recognise</b> it, and that’s all. It’s the ' +
             'only word in the game you can’t honk.',
 
-            'When a car curses at you on the street, the right answer is to let it go, and the ' +
-            'game rewards you for exactly that. Honk back, and Osta stops you.'
+            'When a car curses at you on the street, your job is to recognise it and let it ' +
+            'go. Pick “A curse” from the three bubbles and Osta says “Exactly. Leave him be.” ' +
+            'Honk back and you lose a heart: “No! We don’t answer curses!”'
           ],
           said: { ar: 'هتسمعها كتير… بس إحنا ولاد أصول، مابنردش.',
                   en: 'You’ll hear it plenty, but we have manners: we never answer.' },
@@ -509,16 +518,14 @@ window.WORK = [
           concept: 'Designed to be shared',
           title: 'A score worth posting',
           text: [
-            'A round ends with a rank, not just a number: from ' +
-            '<span class="ar" lang="ar" dir="rtl">رخصة تعليم</span>, a learner’s permit, ' +
-            'all the way to <span class="ar" lang="ar" dir="rtl">أسطى الأسطوات</span>, ' +
-            'master of the road. Osta tells you how many points the next rank needs, so ' +
-            '“one more round” is always close.',
+            'A round ends with something to post. <b>Download image</b> draws a 1080×1920 ' +
+            'picture of your round, with your rank and your place among the players, and ' +
+            'keeps it clear of the strips Instagram covers with its buttons. <b>Share</b> ' +
+            'hands you a line with your rank and score, ready to paste, and one player put ' +
+            'it straight onto their story.',
 
-            'Then the game gives you something to post. <b>Download image</b> makes a ' +
-            'story-sized picture of your round with your rank and your place among the ' +
-            'players, the players board is one tap from home, and a shared link shows the ' +
-            'game’s cover with my credit on it.'
+            'The players board is one tap from home, and a shared link shows the game’s ' +
+            'cover with my credit on it.'
           ],
           image: {
             src: 'assets/img/klaxs/screen-home.webp', width: 420, height: 872,
@@ -538,31 +545,42 @@ window.WORK = [
         'The whole game is written in Egyptian Arabic, <span class="ar" lang="ar" dir="rtl">' +
         'عامية</span>, not the formal Arabic of textbooks and settings menus. Osta talks the ' +
         'way a Cairo taxi driver actually talks: warm, cheeky, a little dramatic. The English ' +
-        'version isn’t a translation of it. It’s the same joke, told again for English speakers.',
+        'version tells each joke again for English speakers: the taxi’s ' +
+        '<span class="ar" lang="ar" dir="rtl">صباح الفل!</span> becomes “Morning, sunshine!”, ' +
+        'and the sign-up’s <span class="ar" lang="ar" dir="rtl">عرّفنا بنفسك</span>, ' +
+        '“introduce yourself”, becomes “Who’s driving?”.',
       items: [
         { where: 'Start button', ar: 'دوّر العربية', en: 'Start the car',
           why: 'Not <span class="ar" lang="ar" dir="rtl">ابدأ</span>, “start”. The first tap ' +
                'already happens inside the world.' },
+        { where: 'Sign-up', ar: 'عرّفنا بنفسك', en: 'Who’s driving?',
+          why: 'The Arabic says “introduce yourself”; the English asks the question a driver ' +
+               'would hear.' },
         { where: 'Loading', ar: 'بنسخّن العربية…', en: 'Warming up the engine…',
           why: 'Even the wait stays in character.' },
         { where: 'Drive button', ar: 'يلا نسوق', en: 'Hit the road',
-          why: 'The way a friend says it, not the way a menu does.' },
+          why: '<span class="ar" lang="ar" dir="rtl">يلا</span>, “come on”, is how a friend ' +
+               'gets you moving.' },
         { where: 'Grades', ar: 'بيرفكت! · حلو! · لأ!', en: 'Perfect! · Good! · Nope!',
           why: 'Short enough to read in the middle of a honk. And yes, Egyptians really do ' +
                'say <span class="ar" lang="ar" dir="rtl">بيرفكت</span>.' },
         { where: 'Wrong rhythm', ar: 'خد نفسك في النص… الوقفة مهمة.',
           en: 'Take a breath in the middle. The pause matters.',
-          why: 'Every hint names the mistake and the fix, in Osta’s voice.' },
+          why: 'One of seven hints, one for each way a rhythm can go wrong: too many beeps, one ' +
+               'missing, a beep too long or too short, no pause, beeps too far apart, or ' +
+               'nothing at all.' },
         { where: 'Honking at nothing', ar: 'على مين بتزمّر يا عم؟ الشارع لسه فاضي!',
           en: 'Who are you honking at? The street is empty!',
-          why: 'Pressing the horn on the home screen isn’t an error, it’s curiosity. So it ' +
-               'gets a joke instead of nothing.' },
+          why: 'Pressing the horn on the home screen is curiosity, so every fourth press gets ' +
+               'a joke from Osta.' },
         { where: 'Honking mid-drive', ar: 'الكلاكس مش لعبة… قصدي هو لعبة، بس برده.',
           en: 'The horn’s not a toy… well, it’s a game. But still.',
-          why: '<b>The line players quoted back to me.</b> See what they said below.' },
+          why: 'Honk when nobody is talking to you and Osta scolds you, then catches himself ' +
+               'halfway. <b>A player quoted this line back to me.</b> See the message below.' },
         { where: 'Ranks', ar: 'رخصة تعليم ← سواق ملاكي ← سواق تاكسي ← سواق ميكروباص ← أسطى الأسطوات',
           en: 'Learner’s permit → Sunday driver → Taxi driver → Microbus driver → Master of the road',
-          why: 'Every Egyptian knows the microbus driver outranks everyone. In English, ' +
+          why: 'Every Egyptian knows a microbus driver gives way to nobody, so only the master ' +
+               'of the road ranks above him. In English, ' +
                '<span class="ar" lang="ar" dir="rtl">سواق ملاكي</span>, a private-car ' +
                'driver, became a “Sunday driver”: localised, not translated.' },
         { where: 'Form error', ar: 'الإيميل مش مظبوط', en: 'That email doesn’t look right',
@@ -579,8 +597,9 @@ window.WORK = [
       num: '07',
       title: 'How it spread',
       intro:
-        'I launched it the Egyptian way: I sent the link to friends on Instagram with a dare, ' +
-        'and asked them to post their score and tag me. They did, and the board kept growing.',
+        'I launched it with a message to friends on Instagram: the link, a dare to beat each ' +
+        'other’s scores, and a request to post their score and tag me. They did, and the board ' +
+        'kept growing.',
       items: [
         {
           image: { src: 'assets/img/klaxs/dm-launch.webp', width: 760, height: 832,
@@ -599,7 +618,7 @@ window.WORK = [
           image: { src: 'assets/img/klaxs/dm-story-reply.webp', width: 760, height: 701,
                    alt: 'My reply to a player’s Instagram story showing the players board, and ' +
                         'their answer. The translation is below.' },
-          en: ['Me: What is this score?! Respect 🤣😍😎',
+          en: ['Me: What is this score?! Respect 🤣😍😍❤️❤️❤️😎😎',
                'Player: Honestly, this game is so sweet ❤️❤️❤️'],
           note: 'A player posted the board on their story when it had 16 players: <b>#1, ' +
                 'with 105,027 points</b>.'
@@ -612,10 +631,9 @@ window.WORK = [
       num: '08',
       title: 'Real players, real numbers',
       items: [
-        { value: '41',      label: 'Players on the board' },
-        { value: '8 → 41',  label: 'Players on the board: 8 when one player posted their story, 41 now' },
-        { value: '3+',      label: 'Countries on the board, including Egypt, Lebanon and China' },
-        { value: '105,027', label: 'The #1 score a player posted on their story' }
+        { value: '41', label: 'Players on the board, as of 12 October 2026' },
+        { value: '5×', label: 'Growth since a player’s story showed 8 players on the board' },
+        { value: '3+', label: 'Countries on the board, including Egypt, Lebanon and China' }
       ]
     },
 
@@ -630,17 +648,17 @@ window.WORK = [
         {
           image: { src: 'assets/img/klaxs/dm-without-reading.webp', width: 760, height: 133,
                    alt: 'A player’s Instagram message, in Arabic. The translation is below.' },
-          en: ['I can’t even tell you how much I learned 😂😂',
-               'Now I understand and reply without reading'],
-          note: '<b>The fading hint worked.</b> This player stopped reading the rhythm and ' +
-                'started hearing it.'
+          en: ['I can’t even tell you how much I learned. Now I understand and reply without ' +
+               'reading 😂😂'],
+          note: '<b>That’s what the hidden rhythm is for:</b> from level 3 the pills disappear ' +
+                'and you honk from memory.'
         },
         {
           image: { src: 'assets/img/klaxs/dm-not-a-toy.webp', width: 760, height: 200,
                    alt: 'Two Instagram messages from a player, in Arabic. The translation is below.' },
           en: ['Dangerous! 🤣🤣🤣',
-               'I honked wrong and he told me “the horn’s not a toy… well, it’s a game, but ' +
-               'still” 😂😂😂😂'],
+               'I honked wrong and he tells me “it’s not a toy… or it’s a game, but still” ' +
+               '😂😂😂😂'],
           note: '<span class="ar" lang="ar" dir="rtl">خطير</span>, “dangerous”, is Egyptian ' +
                 'for brilliant. And “he” is Osta: <b>a player quoting the UX writing back to me.</b>'
         },
@@ -648,7 +666,7 @@ window.WORK = [
           image: { src: 'assets/img/klaxs/dm-masterpiece.webp', width: 760, height: 510,
                    alt: 'Four short Instagram messages from a player, in Arabic. The ' +
                         'translation is below.' },
-          en: ['Mariouma!', 'A masterpiece', 'You really made this?', 'It’s amazing'],
+          en: ['Mariouma!', 'A gem', 'You really made this?', 'It’s amazing'],
           note: '<span class="ar" lang="ar" dir="rtl">مريومة</span>, Mariouma, is what ' +
                 'Egyptians call a Mariam they love.'
         },
@@ -656,7 +674,7 @@ window.WORK = [
           image: { src: 'assets/img/klaxs/dm-seriously.webp', width: 760, height: 311,
                    alt: 'A player’s Instagram message in Arabic, and my reply in emojis. The ' +
                         'translation is below.' },
-          en: ['Seriously, Mariouma, the game is a masterpiece 😂😂❤️❤️❤️❤️'],
+          en: ['Seriously, Mariouma, the game is a gem 😂😂❤️❤️❤️❤️'],
           note: 'I answered in emojis.'
         }
       ]
@@ -667,15 +685,15 @@ window.WORK = [
       num: '10',
       title: 'What I learned',
       body: [
-        '<b>Delight is a feature.</b> The jokes, Osta’s voice and the wedding aren’t ' +
-        'decoration. They are what players laughed about, quoted back to me and shared.',
+        '<b>Write for the street, in one voice.</b> Hints, praise and jokes all come from ' +
+        'Osta, in the Arabic a Cairo driver actually speaks, so the game talks to you like ' +
+        'one person. The player who quoted a line back to me wrote “he tells me”, not “the ' +
+        'game says”.',
 
-        '<b>Write for the street, not for the screen.</b> The moment the copy sounded like a ' +
-        'real Cairo driver, players started quoting it back to me.',
-
-        '<b>Sharing has to be designed.</b> The rank, the story image and the link preview ' +
-        'were all planned. Within days, players were posting their rank on their stories ' +
-        'and tagging me.'
+        '<b>Sharing has to be designed, and asked for.</b> The rank, the story image, the ' +
+        'share line and the link preview were all planned, and my launch message asked ' +
+        'friends to post their score and tag me. Within days, players were putting their ' +
+        'rank on their stories and tagging me.'
       ]
     },
 

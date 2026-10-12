@@ -246,12 +246,15 @@ Arabic inside an English sentence, write
 
 **`horns`** — a vocabulary of rhythms. Each word is drawn as its beeps
 (`'s'` short, `'L'` long, `'|'` a pause), then its Arabic and English.
-`listen` marks a word you only learn to recognise.
+`listen` marks a word you only learn to recognise: write the text of its tag
+(it shows as a pill on the tile), and the tile gets a dashed border.
 
 ```js
 { type: 'horns', num: '02', title: 'Writing the language down',
   items: [{ rhythm: 's s | s s s', repeat: '× 3–4', ar: 'الزفّة',
-            en: 'The wedding', when: 'The bride’s car rolls by.' }] }
+            en: 'The wedding', when: 'The bride’s car rolls by.' },
+          { rhythm: 's s s L', ar: 'شتيمة', en: 'A curse', when: 'A driver lost his temper.',
+            listen: 'Recognise it. Never answer it.' }] }
 ```
 
 **`decisions`** — design decisions, one per row: a phone still on the
