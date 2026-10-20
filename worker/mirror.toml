@@ -1,0 +1,10 @@
+# Only needed if you deploy from the command line:
+#   npx wrangler deploy -c worker/mirror.toml
+# Pasting worker/mirror.js into the Cloudflare dashboard works just as well.
+name = "portfolio-mirror"
+main = "mirror.js"
+compatibility_date = "2026-09-01"
+
+routes = [
+  { pattern = "ruyinqc.com/mariamemadportfolio*", zone_name = "ruyinqc.com" }
+]

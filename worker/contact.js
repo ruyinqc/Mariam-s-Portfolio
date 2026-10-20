@@ -15,7 +15,7 @@
                       with. Once a domain is verified in Resend, use e.g.
                       Portfolio <hello@yourdomain.com>
      ALLOWED_ORIGINS  comma-separated sites allowed to post, e.g.
-                      https://ruyinqc.github.io,http://localhost:8080
+                      https://ruyinqc.github.io,https://ruyinqc.com,http://localhost:8080
    ========================================================================== */
 
 const RESEND_URL = 'https://api.resend.com/emails';

@@ -40,7 +40,7 @@ deploy the starter, then **Edit code**, replace everything with the contents of
 | --- | --- | --- |
 | `RESEND_API_KEY` | Secret | the key from step 1 |
 | `TO_EMAIL` | Text | `marmaremad31@gmail.com` |
-| `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,http://localhost:8080` |
+| `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,https://ruyinqc.com,http://localhost:8080` |
 | `FROM_EMAIL` | Text | optional — see below |
 
 **4. The site** — copy the Worker's address (looks like
@@ -380,6 +380,38 @@ no output directory.
 
 Whatever you use, update the site address once you have a real domain — see
 the SEO section below, it is the one thing that genuinely matters.
+
+### Your ruyinqc.com address
+
+The same site also answers at **https://ruyinqc.com/mariamemadportfolio/**,
+next to Klaxs at `ruyinqc.com/klaxs/`. GitHub Pages is still the host; a
+small Cloudflare Worker (`worker/mirror.js`) fetches each file from it, so
+every push shows up at both addresses with nothing extra to deploy.
+
+Don't add a custom domain in GitHub's Pages settings for this. GitHub would
+then send every github.io visitor to that domain, and the github.io link
+would stop being its own address.
+
+**Set it up once**, at **https://dash.cloudflare.com**:
+
+1. **Workers & Pages → Create → Create Worker**, name it `portfolio-mirror`,
+   deploy the starter, then **Edit code**, replace everything with
+   `worker/mirror.js`, and **Deploy**.
+2. On the Worker, **Settings → Domains & Routes → Add → Route**:
+   route `ruyinqc.com/mariamemadportfolio*`, zone `ruyinqc.com`.
+3. On the `portfolio-contact` Worker, **Settings → Variables and Secrets**,
+   add `https://ruyinqc.com` to `ALLOWED_ORIGINS` (see section 1). Without
+   it the contact form refuses messages sent from the new address.
+4. Open https://ruyinqc.com/mariamemadportfolio/ and send yourself a test
+   message from the form.
+
+Or from the command line: `npx wrangler deploy -c worker/mirror.toml`.
+
+**For search engines** both addresses point at the github.io one as the
+canonical copy, so Google indexes one page instead of two competing ones. To
+make ruyinqc.com the main address instead, replace the site address as the
+SEO section describes, with `https://ruyinqc.com/mariamemadportfolio/`, once
+step 4 works.
 
 ---
 
