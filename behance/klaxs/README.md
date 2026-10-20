@@ -1,11 +1,8 @@
 # Klaxs on Behance
 
-Everything you need to post the Klaxs case study on Behance: 17 images in
-order, a cover, the spots where your videos go, and the text to paste.
-
-Every word in the images comes from the case study on the site
-(`assets/js/data.js`). If you change the text there, run the render again
-(see the end of this file) and the images update to match.
+The Klaxs case study, photographed from the site itself: the same page, the
+same words, the same look, cut into Behance images. Plus a cover with your
+photo, and the spots where the videos go.
 
 ---
 
@@ -13,12 +10,12 @@ Every word in the images comes from the case study on the site
 
 | Setting | What to put |
 |---|---|
-| **Cover** | `00-behance-cover.png` (808 × 632, drawn at 2× so it's sharp) |
+| **Cover** | `00-behance-cover.png`: your photo in the game, the Klaxs logo, the title and “UX · Product Design” |
 | **Title** | Klaxs: Learn to Speak Horn |
-| **Background colour** | `#FFF3DC` (the sand behind every panel) |
-| **Space between modules** | **0**, so the panels join into one long page |
+| **Background colour** | `#F7F5F1` (the site's paper, behind every image) |
+| **Space between modules** | **0**, so the images join into one long page, like the site |
 | **Creative fields** | Game Design · UI/UX · Interaction Design |
-| **Tags** | game design, ux writing, ux design, arabic, egyptian arabic, localisation, cairo, web game, mobile game, gamification, microcopy, product design |
+| **Tags** | game design, ux writing, ux design, product design, arabic, egyptian arabic, localisation, cairo, web game, mobile game, microcopy |
 | **Tools** | Add the ones you actually used |
 | **Project link** | https://ruyinqc.com/klaxs/ |
 
@@ -36,36 +33,37 @@ Every word in the images comes from the case study on the site
 
 ## 2. The order to upload
 
-Upload the images in this order. **▶ marks a video.** Every video is
-optional, and the page reads fine without any of them, but A and B are the
-two worth making first: Klaxs is a game about sound, and a still can't honk.
+**▶ marks a video.** Every video is optional and the page reads fine
+without them, but A and B are the two worth making first: Klaxs is a game
+about sound, and a still can't honk.
 
-| # | Module | |
+| # | Image | On the site |
 |---|---|---|
-| 1 | `01-hero.png` | The cover, title, role, timeline, platform, players, status |
+| 1 | `01-title.png` | The title, the standfirst, the facts and the Play Klaxs card |
+| 2 | `02-cover.png` | The game's cover, and you in it |
 | ▶ | **Video A · Trailer** | One round of the game, sound on |
-| 2 | `02-where-it-started.png` | 01 · Where it started |
-| 3 | `03-pull.png` | “Here, the horn isn’t noise. It’s a language.” |
-| 4 | `04-the-horn-vocabulary.png` | 02 · Writing the language down |
+| 3 | `03-where-it-started.png` | 01 · Where it started, and the quote |
+| 4 | `04-writing-the-language-down.png` | 02 · Writing the language down |
 | 5 | `05-who-its-for.png` | 03 · Who it’s for |
 | 6 | `06-how-it-plays.png` | 04 · How it plays |
 | ▶ | **Video B · A lesson** | Hear it, see it, honk it |
-| 7 | `07-ux-natural-mapping.png` | 05 · The UX behind the fun, 1 / 6 |
-| 8 | `08-ux-feedback-that-teaches.png` | 2 / 6 |
-| 9 | `09-ux-scaffolding-then-fading.png` | 3 / 6 |
-| 10 | `10-ux-peak-end-rule.png` | 4 / 6 |
+| 7 | `07-the-ux-behind-the-fun-1.png` | 05 · The UX behind the fun: natural mapping |
+| 8 | `07-the-ux-behind-the-fun-2.png` | Feedback that teaches |
+| 9 | `07-the-ux-behind-the-fun-3.png` | Scaffolding, then fading |
+| 10 | `07-the-ux-behind-the-fun-4.png` | Peak–end rule |
 | ▶ | **Video C · The wedding** | The zaffa, the confetti, the zaghrouta |
-| 11 | `11-ux-value-sensitive-design.png` | 5 / 6 |
-| 12 | `12-ux-designed-to-be-shared.png` | 6 / 6 |
+| 11 | `07-the-ux-behind-the-fun-5.png` | Value-sensitive design |
+| 12 | `07-the-ux-behind-the-fun-6.png` | Designed to be shared |
 | ▶ | **Video D · Sharing your score** | Round over → Download image → the story picture |
-| 13 | `13-ux-writing.png` | 06 · UX writing |
-| 14 | `14-how-it-spread.png` | 07 · How it spread |
-| 15 | `15-real-numbers.png` | 08 · Real players, real numbers |
-| 16 | `16-what-players-said.png` | 09 · What players told me |
-| 17 | `17-what-i-learned.png` | 10 · What I learned, and the link to play |
+| 13 | `08-ux-writing.png` | 06 · UX writing |
+| 14 | `09-how-it-spread.png` | 07 · How it spread |
+| 15 | `10-real-players-real-numbers.png` | 08 · Real players, real numbers |
+| 16 | `11-what-players-told-me.png` | 09 · What players told me |
+| 17 | `12-what-i-learned.png` | 10 · What I learned, and the closing line |
 
-The images are 2800 px wide (1400 px drawn at 2×). Behance shows them at
-1400 px, and the extra pixels keep the text sharp on a retina screen.
+The images are 2800 px wide: the page at 1400 px, Behance's width, drawn
+at 2× so the text stays sharp on a retina screen. The cover is 808 × 632,
+Behance's cover size, also at 2× (1616 × 1264).
 
 ---
 
@@ -87,10 +85,11 @@ moment, with a second of calm before and after.
 
 ### Put each one in the frame
 
-`tools/behance/frame-video.js` puts a recording in a 1920 × 1080 frame that
-matches the panels: the sand page, the title on the left, your recording in
-a phone bezel on the right. It keeps the sound. A landscape recording gets a
-title strip above it instead.
+`tools/behance/frame-video.js` puts a recording in a 1920 × 1080 frame
+styled like the case study: the site's paper, the section number in blue,
+the title, a line of Osta's in Arabic, and your recording in a phone bezel
+on the right. It keeps the sound. A landscape recording gets a title strip
+above it instead.
 
 From the repository root, once:
 
@@ -113,7 +112,7 @@ node tools/behance/frame-video.js lesson.mp4 behance/klaxs/video-b-lesson.mp4 \
   --sub "Each lesson plays one word, draws its beeps as pills, and waits for you to honk it back on the wheel."
 
 node tools/behance/frame-video.js wedding.mp4 behance/klaxs/video-c-wedding.mp4 \
-  --num 05 --title "A peak in the middle" \
+  --num 05 --title "A peak in the middle, a verdict at the end" \
   --ar "الفرح جبر بخاطرك… قلب زيادة!" \
   --sub "Honk the zaffa with the convoy three times, and the street answers with confetti and a zaghrouta."
 
@@ -145,10 +144,12 @@ A GIF has no sound, so for Klaxs keep at least the trailer as a real video.
 
 ## 4. Changing the images
 
-The panels are drawn from `tools/behance/klaxs.html`, which reads the case
-study's text from `assets/js/data.js`. After changing either one:
+The images are taken from the live case study, so they follow whatever
+`assets/js/data.js` and the site's styles say. After changing the study:
 
 ```sh
 python3 -m http.server 8080 &             # from the repository root
-node tools/behance/render.js              # rewrites everything in behance/klaxs/
+node tools/behance/render.js              # rewrites every image in behance/klaxs/
 ```
+
+The cover is `tools/behance/thumb.html`, and `render.js` draws it too.
