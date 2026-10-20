@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Klaxs · Behance thank-you</title>
+<!--
+  The last Behance image: a thank-you in the site's own contact section, the
+  dark panel with the lime eyebrow and the waving photo, and beside it a card
+  in the game's voice. tools/behance/render.js draws it at 1400px and 3×.
+-->
+<link rel="stylesheet" href="../../assets/css/fonts.css">
+<link rel="stylesheet" href="../../assets/css/tokens.css">
+<link rel="stylesheet" href="../../assets/css/base.css">
+<link rel="stylesheet" href="../../assets/css/layout.css">
+<link rel="stylesheet" href="../../assets/css/components.css">
+<style>
+  html, body { background: var(--paper); }
+  body { width: 1400px; margin: 0; }
+  /* the site's contact panel ends in its footer; here it ends on its own */
+  .contact { padding-block: 120px; }
+  .contact__inner { align-items: center; }
+  .contact__direct a { font-size: 1.15rem; }
+  /* "Thank you" is wider than the site's "Let's talk", so the photo stands clear of it */
+  .contact__photo-wrap { margin-left: 1.25rem; }
+
+  .thanks__card {
+    display: grid;
+    justify-items: center;
+    gap: var(--s-4);
+    padding: 3rem 2.5rem 2.75rem;
+    background: var(--panel-soft);
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: var(--r-lg);
+    text-align: center;
+  }
+  .thanks__logo { display: block; width: 320px; height: auto; margin-bottom: var(--s-2); }
+  .thanks__ar {
+    font-family: var(--font-ar);
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1.4;
+    color: var(--on-panel);
+  }
+  .thanks__en {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.75rem;
+    line-height: 1.2;
+    color: var(--on-panel);
+  }
+  .thanks__card .btn { margin-top: var(--s-4); font-size: 1rem; min-height: 3.25rem; padding-inline: 1.75rem; }
+  .thanks__url { font-family: var(--font-mono); font-weight: 600; opacity: .85; }
+  .thanks__note { font-size: var(--t-small); color: var(--on-panel-soft); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.8" y="5" width="18.4" height="14" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m3.6 6.8 8.4 6 8.4-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15.5m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+</svg>
+
+<section class="section contact">
+  <div class="shell contact__inner">
+    <div class="contact__copy">
+      <header class="section__head section__head--tight">
+        <p class="eyebrow eyebrow--invert"><span>11</span> Thank you</p>
+        <div class="contact__title-row">
+          <h2 class="section__title section__title--invert">Thank you <br>for <em>riding</em> <br>along.</h2>
+          <picture class="contact__photo-wrap">
+            <img class="contact__photo" src="../../assets/img/mariam-wave.webp" width="720" height="872" alt="">
+          </picture>
+        </div>
+      </header>
+
+      <p class="contact__lede">
+        Want to talk about a role, a project, or just share a honk?
+        I reply to everything.
+      </p>
+
+      <ul class="contact__direct">
+        <li><a><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg> marmaremad31@gmail.com</a></li>
+      </ul>
+    </div>
+
+    <div class="thanks__card">
+      <img class="thanks__logo" src="../../assets/img/klaxs/logo.webp" width="1000" height="394" alt="Klaxs">
+      <p class="thanks__ar" lang="ar" dir="rtl">يلا نتعلّم لغة الكلاكس سوا!</p>
+      <p class="thanks__en">Let’s learn the Klaxs language together, and have fun on the road.</p>
+      <span class="btn btn--primary">Play Klaxs <span class="thanks__url">ruyinqc.com/klaxs</span> <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      <p class="thanks__note">Best on a phone, with the sound on.</p>
+    </div>
+  </div>
+</section>
+</body>
+</html>

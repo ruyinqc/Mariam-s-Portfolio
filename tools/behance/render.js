@@ -10,6 +10,7 @@
  * The browser draws each image fresh at 3× (4200px wide), so text and shapes
  * stay sharp however far Behance or a viewer zooms in. The cover comes from
  * tools/behance/thumb.html, at Behance's 808 × 632, drawn at 2× (1616 × 1264).
+ * The closing thank-you is tools/behance/thanks.html, at 1400px and 3×.
  * Everything lands in behance/klaxs/.
  *
  * The title and standfirst are not among the images: the opening video
@@ -60,6 +61,14 @@ const IMAGES = [
   await cover.screenshot({ path: path.join(OUT, '00-behance-cover.png') });
   await cover.close();
   console.log('✓ 00-behance-cover');
+
+  // the thank-you that closes the project, in the site's own contact panel
+  const thanks = await browser.newPage({ viewport: { width: WIDTH, height: 900 }, deviceScaleFactor: 3, reducedMotion: 'reduce' });
+  await thanks.goto(BASE + 'tools/behance/thanks.html', { waitUntil: 'networkidle' });
+  await thanks.evaluate(() => document.fonts.ready);
+  await (await thanks.$('.contact')).screenshot({ path: path.join(OUT, '13-thank-you.png') });
+  await thanks.close();
+  console.log('✓ 13-thank-you');
 
   // the study, opened in the site's own reader
   const page = await browser.newPage({

@@ -38,7 +38,7 @@ The project opens with your video, then the images follow in this order.
 
 | # | Module | On the site |
 |---|---|---|
-| ▶ | **The opening video** | The “Case study” pill, the title and the intro on the left, the game playing on the right |
+| ▶ | **The opening video** (`video-opening.mp4`) | The “Case study” pill, the title and the intro on the left, the game playing on the right |
 | 1 | `01-facts.png` | Role, Timeline, Platform, Players, Status, and the Play Klaxs card |
 | 2 | `02-cover.png` | The game's cover, and you in it |
 | 3 | `03-where-it-started.png` | 01 · Where it started, and the quote |
@@ -56,6 +56,7 @@ The project opens with your video, then the images follow in this order.
 | 15 | `10-real-players-real-numbers.png` | 08 · Real players, real numbers |
 | 16 | `11-what-players-told-me.png` | 09 · What players told me |
 | 17 | `12-what-i-learned.png` | 10 · What I learned, and the closing line |
+| 18 | `13-thank-you.png` | Thank you, your email, and Play Klaxs, in the site's contact style |
 
 The title and intro aren't an image, because the video already shows them.
 
@@ -71,7 +72,12 @@ numbers say “and counting”. To show a newer number, change it in
 
 ## 3. The opening video
 
-### Put the clip in the frame
+`video-opening.mp4` is ready: your demo recording in the frame, 1920 × 1080,
+32 seconds, with its sound. It's cropped to the game, without the phone's
+status bar or Safari's bars, and starts 4.2 seconds in, once the iPhone's
+touch button has moved off the game.
+
+### Put a new clip in the frame
 
 `tools/behance/frame-video.js` puts a phone recording in a 1920 × 1080
 frame styled like the case study: the site's paper, the “Case study” pill,
