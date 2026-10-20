@@ -7,4 +7,8 @@ Allow: /
 # The CV is linked from the page and is meant to be found.
 Allow: /assets/cv/
 
+# Images made for Behance, not pages of the site.
+Disallow: /behance/
+Disallow: /tools/
+
 Sitemap: https://ruyinqc.github.io/Mariam-s-Portfolio/sitemap.xml
