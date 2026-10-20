@@ -224,7 +224,7 @@ window.WORK = [
 
   card: {
     title: 'Klaxs: Learn to Speak Horn',
-    sub: 'I moved to Cairo and realised the car horns were talking. So I designed and built a game that teaches their language, and 41 players are on its board.',
+    sub: 'I moved to Cairo and realised the car horns were talking. So I designed and built a game that teaches their language. 41 players are on its board, and counting.',
     tags: ['Game design', 'UX writing'],
     thumb: {
       image: { src: 'assets/img/work/klaxs-card.webp', width: 1008, height: 630 },
@@ -243,7 +243,7 @@ window.WORK = [
     'Role':     { value: 'Product Designer & builder', note: 'Idea, UX, UX writing, art direction' },
     'Timeline': { value: '9 days', note: 'First line of code to the version people shared' },
     'Platform': { value: 'Web game', note: 'Phone first · Egyptian Arabic & English' },
-    'Players':  { value: '41', note: 'On the players board' },
+    'Players':  { value: '41 and counting', note: 'On the board as of 12 October 2026' },
     'Status':   { value: 'Live', note: 'ruyinqc.com/klaxs' }
   },
 
@@ -631,7 +631,7 @@ window.WORK = [
       num: '08',
       title: 'Real players, real numbers',
       items: [
-        { value: '41', label: 'Players on the board, as of 12 October 2026' },
+        { value: '41', label: 'Players on the board as of 12 October 2026, and still counting' },
         { value: '5×', label: 'Growth since a player’s story showed 8 players on the board' },
         { value: '3+', label: 'Countries on the board, including Egypt, Lebanon and China' },
         { value: '105k → 353k', label: 'The #1 score, from the story at 16 players to today. ' +

@@ -7,9 +7,13 @@
  *
  * Opens index.html#case/klaxs at 1400px, Behance's own width, lets the reader
  * grow to its full height, and cuts it into one image per part of the study.
- * Each image is drawn at 2× (2800px wide) so text stays sharp on a retina
- * screen. The cover comes from tools/behance/thumb.html, at 808 × 632.
+ * The browser draws each image fresh at 3× (4200px wide), so text and shapes
+ * stay sharp however far Behance or a viewer zooms in. The cover comes from
+ * tools/behance/thumb.html, at Behance's 808 × 632, drawn at 2× (1616 × 1264).
  * Everything lands in behance/klaxs/.
+ *
+ * The title and standfirst are not among the images: the opening video
+ * carries them (see frame-video.js), so the first image starts at the facts.
  *
  * Set BROWSER_PATH to use a Chromium you already have installed.
  */
@@ -25,10 +29,11 @@ const WIDTH = 1400;
 const EDGE = 96;   // space above the first part of each image and below the last
 
 // Which parts of the study go in which image, by the section number on the
-// site. 'head' is the title, standfirst and facts; 'cover' the two pictures.
-// A decisions section is cut again, one image per decision.
+// site. 'title' is the pill, title and standfirst; 'facts' the Role / Timeline
+// row and the Play Klaxs card; 'cover' the two pictures. A decisions section
+// is cut again, one image per decision.
 const IMAGES = [
-  ['01-title', ['head']],
+  ['01-facts', ['facts']],
   ['02-cover', ['cover']],
   ['03-where-it-started', ['01', 'pull']],
   ['04-writing-the-language-down', ['02']],
@@ -47,19 +52,19 @@ const IMAGES = [
   for (const f of fs.readdirSync(OUT)) if (f.endsWith('.png')) fs.unlinkSync(path.join(OUT, f));
 
   const browser = await chromium.launch(EXE ? { executablePath: EXE } : {});
-  const page = await browser.newPage({
-    viewport: { width: WIDTH, height: 1000 }, deviceScaleFactor: 2, reducedMotion: 'reduce'
-  });
 
   // the cover
-  await page.setViewportSize({ width: 808, height: 632 });
-  await page.goto(BASE + 'tools/behance/thumb.html', { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.fonts.ready);
-  await page.screenshot({ path: path.join(OUT, '00-behance-cover.png') });
+  const cover = await browser.newPage({ viewport: { width: 808, height: 632 }, deviceScaleFactor: 2 });
+  await cover.goto(BASE + 'tools/behance/thumb.html', { waitUntil: 'networkidle' });
+  await cover.evaluate(() => document.fonts.ready);
+  await cover.screenshot({ path: path.join(OUT, '00-behance-cover.png') });
+  await cover.close();
   console.log('✓ 00-behance-cover');
 
   // the study, opened in the site's own reader
-  await page.setViewportSize({ width: WIDTH, height: 1000 });
+  const page = await browser.newPage({
+    viewport: { width: WIDTH, height: 1000 }, deviceScaleFactor: 3, reducedMotion: 'reduce'
+  });
   await page.goto(BASE + '#case/klaxs', { waitUntil: 'networkidle' });
   await page.waitForSelector('#readerTitle');
   // let the reader grow to its full height, on the page's own paper, with
@@ -93,13 +98,17 @@ const IMAGES = [
     // every piece that can be hidden gets a name, so each image shows only its own
     let n = 0;
     const tag = el => { el.dataset.part = 'p' + (n++); return el.dataset.part; };
+    // the top of the study comes in two runs of elements: the title, then the facts
+    const run = el => el.matches('.cs__kind, .cs__title, .cs__standfirst') ? 'title'
+      : el.matches('.cs__meta, .cs__projects') ? 'facts' : null;
     for (const el of body.children) {
-      if (el.matches('.cs__kind, .cs__title, .cs__standfirst, .cs__meta, .cs__projects')) {
+      const key = run(el);
+      if (head && head.key !== key) { out.push(head); head = null; }
+      if (key) {
         const b = box(el);
-        head = head ? { ...head, bottom: b.bottom, ids: [...head.ids, tag(el)] } : { key: 'head', ...b, ids: [tag(el)] };
+        head = head ? { ...head, bottom: b.bottom, ids: [...head.ids, tag(el)] } : { key, ...b, ids: [tag(el)] };
         continue;
       }
-      if (head) { out.push(head); head = null; }
       if (el.matches('.cs__cover')) out.push({ key: 'cover', ...box(el), ids: [tag(el)] });
       else if (el.matches('.cs__pull')) out.push({ key: 'pull', ...box(el), ids: [tag(el)] });
       else if (el.matches('section')) {
