@@ -20,6 +20,9 @@
   body.front { background: transparent; }
   .front .words, .back .bezel { display: none; }
   .words { position: absolute; left: 160px; top: 0; bottom: 0; width: 900px; display: flex; flex-direction: column; justify-content: center; }
+  /* the site's "Case study" pill, above the title of the opening video */
+  .kind { align-self: flex-start; display: inline-flex; align-items: center; gap: .5em; margin-bottom: 30px; padding: 7px 16px; background: var(--blue-wash); color: var(--blue-deep); font-family: var(--font-mono); font-size: 20px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; border-radius: 9px; }
+  .kind svg { width: 1.15em; height: 1.15em; }
   /* the site's section heading: the number in blue mono, then the title */
   h1 { font-size: 76px; line-height: 1.08; letter-spacing: -.035em; font-weight: 800; }
   h1 span { display: inline-block; margin-right: .45em; font-family: var(--font-mono); font-size: .6em; font-weight: 600; color: var(--blue); vertical-align: .12em; letter-spacing: 0; }
@@ -37,6 +40,7 @@
 </head>
 <body>
 <div class="words">
+  <p class="kind" id="kicker"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2.9 9 5.1-9 5.1-9-5.1z" fill="currentColor" opacity=".16"/><path d="m12 2.9 9 5.1-9 5.1-9-5.1zM3 12.4l9 5.1 9-5.1M3 16.5l9 5.1 9-5.1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg><span id="kicker-text"></span></p>
   <h1><span id="num"></span><b id="title" style="font-weight: inherit"></b></h1>
   <div class="said" id="said"><p class="ar" lang="ar" dir="rtl" id="ar"></p></div>
   <p class="sub" id="sub"></p>
@@ -51,6 +55,8 @@
     if (q.get(k)) el.textContent = q.get(k); else el.style.display = 'none';
   });
   if (!q.get('ar')) document.getElementById('said').style.display = 'none';
+  if (q.get('kicker')) document.getElementById('kicker-text').textContent = q.get('kicker');
+  else document.getElementById('kicker').style.display = 'none';
   // the bezel wraps the video's box, whose place frame-video.js decides; the
   // shadow is drawn on the back layer, so it falls on the paper, not the video
   var b = 18, x = +q.get('x'), y = +q.get('y'), w = +q.get('w'), h = +q.get('h');

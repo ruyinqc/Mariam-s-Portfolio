@@ -8,7 +8,7 @@
  *   python3 -m http.server 8080 &        # from the repository root
  *   node tools/behance/frame-video.js <in.mp4> <out.mp4> \
  *        --title "Hear it, see it, honk it" \
- *        [--num 04] [--ar "دورك! زمّر زيي بالظبط."] [--sub "One line under the title"]
+ *        [--kicker "Case study"] [--num 04] [--ar "دورك! زمّر زيي بالظبط."] [--sub "One line under the title"]
  *
  * Needs ffmpeg and ffprobe on the PATH.
  * Set BROWSER_PATH to use a Chromium you already have installed.
@@ -27,7 +27,7 @@ const args = process.argv.slice(2);
 const [input, output] = args.filter((a, i) => !a.startsWith('--') && !(args[i - 1] || '').startsWith('--'));
 const opt = k => { const i = args.indexOf('--' + k); return i < 0 ? '' : args[i + 1]; };
 if (!input || !output || !opt('title')) {
-  console.error('usage: frame-video.js <in.mp4> <out.mp4> --title "…" [--num 04] [--ar "…"] [--sub "…"]');
+  console.error('usage: frame-video.js <in.mp4> <out.mp4> --title "…" [--kicker "…"] [--num 04] [--ar "…"] [--sub "…"]');
   process.exit(2);
 }
 
@@ -49,7 +49,7 @@ else      { h = 900; w = even(h * vw / vh); x = even(1490 - w / 2); y = even((10
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'klaxs-frame-'));
   const browser = await chromium.launch(EXE ? { executablePath: EXE } : {});
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
-  const q = { x, y, w, h, title: opt('title'), num: opt('num'), ar: opt('ar'), sub: opt('sub') };
+  const q = { x, y, w, h, title: opt('title'), kicker: opt('kicker'), num: opt('num'), ar: opt('ar'), sub: opt('sub') };
   if (wide) q.wide = 1;
   for (const layer of ['back', 'front']) {
     await page.goto(BASE + 'tools/behance/frame.html?' + new URLSearchParams({ ...q, layer }), { waitUntil: 'networkidle' });
