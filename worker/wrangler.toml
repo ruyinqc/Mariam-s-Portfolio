@@ -6,7 +6,7 @@ compatibility_date = "2026-09-01"
 
 [vars]
 TO_EMAIL = "marmaremad31@gmail.com"
-ALLOWED_ORIGINS = "https://ruyinqc.github.io,http://localhost:8080"
+ALLOWED_ORIGINS = "https://ruyinqc.github.io,https://ruyinqc.com,http://localhost:8080"
 
 # The API key is a secret, never put it in this file:
 #   npx wrangler secret put RESEND_API_KEY

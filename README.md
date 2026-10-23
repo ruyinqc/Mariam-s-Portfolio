@@ -40,7 +40,7 @@ deploy the starter, then **Edit code**, replace everything with the contents of
 | --- | --- | --- |
 | `RESEND_API_KEY` | Secret | the key from step 1 |
 | `TO_EMAIL` | Text | `marmaremad31@gmail.com` |
-| `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,http://localhost:8080` |
+| `ALLOWED_ORIGINS` | Text | `https://ruyinqc.github.io,https://ruyinqc.com,http://localhost:8080` |
 | `FROM_EMAIL` | Text | optional — see below |
 
 **4. The site** — copy the Worker's address (looks like
