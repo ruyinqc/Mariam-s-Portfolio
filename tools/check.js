@@ -91,7 +91,7 @@ async function run() {
   check('no horizontal overflow at 1440', overflow.s <= overflow.c);
 
   /* ------------------------------------------------------------------
-     The desk: six folders, her eyes, the cursor, opening a folder
+     The desk: six folders, her eyes, the cursor, folders that open over it
      ------------------------------------------------------------------ */
   await page.evaluate(() => { document.activeElement.blur(); document.documentElement.style.scrollBehavior = 'auto'; scrollTo(0, 0); });
   await page.waitForTimeout(500);
@@ -101,13 +101,15 @@ async function run() {
       count: links.length,
       targets: links.every(a => document.querySelector(a.getAttribute('href'))),
       curved: links.some(a => getComputedStyle(a.parentElement).position === 'absolute'),
-      navHidden: document.getElementById('nav').classList.contains('is-desk')
+      navHidden: getComputedStyle(document.getElementById('nav')).display === 'none',
+      fits: document.documentElement.scrollHeight <= innerHeight + 1
     };
   });
   check('the desk has six folders', desk.count === 6);
   check('every folder links to a section that exists', desk.targets);
   check('the folders are laid on a curve', desk.curved);
-  check('the nav stays hidden over the desk', desk.navHidden);
+  check('the whole desk fits on one screen', desk.fits);
+  check('the folders are the navigation (no nav bar over the desk)', desk.navHidden);
 
   const certFolder = await page.$('#folders .folder[href="#proof"]');
   const cb = await certFolder.boundingBox();
@@ -122,17 +124,59 @@ async function run() {
   check('the selection frame wraps that folder', hover.frame && /Certificates/.test(hover.label), hover.label);
 
   await page.mouse.click(cb.x + cb.width / 2, cb.y + cb.height / 2);
-  await page.waitForTimeout(1700);
-  const landed = await page.evaluate(() => ({
-    hash: location.hash,
-    top: Math.round(document.getElementById('proof').getBoundingClientRect().top),
-    sheet: !!document.querySelector('.desk-sheet'),
-    navShown: !document.getElementById('nav').classList.contains('is-desk')
+  await page.waitForTimeout(1400);
+  const folio = await page.evaluate(() => {
+    const root = document.getElementById('folio'), sheet = document.getElementById('folioSheet');
+    return {
+      open: !root.hidden, folder: root.dataset.folder, hash: location.hash,
+      holds: sheet.contains(document.getElementById('proof')),
+      dialog: sheet.getAttribute('role') === 'dialog' && sheet.getAttribute('aria-modal') === 'true',
+      name: sheet.getAttribute('aria-label'),
+      deskInert: document.getElementById('top').inert === true,
+      focusInside: sheet.contains(document.activeElement),
+      scrolled: scrollY
+    };
+  });
+  check('a folder opens over the desk, not down the page', folio.open && folio.folder === 'proof' && folio.holds && folio.scrolled === 0,
+        `${folio.hash} folder=${folio.folder} scrollY=${folio.scrolled}`);
+  check('the open folder is a named modal dialog', folio.dialog && folio.name === 'Certificates', folio.name);
+  check('the desk behind it is inert', folio.deskInert);
+  check('focus moves into the folder', folio.focusInside);
+
+  let left = false;
+  for (let i = 0; i < 30 && !left; i++) {
+    await page.keyboard.press('Tab');
+    left = !await page.evaluate(() => document.getElementById('folioSheet').contains(document.activeElement));
+  }
+  check('focus is trapped in the open folder', !left);
+
+  await page.click('.folio__tab[href="#contact"]');
+  await page.waitForTimeout(500);
+  const tab = await page.evaluate(() => ({ folder: document.getElementById('folio').dataset.folder, hash: location.hash,
+    holds: document.getElementById('folioSheet').contains(document.getElementById('contact')) }));
+  check('a tab switches folder without closing it', tab.folder === 'contact' && tab.holds && tab.hash === '#contact', tab.hash);
+
+  await page.goBack();
+  await page.waitForTimeout(800);
+  const shut = await page.evaluate(() => ({
+    hidden: document.getElementById('folio').hidden, hash: location.hash,
+    home: document.getElementById('proof').parentElement.id === 'main',
+    focus: document.activeElement.getAttribute('href'),
+    deskInert: document.getElementById('top').inert
   }));
-  check('opening a folder lands on its section', landed.hash === '#proof' && landed.top < 200 && landed.top > -20,
-        `${landed.hash} top=${landed.top}`);
-  check('the opening sheet cleans up after itself', !landed.sheet);
-  check('the nav comes back once you leave the desk', landed.navShown);
+  check('Back closes the folder in one step', shut.hidden && shut.hash === '', shut.hash);
+  check('its sections go back where they live', shut.home);
+  check('focus returns to the folder that opened it', shut.focus === '#proof', shut.focus);
+  check('the desk is handed back', shut.deskInert === false);
+
+  await page.evaluate(() => { location.hash = '#words'; });
+  await page.waitForTimeout(900);
+  const deep = await page.evaluate(() => ({ folder: document.getElementById('folio').dataset.folder,
+    open: !document.getElementById('folio').hidden }));
+  check('a link to a section opens the folder it lives in', deep.open && deep.folder === 'path', deep.folder);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(700);
+  check('Escape closes the folder', await page.evaluate(() => document.getElementById('folio').hidden));
 
   await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
   await page.waitForTimeout(400);
@@ -147,41 +191,40 @@ async function run() {
   await page.waitForTimeout(300);
 
   /* ------------------------------------------------------------------
-     The path: a clothesline the page's own scroll carries sideways
+     The path, inside its folder: a row that moves sideways
      ------------------------------------------------------------------ */
-  const rowX = () => page.evaluate(() => {
-    const m = /translate3d\((-?[\d.]+)px/.exec(document.getElementById('lineTrack').style.transform);
-    return m ? -parseFloat(m[1]) : 0;
-  });
-  const pinned = await page.evaluate(() => {
-    const l = document.getElementById('line');
-    document.documentElement.style.scrollBehavior = 'auto';
-    scrollTo(0, l.getBoundingClientRect().top + scrollY);
-    return l.classList.contains('line--pinned');
-  });
-  await page.waitForTimeout(700);
-  check('the path is pinned while it is on screen', pinned);
+  await page.evaluate(() => { location.hash = '#path'; });
+  await page.waitForTimeout(1000);
+  const rowX = () => page.evaluate(() => document.getElementById('lineView').scrollLeft);
+  const inFolder = await page.evaluate(() => ({
+    pinned: document.getElementById('line').classList.contains('line--pinned'),
+    room: document.getElementById('lineView').scrollWidth > document.getElementById('lineView').clientWidth
+  }));
+  check('in its folder the path is a sideways row, not pinned', !inFolder.pinned && inFolder.room);
 
+  const vb = await (await page.$('#lineView')).boundingBox();
   const x0 = await rowX();
-  await page.mouse.move(720, 450);
-  await page.mouse.wheel(0, 300);
+  await page.mouse.move(vb.x + vb.width / 2, vb.y + vb.height / 2);
+  await page.mouse.wheel(300, 0);
   await page.waitForTimeout(900);
   const x1 = await rowX();
-  check('scrolling down moves the path sideways', x1 - x0 > 200, `${x0} → ${x1}`);
+  check('a sideways scroll moves the path', x1 - x0 > 150, `${x0} → ${x1}`);
 
-  await page.mouse.move(900, 450);
+  await page.mouse.move(vb.x + vb.width / 2, vb.y + vb.height / 2);
   await page.mouse.down();
-  for (let i = 1; i <= 8; i++) { await page.mouse.move(900 + i * 25, 450); await page.waitForTimeout(16); }
+  for (let i = 1; i <= 8; i++) { await page.mouse.move(vb.x + vb.width / 2 + i * 25, vb.y + vb.height / 2); await page.waitForTimeout(16); }
   await page.mouse.up();
   await page.waitForTimeout(900);
   const x2 = await rowX();
-  check('dragging moves the path', x1 - x2 > 150, `${x1} → ${x2}`);
+  check('dragging moves the path', x1 - x2 > 100, `${x1} → ${x2}`);
 
   await page.click('#lineNext');
   await page.waitForTimeout(1000);
   const x3 = await rowX();
   check('the arrow buttons step along the path', x3 - x2 > 20, `${x2} → ${x3}`);
-  await page.evaluate(() => { scrollTo(0, 0); document.documentElement.style.scrollBehavior = ''; });
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(700);
+  await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); document.documentElement.style.scrollBehavior = ''; });
 
   /* ==================================================================
      2 — The reader dialog
@@ -241,16 +284,19 @@ async function run() {
   check('the hash is cleared on close', closed.hash === '');
   check('the background is handed back', closed.inert === false && !closed.locked);
 
-  await page.evaluate(() => window.scrollTo(0, 0));
-  await page.waitForTimeout(300);
+  await page.evaluate(() => { location.hash = '#work'; });
+  await page.waitForTimeout(900);
   const card = await page.$('.pincard__hit');
   await card.focus();
   await card.press('Enter');
   await page.waitForTimeout(700);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(700);
-  const restored = await page.evaluate(() => document.activeElement.className);
-  check('focus returns to the card that opened it', restored.includes('pincard__hit'));
+  const restored = await page.evaluate(() => ({ cls: document.activeElement.className, hash: location.hash }));
+  check('focus returns to the card that opened it', restored.cls.includes('pincard__hit'));
+  check('closing a study opened in a folder leaves you in that folder', restored.hash === '#work', restored.hash);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(700);
 
   // A slug that does not exist must not leave a broken-looking URL behind.
   await page.evaluate(() => { location.hash = '#case/does-not-exist'; });
@@ -262,8 +308,8 @@ async function run() {
   /* ==================================================================
      3 — Contact form
      ================================================================== */
-  await page.evaluate(() => document.getElementById('contact').scrollIntoView());
-  await page.waitForTimeout(400);
+  await page.evaluate(() => { location.hash = '#contact'; });
+  await page.waitForTimeout(900);
   await page.click('#formSubmit');
   await page.waitForTimeout(300);
 

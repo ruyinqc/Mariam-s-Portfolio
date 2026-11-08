@@ -236,7 +236,10 @@
                parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
     var travel = track.offsetWidth - view.clientWidth;
 
-    pinned = travel > 1 && need <= pin.clientHeight;
+    // Inside an open folder the page itself doesn't scroll, so there is
+    // nothing to pin to: the row scrolls sideways on its own instead.
+    var inFolder = !!(line.closest && line.closest('.folio'));
+    pinned = !inFolder && travel > 1 && need <= pin.clientHeight;
     line.classList.toggle('line--pinned', pinned);
 
     if (pinned) {
@@ -391,4 +394,7 @@
 
   window.addEventListener('load', measure);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
+
+  // folio.js calls this when the path is moved into, or out of, a folder.
+  window.Line = { measure: measure };
 })();

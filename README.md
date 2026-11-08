@@ -345,10 +345,17 @@ pinning and becomes a row you swipe sideways instead.
 ## 4. The desk (the top of the page)
 
 The first thing anyone sees is you at your desk, your name on the desk front,
-and six folders on a curve under it. Pointing at a folder makes you look at
-it and draws a green selection frame around it; clicking it opens a sheet in
-the folder's colour that fills the screen and lands on that section. *Live
-Projects* opens the Vibe Coding study in the reader instead.
+and six folders on a curve under it — all of it fitted to one screen, on a
+laptop or a phone. Pointing at a folder makes you look at it and draws a
+green selection frame around it. Clicking it opens the folder over the desk:
+a sheet of paper in the folder's colour, holding that folder's sections, with
+tabs along its top to switch folders. ×, Escape and the Back button close it.
+*Live Projects* opens the Vibe Coding study in the reader instead.
+
+Which sections live in which folder is set at the top of
+`assets/js/folio.js` (About holds About and Toolkit; Experience holds the
+Path and the testimonials). Without JavaScript the folders are plain links
+and the sections read as one long page.
 
 **The photos** are in `assets/img/desk/`:
 
@@ -401,7 +408,8 @@ five years and two months. Recruiters cross-check this against LinkedIn. Pick
 one set of numbers and make the CV, LinkedIn and this site agree.
 
 To change them, edit the `about__facts` list in `index.html`, and the line
-under your name on the desk (`desk__role`), which repeats the 3.5 years.
+under your name on the desk (`desk__role`), which repeats both numbers — and
+`tools/make-og.js`, which puts them on the social image.
 
 ---
 
@@ -493,8 +501,8 @@ node tools/check.js
 Drives a real browser: keyboard access, focus trapping in the reader, the
 contact form's success *and* failure paths, the clothesline (scroll, drag,
 arrows), four screen widths, reduced motion, and the page with JavaScript
-switched off — and the desk: the folders, your eyes, the cursor frame and
-opening a folder. 68 checks.
+switched off — and the desk: that it fits one screen, the folders, your eyes,
+the cursor frame, and opening, switching and closing a folder. 79 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -535,6 +543,7 @@ assets/
     base.css             reset, focus rings, the cursor, the reveal mechanism
     layout.css           shell, about, the clothesline, contact, footer
     desk.css             the desk at the top: photo, name, folders, cursor frame
+    folio.css            an open folder, and the sections dressed to match the desk
     components.css       nav, buttons, work cards, quotes, chips, form
     reader.css           the case-study overlay
   js/
@@ -545,8 +554,9 @@ assets/
     lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
-    desk.js              the desk: fitting the photo, the curve, her eyes,
-                         the cursor frame, opening a folder
+    desk.js              the desk: fitting it to the screen, the curve, her eyes,
+                         the cursor frame
+    folio.js             an open folder: which sections it holds, tabs, routing
     board.js             the work cards (the 3-column grid is CSS)
     line.js              the clothesline: pinning, drag, the swing, the rope
     reader.js            the overlay: routing, prev/next, focus trap
@@ -572,7 +582,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               68 browser checks (accessibility, desk, reader, form, line)
+  check.js               79 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails

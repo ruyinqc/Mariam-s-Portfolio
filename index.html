@@ -58,12 +58,13 @@
 <link rel="preload" as="image" href="assets/img/desk/mariam-front.webp" fetchpriority="high">
 
 <link rel="stylesheet" href="assets/css/fonts.css?v=19">
-<link rel="stylesheet" href="assets/css/tokens.css?v=19">
+<link rel="stylesheet" href="assets/css/tokens.css?v=20">
 <link rel="stylesheet" href="assets/css/base.css?v=19">
 <link rel="stylesheet" href="assets/css/layout.css?v=19">
 <link rel="stylesheet" href="assets/css/components.css?v=20">
 <link rel="stylesheet" href="assets/css/reader.css?v=19">
-<link rel="stylesheet" href="assets/css/desk.css?v=1">
+<link rel="stylesheet" href="assets/css/desk.css?v=2">
+<link rel="stylesheet" href="assets/css/folio.css?v=1">
 
 <!-- Structured data. The case studies and certificates are added at runtime
      by app.js, straight from data.js and config.js, so they can never drift
@@ -292,7 +293,7 @@
 
   <div class="desk__plate" id="deskPlate">
     <h1 class="desk__name">Mariam Emad Nabih</h1>
-    <p class="desk__role">Mid-Senior Product Designer · <b>3.5 years</b> in product design</p>
+    <p class="desk__role"><span>Mid-Senior Product Designer</span><span class="desk__facts"><span class="desk__dot" aria-hidden="true"> · </span><b>6 years</b> in tech · <b>3.5 years</b> in product design</span></p>
   </div>
 
   <!-- The six folders, left to right. --fc is the folder's colour and --fc2
@@ -817,6 +818,34 @@
   </div>
 </section>
 
+<!-- ============ THE OPEN FOLDER ============ -->
+<!-- When a folder on the desk is opened, its sections are moved in here and
+     shown as a sheet of paper over the desk (folio.js). The tabs along the
+     top switch folders without closing it. Without JavaScript this stays
+     hidden and the sections above simply read as one long page. -->
+<div class="folio" id="folio" hidden>
+  <div class="folio__scrim" id="folioScrim"></div>
+  <div class="folio__sheet" id="folioSheet" role="dialog" aria-modal="true" aria-label="Folder">
+    <header class="folio__bar">
+      <nav class="folio__tabs" aria-label="Folders">
+        <a class="folio__tab" href="#about" style="--fc:#E7CF9C">About Me</a>
+        <a class="folio__tab" href="#work" data-case="vibe-coding" style="--fc:#E2574C">Live Projects</a>
+        <a class="folio__tab" href="#work" style="--fc:#9AA36A">Case Studies</a>
+        <a class="folio__tab" href="#path" style="--fc:#E9B8A8">Experience &amp; Words</a>
+        <a class="folio__tab" href="#proof" style="--fc:#E3A92B">Certificates</a>
+        <a class="folio__tab" href="#contact" style="--fc:#D9622B">Contact</a>
+      </nav>
+      <button class="folio__close" type="button" id="folioClose">
+        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+        <span class="sr-only">Close the folder</span>
+      </button>
+    </header>
+    <div class="folio__scroll" id="folioScroll" tabindex="-1">
+      <div class="folio__body" id="folioBody"></div>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer class="footer">
@@ -876,10 +905,11 @@
 <script src="assets/js/motion.js?v=19"></script>
 <script src="assets/js/nav.js?v=19"></script>
 <script src="assets/js/board.js?v=18"></script>
-<script src="assets/js/line.js?v=18"></script>
-<script src="assets/js/reader.js?v=18"></script>
+<script src="assets/js/line.js?v=19"></script>
+<script src="assets/js/reader.js?v=19"></script>
 <script src="assets/js/contact.js?v=19"></script>
-<script src="assets/js/desk.js?v=1"></script>
+<script src="assets/js/folio.js?v=1"></script>
+<script src="assets/js/desk.js?v=2"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>

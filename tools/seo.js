@@ -59,7 +59,14 @@ const check = (name, pass, detail = '') => results.push({ name, pass, detail });
       imgNoAlt: [...document.querySelectorAll('img')].filter(i => !i.hasAttribute('alt')).length,
       linksNoText: [...document.querySelectorAll('a[href]')].filter(a =>
         a.offsetParent && !a.textContent.trim() && !a.getAttribute('aria-label')).length,
-      textLength: document.body.innerText.replace(/\s+/g, ' ').trim().length
+      // All of it is in the served HTML; the desk's folders only keep the
+      // sections out of view until one is opened, so count what is there,
+      // not what happens to be on screen with every folder closed.
+      textLength: (() => {
+        const c = document.getElementById('main').cloneNode(true);
+        c.querySelectorAll('script, style, svg').forEach(n => n.remove());
+        return c.textContent.replace(/\s+/g, ' ').trim().length;
+      })()
     };
   });
 

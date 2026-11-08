@@ -62,7 +62,7 @@ const HTML = `<!DOCTYPE html>
     font-weight: 700; font-size: 66px; line-height: 1; color: #F6ECD9;
     text-shadow: 0 2px 0 rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
   }
-  .role { margin-top: 10px; font-size: 24px; color: rgba(246,236,217,.9); }
+  .role { margin-top: 10px; font-size: 22px; color: rgba(246,236,217,.9); }
   .role b { color: var(--mustard); font-weight: 600; }
   .pill {
     position: absolute; left: 40px; top: 36px;
@@ -84,7 +84,7 @@ const HTML = `<!DOCTYPE html>
   <div class="pill"><i></i>Based in Egypt · <b>Open to relocation</b></div>
   <div class="plate">
     <h1>Mariam Emad Nabih</h1>
-    <p class="role">Mid-Senior Product Designer · <b>3.5 years</b> in product design</p>
+    <p class="role">Mid-Senior Product Designer · <b>6 years</b> in tech · <b>3.5 years</b> in product design</p>
   </div>
 </body>
 </html>`;

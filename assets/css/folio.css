@@ -1,0 +1,330 @@
+/* ==========================================================================
+   folio.css — an open folder, and the sections dressed to match the desk.
+
+   1. The open folder: a sheet of paper over the desk, the folder's colour
+      along its top edge, tabs to switch folders. (folio.js)
+   2. The sections in the desk's language: Fraunces headings, paper cards,
+      tabs for labels, notes for the testimonials, slips for certificates.
+      These apply wherever the sections are — in a folder, or on the plain
+      page a visitor without JavaScript sees.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. The open folder
+   ========================================================================== */
+
+.folio {
+  position: fixed;
+  inset: 0;
+  z-index: 110;            /* under the case-study reader (120), over the desk */
+}
+
+.folio__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 9, 2, .58);
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.folio.is-open .folio__scrim { opacity: 1; }
+
+.folio__sheet {
+  --sheet-pad: clamp(1rem, 3vw, 2.5rem);
+  position: absolute;
+  top: max(2.5vh, 14px);
+  left: 50%;
+  width: min(1180px, calc(100vw - 32px));
+  height: calc(100vh - 2 * max(2.5vh, 14px));
+  height: calc(100svh - 2 * max(2.5vh, 14px));
+  margin-left: calc(-1 * min(1180px, calc(100vw - 32px)) / 2);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--paper) url("../img/desk/paper.webp");
+  background-size: 420px;
+  border-top: 12px solid var(--fc, var(--mustard));
+  border-radius: 8px 18px 18px 18px;
+  box-shadow: 0 60px 120px -30px rgba(0, 0, 0, .6), 0 0 0 1px rgba(0, 0, 0, .06);
+  transition: transform .5s var(--ease), opacity .3s ease;
+}
+.folio.is-closing .folio__sheet { opacity: 0; transition: transform .46s var(--ease), opacity .2s ease .26s; }
+
+/* Folder tabs along the top: the open one stands up in its own colour. */
+.folio__bar {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--s-3);
+  padding: 0.75rem var(--sheet-pad) 0;
+  border-bottom: 1px solid var(--line-strong);
+}
+.folio__tabs {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-top: 6px;
+}
+.folio__tabs::-webkit-scrollbar { display: none; }
+.folio__tab {
+  flex: none;
+  display: flex;
+  align-items: center;
+  min-height: 2.25rem;
+  padding: 0 1.4rem 0 0.85rem;
+  background: color-mix(in srgb, var(--fc) 55%, var(--paper));
+  clip-path: polygon(0 0, calc(100% - 0.9rem) 0, 100% 100%, 0 100%);
+  border-radius: 7px 4px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink);
+  text-decoration: none;
+  translate: 0 4px;
+  transition: translate var(--dur) var(--ease), background var(--dur);
+}
+.folio__tab:hover { translate: 0 1px; background: var(--fc); }
+.folio__tab[aria-current] { translate: 0 0; background: var(--fc); min-height: 2.6rem; }
+/* the clipped corner would cut the focus ring, so draw it inside */
+.folio__tab:focus-visible { box-shadow: inset 0 0 0 2.5px var(--accent); }
+
+.folio__close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-bottom: 0.4rem;
+  border-radius: 50%;
+  background: var(--paper-raised);
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  transition: background var(--dur), transform var(--dur) var(--ease);
+}
+.folio__close:hover { background: var(--ink); color: var(--paper); transform: rotate(90deg); }
+
+.folio__scroll {
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  outline: none;
+}
+.folio__body { transition: opacity .16s ease; }
+.folio.is-switching .folio__body { opacity: 0; }
+
+/* Inside a folder the sections are tighter than on a long page. */
+.folio .section { padding-block: clamp(1.75rem, 3.5vw, 3rem) clamp(2rem, 4vw, 3.5rem); }
+.folio .section + .section { border-top: 1px dashed var(--line-strong); }
+.folio .shell { max-width: 1100px; }
+.folio .contact { border-radius: 0; }
+
+/* Contact is the walnut desk itself: the whole sheet goes dark with it. */
+.folio[data-folder="contact"] .folio__sheet { background: var(--panel); }
+.folio[data-folder="contact"] .folio__bar { border-bottom-color: rgba(255, 255, 255, .12); }
+
+/* Each folder's own ink, for the words in a title set in the display face. */
+.folio[data-folder="about"] { --fi: var(--ink-mustard); }
+.folio[data-folder="work"]  { --fi: var(--ink-olive); }
+.folio[data-folder="path"]  { --fi: var(--ink-clay); }
+.folio[data-folder="proof"] { --fi: var(--ink-mustard); }
+
+@media (max-width: 619px) {
+  .folio__sheet {
+    top: 8px;
+    width: calc(100vw - 16px);
+    margin-left: calc(-50vw + 8px);
+    height: calc(100vh - 16px);
+    height: calc(100svh - 16px);
+    border-radius: 6px 14px 14px 14px;
+  }
+  .folio__tab { padding: 0 1.1rem 0 0.7rem; font-size: 0.625rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .folio__sheet, .folio__scrim, .folio__body, .folio__tab, .folio__close { transition: none; }
+}
+
+/* ==========================================================================
+   2. The sections, in the desk's language
+   ========================================================================== */
+
+/* ---- Titles: the desk's soft serif ----------------------------------------- */
+.section__title {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100, "WONK" 0, "opsz" 144;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.section__title em {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  font-weight: 400;
+  font-size: 1em;
+  letter-spacing: -0.01em;
+  color: var(--fi, var(--accent));
+}
+.section__title--invert em { color: var(--green); }
+
+/* ---- The numbered label: a little folder tab ------------------------------- */
+.eyebrow span {
+  width: auto;
+  height: 1.7rem;
+  padding: 0 0.95rem 0 0.55rem;
+  background: var(--fc, var(--mustard));
+  color: var(--ink);
+  border-radius: 5px 3px 0 0;
+  clip-path: polygon(0 0, calc(100% - 0.55rem) 0, 100% 100%, 0 100%);
+}
+.eyebrow--invert span { background: var(--green); }
+
+/* ---- About: the portrait as a print ----------------------------------------- */
+.about__portrait img {
+  padding: 8px 8px 26px;
+  background: #fff;
+  border-radius: 2px;
+  rotate: 1.2deg;
+  box-shadow: 0 2px 4px rgba(33, 23, 14, .12), 0 26px 50px -18px rgba(33, 23, 14, .45);
+}
+.about__lede em {
+  font-family: var(--font-display);
+  font-style: normal;
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  font-weight: 500;
+  color: var(--fi, var(--accent));
+}
+
+/* ---- Toolkit: labels on paper ---------------------------------------------- */
+.mini-title {
+  display: inline-block;
+  padding-bottom: 0.3rem;
+  border-bottom: 2px solid var(--fc, var(--mustard));
+  color: var(--ink-soft);
+}
+.chip {
+  border-radius: 6px;
+  background: var(--paper-raised);
+  border-color: var(--line-strong);
+  box-shadow: 0 1px 0 var(--line-strong);
+}
+.chip--hero { background: var(--panel); border-color: var(--panel); color: var(--on-panel); }
+
+/* ---- Work: index cards with a print on each -------------------------------- */
+.pincard {
+  background: var(--paper-raised) url("../img/desk/paper.webp");
+  background-size: 360px;
+  border-color: var(--line-strong);
+  border-radius: 6px;
+  box-shadow: 0 1px 2px rgba(33, 23, 14, .08), 0 18px 34px -18px rgba(33, 23, 14, .4);
+  rotate: -0.6deg;
+  transition:
+    box-shadow var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    translate var(--dur) var(--ease),
+    rotate var(--dur) var(--ease);
+}
+.pincard:nth-child(even) { rotate: 0.6deg; }
+.pincard:nth-child(3n) { rotate: -0.2deg; }
+.pincard:hover, .pincard:focus-within {
+  rotate: 0deg;
+  border-color: var(--line-strong);
+  box-shadow: 0 2px 4px rgba(33, 23, 14, .1), 0 30px 50px -20px rgba(33, 23, 14, .5);
+}
+.pincard__thumb {
+  padding: 6px;
+  background: #fff;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(33, 23, 14, .18);
+}
+.pincard__thumb > * { border-radius: 1px; }
+.pincard__title {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100, "opsz" 36;
+  font-weight: 650;
+  font-size: 1.3rem;
+  letter-spacing: -0.01em;
+}
+.tag { border-radius: 3px; }
+
+/* ---- Path: the stops' roles in the display face ----------------------------- */
+.hang__role {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+
+/* ---- Kind words: notes taped down -------------------------------------------
+   The bubble keeps its shape off the photo, squarer now, like paper, with a
+   strip of tape across its top. */
+.quote { --bubble: var(--sage); }
+.quote--blue { --bubble: var(--blush-wash); }
+.quote__bubble {
+  position: relative;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(33, 23, 14, .06), 0 16px 30px -18px rgba(33, 23, 14, .35);
+}
+.quote__bubble::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  right: 18%;
+  width: 72px;
+  height: 20px;
+  background: color-mix(in srgb, var(--fc, var(--mustard)) 60%, transparent);
+  rotate: 4deg;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .1);
+}
+.quote--blue .quote__bubble::before { rotate: -5deg; right: auto; left: 30%; }
+.quote__who b {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100;
+  font-weight: 650;
+  font-size: 1.1rem;
+}
+
+/* ---- Certificates: slips, each with a small seal ---------------------------- */
+.cert {
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  background: var(--paper-raised) url("../img/desk/paper.webp");
+  background-size: 360px;
+  border-color: var(--line-strong);
+  border-radius: 6px;
+  box-shadow: 0 1px 0 var(--line-strong);
+}
+.cert::before {
+  content: "";
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--paper-raised) 0 42%, transparent 44%),
+    repeating-conic-gradient(var(--mustard) 0 10deg, color-mix(in srgb, var(--mustard) 70%, #fff) 10deg 20deg);
+  box-shadow: 0 1px 2px rgba(33, 23, 14, .25);
+}
+.cert__name {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+}
+@media (max-width: 680px) {
+  .cert { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .cert::before { grid-row: span 2; }
+  .cert__when { grid-column: 2 / -1; }
+}
+
+/* ---- Contact: the walnut desk ------------------------------------------------ */
+.contact {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, .15), transparent 30%),
+    var(--panel);
+}

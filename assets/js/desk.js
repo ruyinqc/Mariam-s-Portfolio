@@ -1,8 +1,9 @@
 /* ==========================================================================
    desk.js — the desk at the top of the page.
 
-   • Fits the room photo to the screen, so Mariam, her name and the folders
-     all land in the first view.
+   • Fits the whole desk — photo, name, folders — inside the screen. The
+     photo is cropped from the top (never into her head) and, on a short
+     screen, the folders get a little smaller.
    • Lays the six folders on a fixed curve. They float; they never spin.
      On a wide screen it is one row across the desk, the end folders rising
      beside her name. Below 960px it is two curved rows of three.
@@ -10,9 +11,9 @@
    • The cursor: a crosshair, and a green selection frame around the folder
      you're on, for a mouse or trackpad. On a phone a tap snaps the frame
      onto the folder.
-   • Opening a folder: her eyes move, a sheet in the folder's colour grows to
-     fill the screen, the page jumps to that section behind it, and the
-     sheet fades. Live Projects opens the Vibe Coding study in the reader.
+   • Opening a folder: her eyes move first, then the folder opens as a sheet
+     over the desk (folio.js). Live Projects opens the Vibe Coding study in
+     the reader.
 
    Every folder is a real link, so all of this is an enhancement: without
    the script, the desk.css fallback shows the same desk and plain links.
@@ -53,15 +54,17 @@
      Layout
      ====================================================================== */
 
-  /* Fractions of each room photo. figTop is where the top of her photo sits;
-     bottomCut trims the last bit of floor; maxVH is the most of the screen
-     the photo may take before its top is cropped (never into her head). */
-  var WIDE = { aspect: 941 / 1672, figTop: 0.33,  bottomCut: 0.99, maxVH: 0.64 };
-  var TALL = { aspect: 1672 / 941, figTop: 0.449, bottomCut: 0.93, maxVH: 0.6  };
+  /* Fractions of each room photo. figTop is where the top of her photo sits
+     and figBottom where her forearms meet the desk. bottomCut is where the
+     photo stops (a strip of desk under her arms); headroom is how much room
+     is always kept above her head when the top is cropped. */
+  var WIDE = { aspect: 941 / 1672, figTop: 0.33,  figBottom: 0.845, bottomCut: 0.91, headroom: 0.035 };
+  var TALL = { aspect: 1672 / 941, figTop: 0.449, figBottom: 0.775, bottomCut: 0.84, headroom: 0.03 };
 
   var sides = [];          // which side of her each folder is on
   var lastW = 0;
   var viewH = window.innerHeight;
+  var blend = desk.querySelector('.desk__blend');
 
   function layout(force) {
     var W = desk.clientWidth;
@@ -73,16 +76,28 @@
 
     var P = window.matchMedia('(max-width: 619px)').matches ? TALL : WIDE;
     var Himg = W * P.aspect;
-    var crop = Math.max(0, Math.min(Himg * P.bottomCut - viewH * P.maxVH,
-                                    Himg * P.figTop - Himg * 0.06));
-    var Hc = Himg * P.bottomCut - crop;
+    var full = Himg * P.bottomCut;                                   // no crop
+    var least = full - (Himg * P.figTop - Himg * P.headroom);        // cropped to her head
+    var under = (P.bottomCut - P.figBottom) * Himg;                  // desk below her arms
+    var overlap = Math.max(0, Math.min(110, under - 14));            // her name sits just under her arms
+
+    plate.style.marginTop = px(-overlap);
+    if (blend) blend.style.height = px(under + 26);
+    var pad = parseFloat(getComputedStyle(desk).paddingBottom) || 0;
+    var room = viewH - 6;                                           // a little air at the bottom
+
+    // Try the folders at full size, then a touch smaller, until it all fits.
+    var Hc = least, scales = [1, 0.93, 0.86, 0.8, 0.74, 0.68];
+    for (var i = 0; i < scales.length; i++) {
+      var L = W < 960 ? twoRows(W, scales[i]) : oneRow(W, scales[i]);
+      var below = plate.offsetHeight - overlap + parseFloat(getComputedStyle(list).marginTop) + L + pad;
+      var fits = room - below;
+      if (fits >= least || i === scales.length - 1) { Hc = Math.max(least, Math.min(full, fits)); break; }
+    }
 
     photo.style.aspectRatio = 'auto';
     photo.style.height = px(Hc);
-    world.style.top = px(-crop);
-    plate.style.marginTop = px(-Math.min(Hc * 0.17, 110));
-
-    if (W < 960) twoRows(W); else oneRow(W);
+    world.style.top = px(Hc - full);
 
     if (window.Motion) Motion.remeasure();
   }
@@ -99,24 +114,27 @@
   }
 
   // Narrower screens: two rows of three, each on a shallow cylinder.
-  function twoRows(W) {
+  function twoRows(W, k) {
     var rows = [[0, 1, 2], [3, 4, 5]];
-    var step = 26 * Math.PI / 180, gap = 18, PERS = 1200, rise = 0.35;
-    var cw = Math.min(150, (W - 32) / 3.35), ch = cw * 1.19;
+    var step = 26 * Math.PI / 180, gap = 16, PERS = 1200, rise = 0.35;
+    var cw = Math.min(150, (W - 28) / 3.3) * k, ch = cw * 1.19;
     var R = (cw + gap) / (2 * Math.sin(step / 2));
+    var rowGap = W < 620 ? 22 : 30;
     var y = 0;
     rows.forEach(function (row) {
       var n = row.length, maxD = R * (1 - Math.cos(step * (n - 1) / 2));
       row.forEach(function (idx, i) {
         if (!items[idx]) return;
         var t = (i - (n - 1) / 2) * step, d = R * (1 - Math.cos(t));
-        place(items[idx], W / 2 + R * Math.sin(t), y + ch / 2 + maxD * rise - d * rise + 8,
+        place(items[idx], W / 2 + R * Math.sin(t), y + ch / 2 + maxD * rise - d * rise + 6,
               cw, ch, PERS / (PERS + d), t * 180 / Math.PI, 100 - Math.round(d), idx);
         sides[idx] = t > 0.01 ? 'right' : (t < -0.01 ? 'left' : 'front');
       });
-      y += ch + maxD * rise + 34;
+      y += ch + maxD * rise + rowGap;
     });
-    list.style.height = px(y + 20);
+    var h = y - rowGap + 26;
+    list.style.height = px(h);
+    return h;
   }
 
   // Wide screens: one row across the whole desk. The end folders rise up
@@ -127,11 +145,11 @@
     r.selectNodeContents(el);
     return r.getBoundingClientRect();
   }
-  function oneRow(W) {
+  function oneRow(W, k) {
     var n = items.length, m = 24;
-    var cw = Math.max(140, Math.min(180, (W - 2 * m) / 6.6)), ch = cw * 1.19;
+    var cw = Math.max(130, Math.min(180, (W - 2 * m) / 6.6)) * k, ch = cw * 1.19;
     var sp = (W - 2 * m - cw) / Math.max(1, n - 1), half = W / 2 - m - cw / 2;
-    var rise = Math.max(70, Math.min(160, W * 0.1));
+    var rise = Math.max(70, Math.min(160, W * 0.1)) * k;
 
     list.style.height = '0px';
     var lr = list.getBoundingClientRect(), nb = textBox(nameEl), rb = textBox(roleEl);
@@ -139,11 +157,15 @@
     var boxR = Math.max(nb.right, rb.right) - lr.left + 18;
     var textBottom = rb.bottom - lr.top;
 
-    var xs = [], us = [], base = textBottom + 30;
+    var xs = [], us = [], base = textBottom + 26;
     for (var i = 0; i < n; i++) {
-      var x = m + cw / 2 + i * sp, u = (x - W / 2) / half;
+      var x = m + cw / 2 + i * sp;
+      // Only just touching the text? Slide it outwards rather than lower the row.
+      var ov = Math.min(x + cw / 2 - boxL, boxR - (x - cw / 2));
+      if (ov > 0 && ov < cw * 0.4 && sp - cw > ov + 10) x += x < W / 2 ? -ov : ov;
+      var u = (x - W / 2) / half;
       xs.push(x); us.push(u);
-      if (x + cw / 2 > boxL && x - cw / 2 < boxR) base = Math.max(base, textBottom + 30 + rise * u * u);
+      if (x + cw / 2 > boxL && x - cw / 2 < boxR) base = Math.max(base, textBottom + 26 + rise * u * u);
     }
     var bottom = 0;
     items.forEach(function (li, i) {
@@ -152,7 +174,9 @@
       sides[i] = u > 0 ? 'right' : 'left';
       bottom = Math.max(bottom, top + ch);
     });
-    list.style.height = px(bottom + 30);
+    var h = bottom + 22;
+    list.style.height = px(h);
+    return h;
   }
 
   layout(true);
@@ -179,19 +203,6 @@
 
   var busy = false, openIdx = -1, lastType = 'mouse';
 
-  function pushHash(hash) {
-    try { history.pushState(null, '', hash); } catch (err) { /* sandboxed: the jump still works */ }
-  }
-
-  function landOn(target) {
-    target.scrollIntoView({ behavior: 'instant', block: 'start' });
-    var head = target.querySelector('h2');
-    if (head) {
-      head.setAttribute('tabindex', '-1');
-      head.focus({ preventScroll: true });
-    }
-  }
-
   function finish(folder) {
     folder.classList.remove('is-on');
     busy = false;
@@ -203,8 +214,7 @@
   function openFolder(i) {
     if (busy) return;
     var folder = folders[i];
-    var hash = folder.getAttribute('href');
-    var target = document.querySelector(hash);
+    var key = folder.getAttribute('href').slice(1);
     var study = folder.getAttribute('data-case');
     busy = true;
     openIdx = i;
@@ -213,51 +223,15 @@
     gaze(sides[i]);
     folder.classList.add('is-on');
 
+    // Her eyes get there first; then the folder opens.
     setTimeout(function () {
       // Live Projects: the Vibe Coding study, in the reader. Setting the hash
-      // lands one history entry, exactly like clicking its card on the board.
-      if (study && window.Reader) {
-        location.hash = '#case/' + study;
-        finish(folder);
-        return;
-      }
-      if (!target) { finish(folder); return; }
-
-      if (reduced) {
-        pushHash(hash);
-        landOn(target);
-        finish(folder);
-        return;
-      }
-
-      var r = folder.getBoundingClientRect();
-      var sheet = document.createElement('div');
-      sheet.className = 'desk-sheet';
-      sheet.setAttribute('aria-hidden', 'true');
-      sheet.style.setProperty('--fc', getComputedStyle(folder).getPropertyValue('--fc'));
-      sheet.innerHTML =
-        '<span class="desk-sheet__tag">' + folder.querySelector('.folder__tab').innerHTML + '</span>' +
-        '<span class="desk-sheet__title">' + folder.querySelector('.folder__title').innerHTML + '</span>';
-      sheet.style.top = px(r.top); sheet.style.left = px(r.left);
-      sheet.style.width = px(r.width); sheet.style.height = px(r.height);
-      document.body.appendChild(sheet);
-
-      requestAnimationFrame(function () {
-        requestAnimationFrame(function () {
-          sheet.classList.add('is-full');
-          sheet.style.top = '0px'; sheet.style.left = '0px';
-          sheet.style.width = '100vw'; sheet.style.height = '100vh';
-        });
-      });
-
-      setTimeout(function () {
-        pushHash(hash);
-        landOn(target);
-        sheet.classList.add('is-leaving');
-        finish(folder);
-        setTimeout(function () { sheet.remove(); }, 380);
-      }, 640);
-    }, reduced ? 0 : (looking ? 160 : 420));
+      // lands one history entry, exactly like clicking its card.
+      if (study && window.Reader) location.hash = '#case/' + study;
+      else if (window.Folio) Folio.show(key, folder);
+      else location.hash = '#' + key;
+      finish(folder);
+    }, reduced ? 0 : (looking ? 160 : 400));
   }
 
   folders.forEach(function (folder, i) {
@@ -358,13 +332,4 @@
     run();
   }
 
-  /* ======================================================================
-     The nav stays hidden while the desk fills the screen
-     ====================================================================== */
-
-  if (nav && window.Motion) {
-    Motion.onScroll(function (y, vh) {
-      nav.classList.toggle('is-desk', y < desk.offsetHeight - vh * 0.35);
-    });
-  }
 })();
