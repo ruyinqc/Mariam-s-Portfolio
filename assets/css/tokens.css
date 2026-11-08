@@ -1,45 +1,50 @@
 /* ==========================================================================
    Design tokens — Mariam Emad Nabih
    Light only. There is deliberately no dark-mode block anywhere in this file.
-   Contrast ratios in the comments are measured, not estimated — see
-   tools/contrast.js, which fails the build if any of them regress.
+   Contrast is measured, not estimated — see tools/contrast.js, which fails
+   the build if any pairing regresses.
+
+   The palette comes from the desk at the top of the page: warm cream paper,
+   walnut, olive, mustard, coral, with green (#22C55E) as the second colour.
    ========================================================================== */
 
 :root {
   color-scheme: light;
 
   /* ---- Surface ---------------------------------------------------------- */
-  --paper:        #F7F5F1;   /* page                                          */
-  --paper-raised: #FFFFFF;   /* cards on paper                                */
-  --paper-sunk:   #F0EDE7;   /* wells, diagram panels                         */
-  --panel:        #101018;   /* dark section (contact)                        */
-  --panel-soft:   #1B1B26;   /* raised surface on the dark panel              */
+  --paper:        #F7F0E3;   /* page — warm cream, like the paper on the desk */
+  --paper-raised: #FFFCF6;   /* cards on paper                                */
+  --paper-sunk:   #EFE6D5;   /* wells, diagram panels                         */
+  --panel:        #2B190C;   /* dark section (contact) — the desk's walnut    */
+  --panel-soft:   #3B2515;   /* raised surface on the dark panel              */
 
   /* ---- Ink -------------------------------------------------------------- */
-  --ink:       #14141A;      /* 16.9:1 on paper                               */
-  --ink-soft:  #3A3A45;      /* 10.3:1 on paper                               */
-  --muted:     #5A5A66;      /*  6.3:1 on paper — smallest allowed body ink   */
-  --on-panel:      #F4F2EE;  /* 16.8:1 on panel                               */
-  --on-panel-soft: #A9A9B8;  /*  8.2:1 on panel · 7.4:1 on --panel-soft       */
+  --ink:       #21170E;      /* warm near-black                               */
+  --ink-soft:  #45392D;
+  --muted:     #615446;      /* smallest allowed body ink                     */
+  --on-panel:      #F7F0E3;
+  --on-panel-soft: #CDBDA6;
 
   /* ---- Accent ----------------------------------------------------------- */
-  --blue:       #3B25F5;     /*  7.0:1 on paper (AAA) · 7.6:1 behind white    */
-  --blue-deep:  #2A18C4;     /* hover / pressed                               */
-  --blue-wash:  #EDEAFE;     /* tint fill — ink on top stays 15.6:1           */
-  --blue-line:  #CFC7FB;
+  /* --accent carries text: links, buttons, the eyebrow numbers. It is the
+     deep end of the green, because #22C55E itself is too light to put white
+     or small text on. */
+  --accent:       #166534;
+  --accent-deep:  #14532D;   /* hover / pressed                               */
+  --accent-wash:  #E4F3E3;   /* tint fill — ink on top stays readable         */
+  --accent-line:  #B9DFC0;
 
-  /* Lime is a FILL ONLY. It never carries text.
-     Dark ink on lime measures 14.7:1, which is what makes it usable at all. */
-  --lime:       #D9F24B;
-  --lime-deep:  #C2DD2B;
-  --lime-wash:  #F4FBD4;
-  --sage:       #EDF1DA;     /* testimonial bubbles — Mariam's #F1F5E3, one  */
-                             /* step deeper so the ring shows on --paper     */
+  /* --green is Mariam's second colour, #22C55E. A FILL ONLY: nothing but
+     dark ink ever sits on it. The cursor, chips and highlights use it. */
+  --green:        #22C55E;
+  --green-deep:   #16A34A;
+  --green-wash:   #EAF7E8;
+  --sage:         #EEE8D2;   /* testimonial bubbles                           */
 
   /* Klaxs, the horn game: its warm paper and its mustard. Mustard is a FILL
-     ONLY, like lime — it sits inside an ink outline and never carries text. */
+     ONLY, like green — it sits inside an ink outline and never carries text. */
   --sand:       #FFF3DC;
-  --mustard:    #EDA836;
+  --mustard:    #E3A92B;
 
   /* --line and --line-strong are decorative rules only: page hairlines and
      the timeline rail. WCAG 1.4.11 exempts pure decoration, and darkening
@@ -47,23 +52,28 @@
      --rope is the same kind of thing.
      Anything that is a control boundary or carries meaning uses --edge or
      --graphic instead, both of which clear 3:1. */
-  --line:       #E3DFD7;
-  --line-strong:#CFC9BD;
+  --line:       #E4D9C7;
+  --line-strong:#D1C3AC;
   --rope:       #B5A98F;     /* the clothesline in the path section — twine */
-  --wire:       #E9E6E0;     /* wireframe bars — ink-soft on top is 9.0:1   */
+  --wire:       #EAE2D3;     /* wireframe bars                               */
   --rose-line:  #F2D3D8;     /* the challenge rectangle's outline, from      */
                              /* Mariam's own layout — decorative only        */
-  --edge:       #83838D;     /* 3.4:1 on paper — control borders             */
-  --graphic:    #5A5A66;     /* 6.2:1 on paper — arrows, operators, marks    */
-  --graphic-bad:#C2410C;     /* 5.2:1 on white — the "before" state          */
+  --edge:       #8A7C6C;     /* control borders                              */
+  --graphic:    #615446;     /* arrows, operators, marks                     */
+  --graphic-bad:#C2410C;     /* the "before" state                           */
 
   /* Form controls on the dark panel. The border is measured against the
-     field's own translucent fill, not the panel behind it — .14 came out at
-     1.54:1 and .34 at 2.82:1. .40 is the first value that clears 3:1. */
+     field's own translucent fill, not the panel behind it. */
   --field-edge:       rgba(255, 255, 255, .40);
   --field-edge-hover: rgba(255, 255, 255, .58);
   --field-bg:         rgba(255, 255, 255, .04);
-  --field-placeholder:#8B8B99;   /* 5.1:1 on --panel-soft                    */
+  --field-placeholder:#A8987F;
+
+  /* ---- Cursor -------------------------------------------------------------
+     An ordinary arrow and hand in green, a little larger than the system
+     ones. The desk at the top swaps them for a selection frame (desk.js). */
+  --cur-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='32' viewBox='0 0 26 32'%3E%3Cpath d='M4.2 4.4v23l5.5-5.2 3.7 8.6 3.6-1.5-3.6-8.4h7.3z' fill='rgba(0,0,0,.28)'/%3E%3Cpath d='M3 3v23l5.5-5.2 3.7 8.6 3.6-1.5-3.6-8.4h7.3z' fill='%2322C55E' stroke='white' stroke-width='1.8' stroke-linejoin='round'/%3E%3C/svg%3E") 3 3, auto;
+  --cur-hand: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='32' viewBox='0 0 30 32'%3E%3Cg fill='white' stroke='white' stroke-width='3.6' stroke-linejoin='round'%3E%3Crect x='9' y='2' width='5.6' height='17' rx='2.8'/%3E%3Crect x='14.6' y='10' width='5' height='10' rx='2.5'/%3E%3Crect x='19.6' y='11.5' width='5' height='10' rx='2.5'/%3E%3Crect x='6' y='14' width='18.6' height='15' rx='6'/%3E%3Crect x='2.6' y='13.6' width='5.2' height='10.5' rx='2.6' transform='rotate(-28 5.2 18.8)'/%3E%3C/g%3E%3Cg fill='%2322C55E'%3E%3Crect x='9' y='2' width='5.6' height='17' rx='2.8'/%3E%3Crect x='14.6' y='10' width='5' height='10' rx='2.5'/%3E%3Crect x='19.6' y='11.5' width='5' height='10' rx='2.5'/%3E%3Crect x='6' y='14' width='18.6' height='15' rx='6'/%3E%3Crect x='2.6' y='13.6' width='5.2' height='10.5' rx='2.6' transform='rotate(-28 5.2 18.8)'/%3E%3C/g%3E%3C/svg%3E") 11 3, pointer;
 
   /* ---- Type ------------------------------------------------------------- */
   --font-sans:  "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
@@ -71,6 +81,8 @@
   --font-mono:  "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo,
                 Consolas, monospace;
   --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  /* The desk: her name and the folder labels. A soft, slightly retro serif. */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   /* Arabic lines in the Klaxs case study: the game's own typeface */
   --font-ar:    "Baloo Bhaijaan 2", "Geeza Pro", "Noto Sans Arabic", Tahoma,
                 "Segoe UI", sans-serif;
@@ -101,10 +113,10 @@
   --r-sm: 8px;  --r-md: 14px;  --r-lg: 22px;  --r-xl: 32px;  --r-pill: 999px;
 
   /* ---- Elevation -------------------------------------------------------- */
-  --sh-1: 0 1px 2px rgba(20,20,26,.05), 0 2px 8px rgba(20,20,26,.04);
-  --sh-2: 0 2px 6px rgba(20,20,26,.06), 0 12px 28px rgba(20,20,26,.07);
-  --sh-3: 0 4px 12px rgba(20,20,26,.08), 0 26px 60px rgba(20,20,26,.12);
-  --sh-lift: 0 10px 24px rgba(20,20,26,.10), 0 38px 80px rgba(20,20,26,.14);
+  --sh-1: 0 1px 2px rgba(33,23,14,.06), 0 2px 8px rgba(33,23,14,.05);
+  --sh-2: 0 2px 6px rgba(33,23,14,.07), 0 12px 28px rgba(33,23,14,.08);
+  --sh-3: 0 4px 12px rgba(33,23,14,.09), 0 26px 60px rgba(33,23,14,.13);
+  --sh-lift: 0 10px 24px rgba(33,23,14,.11), 0 38px 80px rgba(33,23,14,.15);
 
   /* ---- Motion ----------------------------------------------------------- */
   --ease:      cubic-bezier(.16, 1, .3, 1);   /* the house curve             */
@@ -117,8 +129,8 @@
      animations read the same switch the stylesheet does. */
   --motion: 1;
 
-  --focus: 0 0 0 2px var(--paper), 0 0 0 4.5px var(--blue);
-  --focus-on-panel: 0 0 0 2px var(--panel), 0 0 0 4.5px var(--lime);
+  --focus: 0 0 0 2px var(--paper), 0 0 0 4.5px var(--accent);
+  --focus-on-panel: 0 0 0 2px var(--panel), 0 0 0 4.5px var(--green);
 }
 
 @media (prefers-reduced-motion: reduce) {

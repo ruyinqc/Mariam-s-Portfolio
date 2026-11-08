@@ -25,12 +25,12 @@
   font-style: italic;
   font-weight: 400;
   letter-spacing: -0.01em;
-  color: var(--blue);
+  color: var(--accent);
   /* the serif sits optically small next to 800-weight Jakarta */
   font-size: 1.12em;
 }
 .section__title--invert { color: var(--on-panel); }
-.section__title--invert em { color: var(--lime); }
+.section__title--invert em { color: var(--green); }
 
 .section__sub {
   margin-top: var(--s-5);
@@ -55,13 +55,13 @@
   display: grid;
   place-items: center;
   width: 2rem; height: 2rem;
-  background: var(--blue);
+  background: var(--accent);
   color: #fff;
   border-radius: var(--r-sm);
   letter-spacing: 0.02em;
 }
 .eyebrow--invert { color: var(--on-panel-soft); }
-.eyebrow--invert span { background: var(--lime); color: var(--ink); }
+.eyebrow--invert span { background: var(--green); color: var(--ink); }
 
 .mini-title {
   font-family: var(--font-mono);
@@ -74,58 +74,19 @@
 }
 
 /* ==========================================================================
-   Hero
+   About — the first folder on the desk. The desk itself lives in desk.css.
    ========================================================================== */
 
-.hero {
-  position: relative;
-  min-height: min(100svh, 980px);
-  display: flex;
-  align-items: center;
-  padding-block: clamp(7rem, 14vh, 10rem) clamp(4rem, 8vh, 7rem);
-  overflow: hidden;
-}
-
-/* A design-tool canvas grid that fades out before it can compete with text. */
-.hero__grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, var(--line) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-  background-size: 72px 72px;
-  -webkit-mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, transparent 72%);
-          mask-image: radial-gradient(120% 90% at 78% 30%, #000 0%, transparent 72%);
-  opacity: 0.85;
-  pointer-events: none;
-}
-
-.hero__inner {
+.about__inner {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
   gap: clamp(2rem, 5vw, 5rem);
   align-items: center;
-  position: relative;
-  z-index: 1;
 }
 
-.hero__name {
-  font-size: var(--t-display);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.05em;
-  margin-block: var(--s-5) var(--s-4);
-}
+.about__title { margin-top: var(--s-5); }
 
-.hero__role {
-  font-family: var(--font-mono);
-  font-size: clamp(0.875rem, 0.8rem + 0.35vw, 1.0625rem);
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--blue);
-}
-
-.hero__facts {
+.about__facts {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -136,8 +97,8 @@
   font-size: var(--t-small);
   color: var(--muted);
 }
-.hero__facts li { display: flex; align-items: baseline; gap: 0.4em; }
-.hero__facts li + li::before {
+.about__facts li { display: flex; align-items: baseline; gap: 0.4em; }
+.about__facts li + li::before {
   content: "";
   width: 4px; height: 4px;
   margin-right: calc(var(--s-5) - 0.4em);
@@ -145,27 +106,27 @@
   background: var(--line-strong);
   align-self: center;
 }
-.hero__facts b {
+.about__facts b {
   font-size: 1.45em;
   font-weight: 800;
   letter-spacing: -0.03em;
   color: var(--ink);
 }
 
-.hero__lede {
+.about__lede {
   margin-top: var(--s-6);
   max-width: 46ch;
   font-size: var(--t-lede);
   color: var(--ink-soft);
 }
-.hero__lede em {
+.about__lede em {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 1.1em;
   color: var(--ink);
 }
 
-.hero__cta {
+.about__cta {
   display: flex;
   flex-wrap: wrap;
   gap: var(--s-3);
@@ -173,21 +134,22 @@
 }
 
 /* ---- Portrait ----------------------------------------------------------- */
-.hero__portrait {
+.about__portrait {
   position: relative;
   margin: 0;
   border-radius: var(--r-lg);
   overflow: visible;
   will-change: transform;
 }
-.hero__portrait img {
+.about__portrait img {
   width: 100%;
   border-radius: var(--r-lg);
   box-shadow: var(--sh-3);
 }
 
-/* A multiplayer cursor label, the way a design tool shows who is on canvas. */
-.hero__tag {
+/* A multiplayer cursor label, the way a design tool shows who is on canvas —
+   in the same green as the site's cursor. */
+.about__tag {
   position: absolute;
   right: clamp(-0.5rem, 1vw, 1rem);
   bottom: clamp(-0.75rem, -1vw, -0.5rem);
@@ -195,8 +157,8 @@
   align-items: center;
   gap: 0.45em;
   padding: 0.5em 0.9em;
-  background: var(--blue);
-  color: #fff;
+  background: var(--green);
+  color: var(--ink);
   font-family: var(--font-mono);
   font-size: var(--t-meta);
   font-weight: 600;
@@ -205,7 +167,7 @@
   box-shadow: var(--sh-2);
   animation: tag-float 5.5s var(--ease) infinite;
 }
-.hero__tag .icon { width: 0.95em; height: 0.95em; fill: currentColor; }
+.about__tag .icon { width: 0.95em; height: 0.95em; fill: currentColor; }
 
 @keyframes tag-float {
   0%, 100% { transform: translate3d(0, 0, 0); }
@@ -213,22 +175,19 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero__tag { animation: none; }
+  .about__tag { animation: none; }
 }
 
 @media (max-width: 900px) {
-  /* The nav has moved to the bottom by now, so the hero no longer needs to
-     duck under it. */
-  .hero { min-height: 0; padding-block: clamp(2.5rem, 7vh, 4rem) clamp(2rem, 6vh, 3.5rem); }
-  .hero__inner { grid-template-columns: 1fr; }
-  .hero__portrait { order: -1; max-width: 26rem; }
+  .about__inner { grid-template-columns: 1fr; }
+  .about__portrait { order: -1; max-width: 26rem; }
 }
 
 /* Below this the three facts stop fitting on one line, and the separator
    dots start orphaning onto a line of their own. */
 @media (max-width: 560px) {
-  .hero__facts { display: grid; gap: var(--s-2); }
-  .hero__facts li + li::before { content: none; }
+  .about__facts { display: grid; gap: var(--s-2); }
+  .about__facts li + li::before { content: none; }
 }
 
 /* ==========================================================================
@@ -359,7 +318,7 @@
   overflow-y: hidden;
   overscroll-behavior-x: contain;
 }
-.line__view:focus-visible { box-shadow: inset 0 0 0 2.5px var(--blue); border-radius: 0; }
+.line__view:focus-visible { box-shadow: inset 0 0 0 2.5px var(--accent); border-radius: 0; }
 
 .line--live .line__view {
   cursor: grab;
@@ -473,7 +432,7 @@
   height: 36px;
   margin-left: -6px;
   border-radius: 3px 3px 5px 5px;
-  background: linear-gradient(90deg, #6D5BFF, var(--blue) 42%, var(--blue-deep));
+  background: linear-gradient(90deg, #3F9A5C, var(--accent) 42%, var(--accent-deep));
   box-shadow: 0 3px 5px rgba(20, 20, 26, .3);
 }
 .hang__peg::before {
@@ -483,7 +442,7 @@
   top: 14px;
   height: 6px;
   border-radius: 3px;
-  background: linear-gradient(#EEEFF4, #9A9DAA);
+  background: linear-gradient(#F3EDE2, #A99C88);
   box-shadow: 0 1px 1px rgba(20, 20, 26, .3);
 }
 .hang__peg::after {
@@ -496,7 +455,7 @@
   background: rgba(10, 6, 60, .4);
 }
 .hang--now .hang__peg {
-  background: linear-gradient(90deg, #EEFF8F, var(--lime) 45%, var(--lime-deep));
+  background: linear-gradient(90deg, #BBF0CC, var(--green) 45%, var(--green-deep));
 }
 .hang--now .hang__peg::after { background: rgba(60, 70, 0, .35); }
 
@@ -518,8 +477,8 @@
   box-shadow: 0 3px 8px rgba(20, 20, 26, .22);
   rotate: 7deg;
 }
-.hang__sticker--lime { background: var(--lime); }
-.hang__sticker--blue { background: var(--blue); color: #fff; rotate: -5deg; }
+.hang__sticker--lime { background: var(--green); }
+.hang__sticker--blue { background: var(--accent); color: #fff; rotate: -5deg; }
 
 /* ---- The words under each photo ---------------------------------------- */
 .hang__text {
@@ -542,7 +501,7 @@
   content: "";
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: var(--lime-deep);
+  background: var(--green-deep);
 }
 .hang__role {
   margin-top: var(--s-2);
@@ -552,7 +511,7 @@
 }
 .hang__org {
   margin-top: 2px;
-  color: var(--blue);
+  color: var(--accent);
   font-weight: 600;
   font-size: var(--t-small);
 }
@@ -580,7 +539,7 @@
   color: var(--muted);
   white-space: nowrap;
 }
-.line__hint .icon { color: var(--blue); fill: currentColor; }
+.line__hint .icon { color: var(--accent); fill: currentColor; }
 
 .line__rail {
   flex: 1;
@@ -605,7 +564,7 @@
 .line__bar i {
   display: block;
   height: 100%;
-  background: var(--lime-deep);
+  background: var(--green-deep);
   transform-origin: left center;
   transform: scaleX(0);
 }
@@ -715,9 +674,9 @@
   text-decoration: none;
   transition: background var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
-.contact__direct a:hover { background: var(--panel-soft); color: var(--lime); }
+.contact__direct a:hover { background: var(--panel-soft); color: var(--green); }
 .contact__direct .icon { color: var(--on-panel-soft); }
-.contact__direct a:hover .icon { color: var(--lime); }
+.contact__direct a:hover .icon { color: var(--green); }
 
 /* The photo stands beside the title, and the title sits on the photo's
    bottom edge. The two are allowed to overlap: the text stays on top. */
@@ -788,7 +747,7 @@
   margin-inline: calc(var(--s-2) * -1);
   border-radius: var(--r-sm);
 }
-.footer__links a:hover { color: var(--lime); }
+.footer__links a:hover { color: var(--green); }
 .footer__fine {
   margin-left: auto;
   font-size: var(--t-meta);

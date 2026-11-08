@@ -56,6 +56,8 @@ async function run() {
     const bad = [];
     for (const el of document.querySelectorAll(sel)) {
       if (!el.offsetParent && el.className !== 'skip-link') continue;
+      // the nav is deliberately hidden while the desk fills the screen
+      if (getComputedStyle(el).visibility === 'hidden') continue;
       el.focus();
       const cs = getComputedStyle(el);
       const ring = (cs.boxShadow && cs.boxShadow !== 'none') ||
@@ -87,6 +89,62 @@ async function run() {
   const overflow = await page.evaluate(() => ({
     s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
   check('no horizontal overflow at 1440', overflow.s <= overflow.c);
+
+  /* ------------------------------------------------------------------
+     The desk: six folders, her eyes, the cursor, opening a folder
+     ------------------------------------------------------------------ */
+  await page.evaluate(() => { document.activeElement.blur(); document.documentElement.style.scrollBehavior = 'auto'; scrollTo(0, 0); });
+  await page.waitForTimeout(500);
+  const desk = await page.evaluate(() => {
+    const links = [...document.querySelectorAll('#folders .folder')];
+    return {
+      count: links.length,
+      targets: links.every(a => document.querySelector(a.getAttribute('href'))),
+      curved: links.some(a => getComputedStyle(a.parentElement).position === 'absolute'),
+      navHidden: document.getElementById('nav').classList.contains('is-desk')
+    };
+  });
+  check('the desk has six folders', desk.count === 6);
+  check('every folder links to a section that exists', desk.targets);
+  check('the folders are laid on a curve', desk.curved);
+  check('the nav stays hidden over the desk', desk.navHidden);
+
+  const certFolder = await page.$('#folders .folder[href="#proof"]');
+  const cb = await certFolder.boundingBox();
+  await page.mouse.move(cb.x + cb.width / 2, cb.y + cb.height / 2);
+  await page.waitForTimeout(500);
+  const hover = await page.evaluate(() => ({
+    gaze: document.getElementById('deskMe').getAttribute('data-gaze'),
+    frame: document.getElementById('deskSel').classList.contains('is-on'),
+    label: document.querySelector('.desk__sel-name').textContent
+  }));
+  check('she looks at the folder you point at', hover.gaze === 'right', hover.gaze);
+  check('the selection frame wraps that folder', hover.frame && /Certificates/.test(hover.label), hover.label);
+
+  await page.mouse.click(cb.x + cb.width / 2, cb.y + cb.height / 2);
+  await page.waitForTimeout(1700);
+  const landed = await page.evaluate(() => ({
+    hash: location.hash,
+    top: Math.round(document.getElementById('proof').getBoundingClientRect().top),
+    sheet: !!document.querySelector('.desk-sheet'),
+    navShown: !document.getElementById('nav').classList.contains('is-desk')
+  }));
+  check('opening a folder lands on its section', landed.hash === '#proof' && landed.top < 200 && landed.top > -20,
+        `${landed.hash} top=${landed.top}`);
+  check('the opening sheet cleans up after itself', !landed.sheet);
+  check('the nav comes back once you leave the desk', landed.navShown);
+
+  await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
+  await page.waitForTimeout(400);
+  await page.click('#folders .folder[data-case="vibe-coding"]', { force: true });  // the folders float
+  await page.waitForTimeout(1200);
+  const live = await page.evaluate(() => ({
+    hash: location.hash, open: !document.getElementById('reader').hidden }));
+  check('Live Projects opens the vibe coding study', live.open && live.hash === '#case/vibe-coding', live.hash);
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(700);
+  await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
+  await page.waitForTimeout(300);
 
   /* ------------------------------------------------------------------
      The path: a clothesline the page's own scroll carries sideways
@@ -358,8 +416,11 @@ async function run() {
   page = await ctx.newPage();
   await page.goto(BASE, { waitUntil: 'load' });
   const text = await page.textContent('body');
-  check('the hero still renders with JavaScript off',
-    await page.isVisible('.hero__name') && await page.isVisible('.hero__cta'));
+  check('the desk still renders with JavaScript off',
+    await page.isVisible('.desk__name') && await page.isVisible('#folders .folder'));
+  check('…and its folders are plain links',
+    await page.evaluate(() => [...document.querySelectorAll('#folders .folder')]
+      .every(a => a.tagName === 'A' && a.getBoundingClientRect().height > 100)));
   check('the page still says who she is with JavaScript off',
     text.includes('Mariam') && text.includes('Open to relocation'));
   const row = await page.evaluate(() => {

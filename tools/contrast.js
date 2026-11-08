@@ -46,17 +46,17 @@ const PAIRS = [
   ['ink',          'paper',        4.5, 'body text on the page'],
   ['ink-soft',     'paper',        4.5, 'secondary paragraphs'],
   ['muted',        'paper',        4.5, 'meta, captions, eyebrows'],
-  ['blue',         'paper',        4.5, 'links and accents on the page'],
-  ['blue-deep',    'blue-wash',    4.5, 'kind pill'],
-  ['ink',          'blue-wash',    4.5, 'text in a blue tint panel'],
-  ['ink',          'lime',         4.5, 'ink on the lime chip'],
-  ['muted',        'lime',         4.5, 'note under a lime chip in a case study'],
-  ['ink',          'lime-wash',    4.5, '"How I worked on solving this?" panel'],
-  ['ink-soft',     'lime-wash',    4.5, 'paragraphs in the How panel'],
-  ['muted',        'lime-wash',    4.5, 'screenshot caption in the How panel'],
+  ['accent',         'paper',        4.5, 'links and accents on the page'],
+  ['accent-deep',    'accent-wash',    4.5, 'kind pill'],
+  ['ink',          'accent-wash',    4.5, 'text in an accent tint panel'],
+  ['ink',          'green',         4.5, 'ink on the green chip'],
+  ['ink-soft',     'green',         4.5, 'note under a green chip in a case study'],
+  ['ink',          'green-wash',    4.5, '"How I worked on solving this?" panel'],
+  ['ink-soft',     'green-wash',    4.5, 'paragraphs in the How panel'],
+  ['muted',        'green-wash',    4.5, 'screenshot caption in the How panel'],
   ['ink-soft',     'wire',         4.5, 'text on a wireframe bar'],
   ['ink',          'sage',         4.5, 'testimonial text in a bubble'],
-  ['ink',          'blue-wash',    4.5, 'testimonial text in a blue bubble'],
+  ['ink',          'accent-wash',    4.5, 'testimonial text in an accent bubble'],
   ['ink',          'paper-raised', 4.5, 'card text'],
   ['muted',        'paper-raised', 4.5, 'card meta'],
   ['ink',          'paper-sunk',   4.5, 'tag text'],
@@ -65,8 +65,8 @@ const PAIRS = [
   ['on-panel-soft','panel',        4.5, 'muted text on the dark section'],
   ['on-panel',     'panel-soft',   4.5, 'text on the form'],
   ['on-panel-soft','panel-soft',   4.5, 'form labels'],
-  ['lime',         'panel',        4.5, 'lime accent on the dark section'],
-  ['lime',         'panel-soft',   3.0, 'focused field border'],
+  ['green',         'panel',        4.5, 'green accent on the dark section'],
+  ['green',         'panel-soft',   3.0, 'focused field border'],
 
   /* SC 1.4.11 — control boundaries and graphics that carry meaning.
      --line / --line-strong are absent on purpose: they are decorative
@@ -75,7 +75,7 @@ const PAIRS = [
   ['graphic',      'paper-raised', 3.0, 'placeholder icons in a diagram'],
   ['ink',          'paper-raised', 3.0, 'diagram arrows and "+" operators'],
   ['graphic-bad',  'paper-raised', 3.0, 'the "before" state in a diagram'],
-  ['blue',         'paper-raised', 3.0, 'the "after" state in a diagram'],
+  ['accent',         'paper-raised', 3.0, 'the "after" state in a diagram'],
   ['field-placeholder', 'panel-soft', 4.5, 'form placeholder text'],
 
   /* The Klaxs case study: horn tiles on sand, beeps outlined in ink */
@@ -101,8 +101,8 @@ const over = (hex, alpha, bgHex) => {
 const FIELD_BG = over(WHITE, 0.04, tokens['panel-soft']);
 
 const EXTRA = [
-  [WHITE, tokens['blue'],      4.5, 'white label on the primary button'],
-  [WHITE, tokens['blue-deep'], 4.5, 'white label on the pressed button'],
+  [WHITE, tokens['accent'],      4.5, 'white label on the primary button'],
+  [WHITE, tokens['accent-deep'], 4.5, 'white label on the pressed button'],
   [tokens['paper'], tokens['ink'], 4.5, 'inverted chip'],
   [over(WHITE, 0.40, tokens['panel-soft']), FIELD_BG, 3.0, 'form field border (rgba .40)'],
   [over(WHITE, 0.58, tokens['panel-soft']), FIELD_BG, 3.0, 'form field border, hover'],

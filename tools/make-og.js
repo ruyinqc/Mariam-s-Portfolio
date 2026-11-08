@@ -49,13 +49,13 @@ const HTML = `<!DOCTYPE html>
     background: var(--paper-raised); border: 1px solid var(--line);
     border-radius: 999px; font-size: 20px; color: var(--muted);
   }
-  .pill i { width: 12px; height: 12px; border-radius: 50%; background: var(--lime-deep); }
+  .pill i { width: 12px; height: 12px; border-radius: 50%; background: var(--green-deep); }
   .pill b { color: var(--ink); font-weight: 700; }
   h1 { font-size: 92px; font-weight: 800; line-height: .92; letter-spacing: -.05em; }
   .role {
     margin-top: 26px; font-family: var(--font-mono); font-size: 22px;
     font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-    color: var(--blue);
+    color: var(--accent);
   }
   .facts { display: flex; gap: 34px; margin-top: 34px; font-size: 21px; color: var(--muted); }
   .facts b { font-size: 30px; font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
@@ -65,7 +65,7 @@ const HTML = `<!DOCTYPE html>
     position: absolute; inset: 0;
     width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%;
   }
-  .edge { position: absolute; inset: 0 auto 0 0; width: 8px; background: var(--blue); }
+  .edge { position: absolute; inset: 0 auto 0 0; width: 8px; background: var(--accent); }
 </style>
 </head>
 <body>
