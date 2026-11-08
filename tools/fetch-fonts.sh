@@ -4,7 +4,7 @@
 # the site uses. Run from the repository root:  bash tools/fetch-fonts.sh
 set -euo pipefail
 
-QUERY="family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&family=JetBrains+Mono:wght@500..600&family=Instrument+Serif:ital@0;1&family=Baloo+Bhaijaan+2:wght@400..800&display=swap"
+QUERY="family=Plus+Jakarta+Sans:ital,wght@0,400..800;1,400..700&family=JetBrains+Mono:wght@500..600&family=Instrument+Serif:ital@0;1&family=Baloo+Bhaijaan+2:wght@400..800&family=Fraunces:opsz,wght,SOFT,WONK@9..144,400..800,0..100,0..1&display=swap"
 UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
 
 mkdir -p assets/fonts

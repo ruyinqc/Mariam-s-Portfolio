@@ -60,9 +60,12 @@
   /* Which section is the reader actually looking at? Use the one whose top
      is closest to just under the nav, rather than whatever happens to be
      intersecting — with sections this tall, several always are. */
-  var sections = ['path', 'work', 'words', 'toolkit', 'proof']
+  var sections = ['about', 'toolkit', 'work', 'path', 'words', 'proof']
     .map(function (id) { return document.getElementById(id); })
     .filter(Boolean);
+
+  // The toolkit sits inside the About folder, so it lights up About.
+  var ALIAS = { toolkit: 'about' };
 
   Motion.onScroll(function (y, vh) {
     var line = y + vh * 0.32;
@@ -72,7 +75,7 @@
       var top = s.offsetTop;
       if (line >= top && line < top + s.offsetHeight) { found = s.id; break; }
     }
-    setActive(found);
+    setActive(ALIAS[found] || found);
   });
 
   window.addEventListener('resize', function () {

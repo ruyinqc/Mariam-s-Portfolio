@@ -15,6 +15,7 @@ don't need to touch anything else.
 | `assets/js/config.js` | Contact-form address, your links, the certificate list |
 | `assets/js/data.js` | Every word of every case study |
 | `index.html` → *EXPERIENCE* | Your roles on the clothesline, and their photos |
+| `index.html` → *THE DESK* | The desk at the top: your photos, your name, the six folders |
 
 ---
 
@@ -341,7 +342,50 @@ pinning and becomes a row you swipe sideways instead.
 
 ---
 
-## 4. Two things worth fixing in your content
+## 4. The desk (the top of the page)
+
+The first thing anyone sees is you at your desk, your name on the desk front,
+and six folders on a curve under it. Pointing at a folder makes you look at
+it and draws a green selection frame around it; clicking it opens a sheet in
+the folder's colour that fills the screen and lands on that section. *Live
+Projects* opens the Vibe Coding study in the reader instead.
+
+**The photos** are in `assets/img/desk/`:
+
+| File | What it is |
+|---|---|
+| `room-wide.webp` | the room, for computers (1672 × 941) |
+| `room-tall.webp` | the same room, for phones (941 × 1672) |
+| `mariam-front.webp` | you, cut out, looking at the camera (791 × 917) |
+| `mariam-look-right.webp` | the same photo, looking to the right |
+| `paper.webp` | the paper texture on the folder labels and the opening sheet |
+
+**To add the photo of you looking left**, save it as
+`assets/img/desk/mariam-look-left.webp` — same size and framing as
+`mariam-front.webp`, with only your head and eyes changed — then in
+`index.html` search for `LOOK LEFT` and remove the `<!--` and `-->` around
+that line. Until then you look at the camera for the three folders on the
+left.
+
+If you replace a cutout of yourself, keep the same size and keep your arms
+in the same place in every version; the photos cross-fade, so anything that
+moves between them shows as a jump.
+
+**The folders** are the six `<li class="folders__item">` under *THE DESK*.
+Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
+image already on the site), a title and a one-line note on its label.
+`--fc` is the folder's colour and `--fc2` the lighter shade on its front.
+The link (`href`) is the section it opens; `data-case` opens a case study
+in the reader instead.
+
+**The cursor.** On the desk, a mouse or trackpad gets a green crosshair and
+a selection frame. Everywhere else it's an ordinary arrow and hand in
+green, a little larger than usual — they're `--cur-arrow` and `--cur-hand`
+in `tokens.css`. Phones and keyboards keep their normal behaviour.
+
+---
+
+## 5. Two things worth fixing in your content
 
 **Your certificate links.** Your CV gives the *same* Coursera URL for three
 different certificates — CalArts Graphic Design, Google UX, and Udacity
@@ -356,7 +400,8 @@ product design*, because that's what you wrote. Your CV says *over 5 years* and
 five years and two months. Recruiters cross-check this against LinkedIn. Pick
 one set of numbers and make the CV, LinkedIn and this site agree.
 
-To change them, edit the `hero__facts` list in `index.html`.
+To change them, edit the `about__facts` list in `index.html`, and the line
+under your name on the desk (`desk__role`), which repeats the 3.5 years.
 
 ---
 
@@ -448,7 +493,8 @@ node tools/check.js
 Drives a real browser: keyboard access, focus trapping in the reader, the
 contact form's success *and* failure paths, the clothesline (scroll, drag,
 arrows), four screen widths, reduced motion, and the page with JavaScript
-switched off. 58 checks.
+switched off — and the desk: the folders, your eyes, the cursor frame and
+opening a folder. 68 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -485,9 +531,10 @@ index.html               all the markup; sections are commented
 assets/
   css/
     fonts.css            self-hosted @font-face (generated)
-    tokens.css           colour, type, space, motion — change the design here
-    base.css             reset, focus rings, the reveal mechanism
-    layout.css           shell, hero, the clothesline, contact, footer
+    tokens.css           colour, type, space, motion, cursor — change the design here
+    base.css             reset, focus rings, the cursor, the reveal mechanism
+    layout.css           shell, about, the clothesline, contact, footer
+    desk.css             the desk at the top: photo, name, folders, cursor frame
     components.css       nav, buttons, work cards, quotes, chips, form
     reader.css           the case-study overlay
   js/
@@ -498,6 +545,8 @@ assets/
     lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
+    desk.js              the desk: fitting the photo, the curve, her eyes,
+                         the cursor frame, opening a folder
     board.js             the work cards (the 3-column grid is CSS)
     line.js              the clothesline: pinning, drag, the swing, the rope
     reader.js            the overlay: routing, prev/next, focus trap
@@ -510,6 +559,7 @@ assets/
     klaxs/               the Klaxs study: the game's screens in a phone frame, and
                          players' messages with their profile pictures blurred
     path/                one photo per stop on the clothesline
+    desk/                the room, your cutouts, the paper texture
     people/              testimonial photos. Mohamed Wael's card is a
                          placeholder: the comment next to "MW" in index.html
                          says what to add when his words and photo arrive
@@ -522,7 +572,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               58 browser checks (accessibility, reader, form, line)
+  check.js               68 browser checks (accessibility, desk, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -534,9 +584,10 @@ tools/
 **Light only.** There is no dark mode and no `prefers-color-scheme` block
 anywhere. If you add one, add the new pairings to `tools/contrast.js` too.
 
-**Lime is a fill, never text.** `--lime` only ever sits *behind* dark ink. As a
-text colour on the off-white background it's around 1.3:1 — invisible. The
-contrast checker enforces this.
+**Green is a fill, never text.** `--green` (#22C55E, your second colour)
+only ever sits *behind* dark ink. As a text colour on the cream background
+it's around 2:1 — unreadable. Links and buttons use `--accent`, the deep end
+of the same green. The contrast checker enforces this.
 
 **Fonts are self-hosted.** No request ever goes to Google. That's one less
 third-party connection, and it keeps the site clear of the GDPR problem that

@@ -26,63 +26,65 @@ const HTML = `<!DOCTYPE html>
 <link rel="stylesheet" href="assets/css/fonts.css">
 <link rel="stylesheet" href="assets/css/tokens.css">
 <style>
+  /* The desk from the top of the site, framed for a 1200×630 card:
+     the room, Mariam in her chair, her name on the desk front. */
   * { box-sizing: border-box; margin: 0; }
   body {
+    position: relative;
     width: 1200px; height: 630px;
-    display: grid; grid-template-columns: 1.15fr 0.85fr;
-    background: var(--paper); color: var(--ink);
-    font-family: var(--font-sans);
     overflow: hidden;
+    background: #5E2A0D;
+    font-family: var(--font-sans);
   }
-  .grid {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(to right, var(--line) 1px, transparent 1px),
-      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
-    background-size: 72px 72px;
-    mask-image: radial-gradient(110% 90% at 80% 30%, #000 0%, transparent 70%);
+  .room { position: absolute; left: 0; top: -45px; width: 1200px; }
+  .me {
+    position: absolute; left: 612px; top: 176px; width: 300px;
+    transform: translateX(-50%);
+    filter: sepia(.14) saturate(1.06) brightness(.96) contrast(1.02);
   }
-  .copy { position: relative; padding: 72px 0 72px 76px; align-self: center; }
+  .shadow {
+    position: absolute; left: 612px; top: 525px; width: 280px; height: 18px;
+    transform: translate(-50%, -50%); border-radius: 50%;
+    background: rgba(25,10,2,.55); filter: blur(10px);
+  }
+  .light {
+    position: absolute; inset: 0; mix-blend-mode: soft-light;
+    background: linear-gradient(100deg, rgba(255,196,110,.55), rgba(255,196,110,0) 55%);
+  }
+  .blend {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 150px;
+    background: linear-gradient(180deg, transparent, rgba(94,42,13,.92) 60%);
+  }
+  .plate { position: absolute; left: 0; right: 0; bottom: 34px; text-align: center; }
+  h1 {
+    font-family: var(--font-display);
+    font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+    font-weight: 700; font-size: 66px; line-height: 1; color: #F6ECD9;
+    text-shadow: 0 2px 0 rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.4);
+  }
+  .role { margin-top: 10px; font-size: 24px; color: rgba(246,236,217,.9); }
+  .role b { color: var(--mustard); font-weight: 600; }
   .pill {
+    position: absolute; left: 40px; top: 36px;
     display: inline-flex; align-items: center; gap: 12px;
-    padding: 10px 22px; margin-bottom: 30px;
-    background: var(--paper-raised); border: 1px solid var(--line);
-    border-radius: 999px; font-size: 20px; color: var(--muted);
+    padding: 10px 20px; border-radius: 999px;
+    background: rgba(246,236,217,.92); color: var(--ink);
+    font-size: 19px; box-shadow: 0 6px 20px rgba(0,0,0,.25);
   }
-  .pill i { width: 12px; height: 12px; border-radius: 50%; background: var(--lime-deep); }
-  .pill b { color: var(--ink); font-weight: 700; }
-  h1 { font-size: 92px; font-weight: 800; line-height: .92; letter-spacing: -.05em; }
-  .role {
-    margin-top: 26px; font-family: var(--font-mono); font-size: 22px;
-    font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
-    color: var(--blue);
-  }
-  .facts { display: flex; gap: 34px; margin-top: 34px; font-size: 21px; color: var(--muted); }
-  .facts b { font-size: 30px; font-weight: 800; letter-spacing: -.03em; color: var(--ink); }
-  .facts span { display: flex; align-items: baseline; gap: 9px; }
-  .shot { position: relative; overflow: hidden; }
-  .shot img {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%;
-  }
-  .edge { position: absolute; inset: 0 auto 0 0; width: 8px; background: var(--blue); }
+  .pill i { width: 12px; height: 12px; border-radius: 50%; background: var(--green); }
+  .pill b { font-weight: 700; }
 </style>
 </head>
 <body>
-  <div class="grid"></div>
-  <div class="copy">
-    <div class="pill"><i></i>Based in Egypt · <b>Open to relocation</b></div>
-    <h1>Mariam<br>Emad Nabih</h1>
-    <div class="role">Mid-Senior Product Designer</div>
-    <div class="facts">
-      <span><b>6</b> years in tech</span>
-      <span><b>3.5</b> in product design</span>
-      <span><b>B2B</b> SaaS</span>
-    </div>
-  </div>
-  <div class="shot">
-    <div class="edge"></div>
-    <img src="assets/img/mariam-frame.webp" alt="">
+  <img class="room" src="assets/img/desk/room-wide.webp" alt="">
+  <div class="shadow"></div>
+  <img class="me" src="assets/img/desk/mariam-front.webp" alt="">
+  <div class="light"></div>
+  <div class="blend"></div>
+  <div class="pill"><i></i>Based in Egypt · <b>Open to relocation</b></div>
+  <div class="plate">
+    <h1>Mariam Emad Nabih</h1>
+    <p class="role">Mid-Senior Product Designer · <b>3.5 years</b> in product design</p>
   </div>
 </body>
 </html>`;

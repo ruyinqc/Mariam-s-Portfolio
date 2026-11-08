@@ -1,0 +1,454 @@
+/* ==========================================================================
+   desk.css — the desk at the top of the page: the room, Mariam, her name on
+   the desk front, and the six folders that open the rest of the page.
+
+   Two layers:
+   • Without JavaScript the photo is laid out with percentages and the
+     folders sit in a plain row. Nothing here needs a script to be read.
+   • desk.js adds .desk--js: it crops the photo to the screen, arranges the
+     folders on a curve, and moves her eyes. .desk--cursor turns on the
+     selection-frame cursor for a mouse or trackpad.
+   ========================================================================== */
+
+.desk {
+  --fill: #5E2A0D;               /* the desk's wood, continued under the photo */
+  --cream: #F6ECD9;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--fill);
+  color: var(--on-panel);
+  padding-bottom: clamp(2.5rem, 5vw, 3.75rem);
+}
+
+/* ---- The photo --------------------------------------------------------------
+   The room photo, with Mariam cut out and placed in the chair. All positions
+   are fractions of the room photo, so the two always line up. */
+.desk__photo {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1672 / 931;      /* the room photo, its last 1% trimmed */
+}
+.desk__world { position: absolute; left: 0; top: 0; width: 100%; }
+.desk__room img { width: 100%; height: auto; }
+
+/* Where her forearms meet the desk is 84.5% of the way down the photo. */
+.desk__me {
+  position: absolute;
+  z-index: 2;
+  left: 51%;
+  top: 33%;
+  width: 25%;
+  transform: translateX(-50%);
+}
+.desk__me img { width: 100%; }
+/* her photos are warmed a little, to sit in the room's late-afternoon light */
+.desk__me img,
+.desk__reflect { filter: sepia(.14) saturate(1.06) brightness(.96) contrast(1.02); }
+.desk__look {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity .38s ease;
+}
+.desk__me[data-gaze="right"] [data-look="right"],
+.desk__me[data-gaze="left"]  [data-look="left"] { opacity: 1; }
+
+/* Grounding: a faint reflection in the varnished desk, and a contact shadow
+   under her arms, so she rests on the desk rather than floating over it. */
+.desk__reflect {
+  position: absolute;
+  z-index: 1;
+  left: 51%;
+  top: 84.3%;
+  width: 25%;
+  transform: translateX(-50%) scaleY(-1);
+  opacity: .16;
+  filter: blur(1.5px) sepia(.3);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to top, #000, transparent 14%);
+          mask-image: linear-gradient(to top, #000, transparent 14%);
+}
+.desk__shadow {
+  position: absolute;
+  z-index: 2;
+  left: 51%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.desk__shadow--soft  { top: 84%;   width: 23%;   height: 3.3%; background: rgba(25,10,2,.5);  filter: blur(12px); }
+.desk__shadow--tight { top: 84.4%; width: 19.5%; height: 8px;  background: rgba(20,8,1,.7);  filter: blur(4px); }
+
+/* the window's warm glow falling across the scene */
+.desk__light {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background: linear-gradient(100deg, rgba(255,196,110,.55), rgba(255,196,110,0) 55%);
+}
+/* the bottom of the photo melts into the wood below it */
+.desk__blend {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 24%;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent, var(--fill) 92%);
+}
+
+/* ---- Her name, on the desk front ------------------------------------------ */
+.desk__plate {
+  position: relative;
+  z-index: 5;
+  margin-top: calc(-1 * min(9.5vw, 110px));
+  padding-inline: max(var(--gutter), env(safe-area-inset-left, 0px));
+  text-align: center;
+}
+.desk__name {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.625rem);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--cream);
+  text-shadow: 0 1px 0 rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+}
+.desk__role {
+  font-size: clamp(0.875rem, 0.8rem + 0.4vw, 1.0625rem);
+  color: rgba(246, 236, 217, .88);
+}
+.desk__role b { color: var(--mustard); font-weight: 600; }
+
+/* ---- The folders ------------------------------------------------------------
+   Without JavaScript: a centred row that wraps. desk.js lifts them onto a
+   curve, setting --w, --h and the transform on each item. */
+.folders {
+  list-style: none;
+  margin: clamp(1.75rem, 3vw, 2.5rem) auto 0;
+  padding: 0 var(--gutter);
+  max-width: 1240px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2.25rem 1.25rem;
+}
+.folders__item {
+  --w: min(168px, 28vw);
+  --h: calc(var(--w) * 1.19);
+  position: relative;
+  width: var(--w);
+  height: var(--h);
+  container-type: size;
+}
+
+.desk--js .folders { position: relative; display: block; padding: 0; max-width: none; margin-top: 14px; }
+.desk--js .folders__item {
+  position: absolute;
+  z-index: var(--z, 1);
+  transform: translate(-50%, -50%) scale(var(--s, 1)) perspective(1200px) rotateY(var(--ry, 0deg));
+  animation: folder-bob 6s ease-in-out infinite alternate;
+  animation-delay: var(--d, 0s);
+}
+/* a soft shadow on the air beneath each one */
+.desk--js .folders__item::after {
+  content: "";
+  position: absolute;
+  left: 12%; right: 12%;
+  bottom: -20px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(10, 4, 0, .6);
+  filter: blur(8px);
+  animation: folder-shade 6s ease-in-out infinite alternate;
+  animation-delay: var(--d, 0s);
+  z-index: -1;
+}
+@keyframes folder-bob   { from { translate: 0 4px; } to { translate: 0 -7px; } }
+@keyframes folder-shade { from { transform: scaleX(1); opacity: .9; } to { transform: scaleX(.82); opacity: .55; } }
+
+/* A folder: a back with a tab, a print sticking out, and a front with a
+   paper label. Sizes are in cqw/cqh so the whole thing scales as one. */
+.folder {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  color: var(--ink);
+  text-decoration: none;
+  perspective: 800px;
+  transition: transform .45s var(--ease), opacity .35s;
+}
+.folder__back {
+  position: absolute;
+  inset: 12% 0 0 0;
+  background: var(--fc);
+  border-radius: 2cqw 5cqw 5cqw 5cqw;
+  box-shadow: 0 22px 34px -14px rgba(10, 4, 0, .75);
+}
+.folder__tab {
+  position: absolute;
+  top: 0; left: 0;
+  height: 12.5%;
+  min-width: 54%;
+  max-width: 92%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 13cqw 0 7cqw;
+  background: var(--fc);
+  border-radius: 5cqw 3cqw 0 0;
+  clip-path: polygon(0 0, 86% 0, 100% 100%, 0 100%);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font: 500 5cqw/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+.folder__print {
+  position: absolute;
+  left: 11%; right: 11%;
+  top: 15%;
+  height: 58%;
+  padding: 3cqw 3cqw 8cqw;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .3);
+  transform: rotate(-2.5deg);
+  transition: transform .5s var(--ease);
+}
+.folder__front {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 60%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 7cqw;
+  background: linear-gradient(180deg, var(--fc2), var(--fc));
+  border-radius: 3cqw 3cqw 5cqw 5cqw;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45), 0 -3px 8px rgba(0, 0, 0, .18);
+  transform-origin: 50% 100%;
+  transition: transform .5s var(--ease);
+}
+/* a little paper grain on the card stock */
+.folder__front::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: .22;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.folder__label {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding: 4cqw 5.5cqw 5cqw;
+  background: var(--cream) url("../img/desk/paper.webp");
+  background-size: 200px;
+  border-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .25);
+  transform: rotate(-1deg);
+}
+.folder__title {
+  display: block;
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100;
+  font-weight: 600;
+  font-size: 9.6cqw;
+  line-height: 1.05;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.folder__sub {
+  display: block;
+  margin-top: 1.8cqw;
+  font-size: 6.2cqw;
+  line-height: 1.3;
+  color: var(--ink-soft);
+}
+
+/* what's printed inside each folder */
+.folder__pic { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; background: #1b120a; }
+.folder__pic img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.folder__pic--collage { background: var(--cream); }
+.folder__pic--collage img {
+  inset: auto;
+  top: 22%;
+  width: 50%;
+  height: auto;
+  aspect-ratio: 1;
+  border: 2px solid #fff;
+  border-radius: 8%;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .3);
+}
+.folder__pic--collage img:nth-child(1) { left: 4%;  transform: rotate(-9deg); }
+.folder__pic--collage img:nth-child(2) { left: 25%; top: 12%; z-index: 2; transform: rotate(1deg); }
+.folder__pic--collage img:nth-child(3) { left: 46%; transform: rotate(9deg); }
+.folder__pic--seal { display: grid; place-items: center; background: #4B4A23; }
+.folder__pic--seal svg { width: 70%; height: auto; filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .35)); }
+.folder__faces { position: absolute; right: 5%; bottom: 6%; z-index: 2; display: flex; }
+.folder__faces img {
+  position: static;
+  width: 11cqw;
+  height: 11cqw;
+  margin-left: -3cqw;
+  border: 2px solid var(--cream);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Pointing at a folder: the front tips open and the print slides up. */
+.folder:hover,
+.folder:focus-visible,
+.folder.is-on { transform: translateY(-8px); }
+.folder:hover .folder__print,
+.folder:focus-visible .folder__print,
+.folder.is-on .folder__print { transform: translateY(-14cqh) rotate(0); }
+.folder:hover .folder__front,
+.folder:focus-visible .folder__front,
+.folder.is-on .folder__front { transform: rotateX(-16deg); }
+.folders:has(.folder:hover) .folder:not(:hover) { opacity: .62; }
+
+/* Small screens: the label keeps only its title, a touch larger. */
+@media (max-width: 619px) {
+  .desk { --fill: #602C0F; }
+  .desk__photo { aspect-ratio: 941 / 1555; }
+  .desk__me      { left: 50.5%; top: 44.9%; width: 50%; }
+  .desk__reflect { left: 50.5%; top: 77.3%; width: 50%; }
+  .desk__shadow  { left: 50.5%; }
+  .desk__shadow--soft  { top: 77.2%; width: 46%; height: 1.9%; }
+  .desk__shadow--tight { top: 77.5%; width: 39%; }
+  .desk__plate { margin-top: -96px; }
+  .folder__sub { display: none; }
+  .folder__title { font-size: 11.5cqw; }
+  .folder__tab { font-size: 6cqw; padding: 0 10cqw 0 5cqw; max-width: 96%; }
+}
+
+/* ---- The selection-frame cursor ---------------------------------------------
+   For a mouse or trackpad only. A crosshair with its coordinates, and a
+   green selection box around the folder you're on, sized like Figma's. */
+.desk__cursor {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  pointer-events: none;
+}
+.desk--cursor,
+.desk--cursor * { cursor: none; }
+
+.cpill {
+  display: inline-block;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: var(--green);
+  color: #06301A;
+  font: 500 10.5px/1 var(--font-mono);
+  white-space: nowrap;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .3);
+}
+.desk__cross {
+  position: absolute;
+  left: 0; top: 0;
+  opacity: 0;
+  transition: opacity .15s;
+  will-change: transform;
+}
+.desk__cross.is-on { opacity: 1; }
+.desk__cross svg { display: block; margin: -11px 0 0 -11px; }
+.desk__xy { position: absolute; left: 14px; top: 14px; transition: opacity .15s; }
+
+.desk__sel {
+  position: absolute;
+  left: 0; top: 0;
+  width: 0; height: 0;
+  border: 1.5px solid var(--green);
+  opacity: 0;
+  transition: left .2s var(--ease), top .2s var(--ease), width .2s var(--ease), height .2s var(--ease), opacity .18s;
+}
+.desk__sel.is-on { opacity: 1; }
+.desk__sel i { position: absolute; width: 8px; height: 8px; background: #fff; border: 1.5px solid var(--green); }
+.desk__sel i:nth-child(1) { left: -5px;  top: -5px; }
+.desk__sel i:nth-child(2) { right: -5px; top: -5px; }
+.desk__sel i:nth-child(3) { left: -5px;  bottom: -5px; }
+.desk__sel i:nth-child(4) { right: -5px; bottom: -5px; }
+.desk__sel-name {
+  position: absolute;
+  left: -1px;
+  bottom: calc(100% + 6px);
+  font: 500 11px var(--font-mono);
+  color: var(--green);
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
+}
+.desk__sel-size { position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); }
+
+/* a tap on the empty desk, on a phone */
+.desk__pulse { position: absolute; margin: -11px 0 0 -11px; animation: desk-pulse .5s ease-out forwards; }
+@keyframes desk-pulse { from { opacity: 1; transform: scale(.6); } to { opacity: 0; transform: scale(1.7); } }
+
+/* ---- Opening a folder ---------------------------------------------------------
+   A sheet of paper in the folder's colour grows from the folder to fill the
+   screen; the page jumps to the section behind it, and the sheet fades. */
+.desk-sheet {
+  position: fixed;
+  z-index: 150;
+  display: grid;
+  place-content: center;
+  gap: 0.75rem;
+  overflow: hidden;
+  text-align: center;
+  color: var(--ink);
+  background: var(--paper) url("../img/desk/paper.webp");
+  background-size: 420px;
+  border-top: 10px solid var(--fc);
+  border-radius: 6px 14px 14px 14px;
+  box-shadow: 0 50px 90px -20px rgba(0, 0, 0, .55);
+  transition: top .5s var(--ease), left .5s var(--ease), width .5s var(--ease), height .5s var(--ease),
+              border-radius .5s var(--ease), opacity .32s ease;
+}
+.desk-sheet.is-full { border-radius: 0; }
+.desk-sheet.is-leaving { opacity: 0; }
+.desk-sheet__tag {
+  justify-self: center;
+  padding: 7px 10px;
+  border-radius: 3px;
+  background: var(--fc);
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity .2s .2s;
+}
+.desk-sheet__title {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 100, "WONK" 1;
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1;
+  opacity: 0;
+  transition: opacity .2s .2s;
+}
+.desk-sheet.is-full .desk-sheet__tag,
+.desk-sheet.is-full .desk-sheet__title { opacity: 1; }
+
+/* The nav stays out of the way while the desk is on screen — the folders
+   are the navigation there. */
+.nav { transition: opacity var(--dur) var(--ease), visibility var(--dur); }
+.nav.is-desk { opacity: 0; visibility: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .desk--js .folders__item,
+  .desk--js .folders__item::after { animation: none; }
+  .folder, .folder__print, .folder__front, .desk__look, .desk__sel, .desk-sheet { transition: none; }
+  .folder:hover, .folder:focus-visible, .folder.is-on { transform: none; }
+  .desk__pulse { animation-duration: .01s; }
+}

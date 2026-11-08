@@ -81,7 +81,7 @@ const HTML = `<!DOCTYPE html>
     background:
       radial-gradient(120% 80% at 100% 0%, rgba(217,242,75,.55), transparent 55%),
       radial-gradient(90% 90% at 0% 100%, rgba(59,37,245,.22), transparent 60%),
-      var(--blue-wash);
+      var(--accent-wash);
   }
   .win {
     position: absolute; top: 50%; left: 50%;
@@ -105,7 +105,7 @@ const HTML = `<!DOCTYPE html>
     position: absolute; top: 22px; left: 26px;
     display: inline-flex; align-items: center; gap: 12px;
     padding: 10px 22px; border-radius: 999px; background: #fff;
-    box-shadow: 0 0 0 1px var(--blue-line), var(--sh-2);
+    box-shadow: 0 0 0 1px var(--accent-line), var(--sh-2);
     font-family: var(--font-mono); font-size: 24px; font-weight: 700;
     letter-spacing: .1em; text-transform: uppercase;
   }

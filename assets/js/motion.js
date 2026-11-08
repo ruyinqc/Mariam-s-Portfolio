@@ -90,7 +90,9 @@ window.Motion = (function () {
         if (d) el.style.setProperty('--reveal-delay', d);
       });
 
-      if (!('IntersectionObserver' in window)) {
+      // No observer, or a visitor who asked for less motion: show it all now.
+      // Content is never left waiting on an animation they turned off.
+      if (!('IntersectionObserver' in window) || reduced) {
         nodes.forEach(function (el) { el.classList.add('is-in'); });
         return;
       }
