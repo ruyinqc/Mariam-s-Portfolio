@@ -53,6 +53,7 @@
 <!-- Type is self-hosted: no third-party request, nothing for a visitor to consent to. -->
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plus-jakarta-sans-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-normal-latin.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="assets/fonts/fraunces-normal-latin.woff2" crossorigin>
 <link rel="preload" as="image" href="assets/img/desk/room-wide.webp" media="(min-width: 620px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/desk/room-tall.webp" media="(max-width: 619px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/desk/mariam-front.webp" fetchpriority="high">
@@ -62,9 +63,11 @@
 <link rel="stylesheet" href="assets/css/base.css?v=19">
 <link rel="stylesheet" href="assets/css/layout.css?v=19">
 <link rel="stylesheet" href="assets/css/components.css?v=20">
-<link rel="stylesheet" href="assets/css/reader.css?v=19">
-<link rel="stylesheet" href="assets/css/desk.css?v=2">
-<link rel="stylesheet" href="assets/css/folio.css?v=1">
+<!-- The case-study reader's styles aren't needed for the first screen, so they load
+     without holding it up. (The reader itself needs JavaScript anyway.) -->
+<link rel="stylesheet" href="assets/css/reader.css?v=19" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/css/desk.css?v=3">
+<link rel="stylesheet" href="assets/css/folio.css?v=2">
 
 <!-- Structured data. The case studies and certificates are added at runtime
      by app.js, straight from data.js and config.js, so they can never drift
@@ -283,8 +286,8 @@
       <div class="desk__me" id="deskMe" data-gaze="front">
         <img src="assets/img/desk/mariam-front.webp" width="791" height="917" fetchpriority="high" decoding="async"
              alt="Mariam Emad Nabih sitting at her desk, smiling, her arms folded on the desk.">
-        <img class="desk__look" data-look="right" src="assets/img/desk/mariam-look-right.webp" width="791" height="917" alt="" decoding="async">
-        <!-- LOOK LEFT: <img class="desk__look" data-look="left" src="assets/img/desk/mariam-look-left.webp" width="791" height="917" alt="" decoding="async"> -->
+        <img class="desk__look" data-look="right" data-src="assets/img/desk/mariam-look-right.webp" width="791" height="917" alt="" decoding="async">
+        <!-- LOOK LEFT: <img class="desk__look" data-look="left" data-src="assets/img/desk/mariam-look-left.webp" width="791" height="917" alt="" decoding="async"> -->
       </div>
       <span class="desk__light" aria-hidden="true"></span>
     </div>
@@ -305,7 +308,7 @@
         <a class="folder" href="#about" style="--fc:#E7CF9C; --fc2:#F1DDB1">
           <span class="folder__tab" aria-hidden="true">Who I am</span>
           <span class="folder__back" aria-hidden="true"></span>
-          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/mariam-frame-900.webp" width="900" height="563" alt="" loading="lazy" decoding="async" style="object-position:64% 45%"></span></span>
+          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/desk/prints/about.webp" width="360" height="225" alt="" decoding="async" style="object-position:64% 45%"></span></span>
           <span class="folder__front"><span class="folder__label"><span class="folder__title">About Me</span><span class="folder__sub">Engineer turned designer</span></span></span>
         </a>
       </li>
@@ -321,7 +324,7 @@
         <a class="folder" href="#work" style="--fc:#9AA36A; --fc2:#B3BA86">
           <span class="folder__tab" aria-hidden="true">Deep dives</span>
           <span class="folder__back" aria-hidden="true"></span>
-          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/work/localisation-card.webp" width="1200" height="750" alt="" loading="lazy" decoding="async" style="object-position:8% 30%"></span></span>
+          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/desk/prints/cases.webp" width="400" height="250" alt="" decoding="async" style="object-position:8% 30%"></span></span>
           <span class="folder__front"><span class="folder__label"><span class="folder__title">Case Studies</span><span class="folder__sub">Invoices, Klaxs, Journey Guide</span></span></span>
         </a>
       </li>
@@ -329,7 +332,7 @@
         <a class="folder" href="#path" style="--fc:#E9B8A8; --fc2:#F1CDBF">
           <span class="folder__tab" aria-hidden="true">Huawei · Ovarc</span>
           <span class="folder__back" aria-hidden="true"></span>
-          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/path/huawei-designer.webp" width="600" height="442" alt="" loading="lazy" decoding="async" style="object-position:30% 40%"><span class="folder__faces"><img src="assets/img/people/amany-salah.webp" width="176" height="176" alt="" loading="lazy" decoding="async"><img src="assets/img/people/mohamed-wael.webp" width="176" height="176" alt="" loading="lazy" decoding="async"><img src="assets/img/people/randa-mohammed.webp" width="144" height="144" alt="" loading="lazy" decoding="async"></span></span></span>
+          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/desk/prints/path.webp" width="360" height="265" alt="" decoding="async" style="object-position:30% 40%"><span class="folder__faces"><img src="assets/img/people/amany-salah.webp" width="176" height="176" alt="" loading="lazy" decoding="async"><img src="assets/img/people/mohamed-wael.webp" width="176" height="176" alt="" loading="lazy" decoding="async"><img src="assets/img/people/randa-mohammed.webp" width="144" height="144" alt="" loading="lazy" decoding="async"></span></span></span>
           <span class="folder__front"><span class="folder__label"><span class="folder__title">Experience &amp;&nbsp;Kind Words</span><span class="folder__sub">My path, and the people on it</span></span></span>
         </a>
       </li>
@@ -345,7 +348,7 @@
         <a class="folder" href="#contact" style="--fc:#D9622B; --fc2:#E4804F">
           <span class="folder__tab" aria-hidden="true">Open to relocation</span>
           <span class="folder__back" aria-hidden="true"></span>
-          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/mariam-wave.webp" width="720" height="872" alt="" loading="lazy" decoding="async" style="object-position:50% 18%"></span></span>
+          <span class="folder__print" aria-hidden="true"><span class="folder__pic"><img src="assets/img/desk/prints/contact.webp" width="300" height="363" alt="" decoding="async" style="object-position:50% 18%"></span></span>
           <span class="folder__front"><span class="folder__label"><span class="folder__title">Contact</span><span class="folder__sub">Say hello</span></span></span>
         </a>
       </li>
@@ -908,8 +911,8 @@
 <script src="assets/js/line.js?v=19"></script>
 <script src="assets/js/reader.js?v=19"></script>
 <script src="assets/js/contact.js?v=19"></script>
-<script src="assets/js/folio.js?v=1"></script>
-<script src="assets/js/desk.js?v=2"></script>
+<script src="assets/js/folio.js?v=2"></script>
+<script src="assets/js/desk.js?v=3"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>

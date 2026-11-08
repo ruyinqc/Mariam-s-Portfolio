@@ -109,6 +109,45 @@ async function run() {
   check('every folder links to a section that exists', desk.targets);
   check('the folders are laid on a curve', desk.curved);
   check('the whole desk fits on one screen', desk.fits);
+
+  const geo = await page.evaluate(() => {
+    const box = el => el.getBoundingClientRect();
+    const range = el => { const r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); };
+    const name = range(document.querySelector('.desk__name'));
+    const role = range(document.querySelector('.desk__role'));
+    const me = box(document.querySelector('.desk__me'));
+    const f = [...document.querySelectorAll('.folders__item')].map(box);
+    const hit = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    let overlap = 0;
+    for (let i = 0; i < f.length; i++) for (let j = i + 1; j < f.length; j++) if (hit(f[i], f[j])) overlap++;
+    const end = f[0], last = f[f.length - 1];
+    return {
+      gap: Math.round(name.top - me.bottom),
+      coversText: f.filter(r => hit(r, name) || hit(r, role)).length,
+      overlap,
+      beside: end.right < me.left && last.left > me.right &&
+              end.top < me.bottom && last.top < me.bottom,
+      width: Math.round(f[2].width)
+    };
+  });
+  // measured from the top of the name's line box, which sits a little above
+  // its letters: a small negative gap is the letters just under her hands
+  check('her name sits right under her hands', geo.gap > -24 && geo.gap < 30, `gap=${geo.gap}px`);
+  check('no folder covers her name', geo.coversText === 0, String(geo.coversText));
+  check('no two folders overlap', geo.overlap === 0, String(geo.overlap));
+  check('the end folders sit beside her, up at the desk', geo.beside);
+  check('the folders are a good size', geo.width >= 140, `${geo.width}px`);
+
+  // Nothing should run while nobody is touching the page.
+  const cdp = await ctx.newCDPSession(page);
+  await cdp.send('Performance.enable');
+  const busy = async () => (await cdp.send('Performance.getMetrics')).metrics.find(m => m.name === 'TaskDuration').value;
+  await page.mouse.move(700, 120);
+  await page.waitForTimeout(600);
+  const b0 = await busy();
+  await page.waitForTimeout(2000);
+  const idle = Math.round((await busy() - b0) * 1000);
+  check('the desk does no work while idle', idle < 150, `${idle}ms busy in 2s`);
   check('the folders are the navigation (no nav bar over the desk)', desk.navHidden);
 
   const certFolder = await page.$('#folders .folder[href="#proof"]');
@@ -286,6 +325,11 @@ async function run() {
 
   await page.evaluate(() => { location.hash = '#work'; });
   await page.waitForTimeout(900);
+  check('the work cards sit straight', await page.evaluate(() =>
+    [...document.querySelectorAll('.pincard')].every(c => {
+      const cs = getComputedStyle(c);
+      return (cs.rotate === 'none' || cs.rotate === '0deg') && (cs.transform === 'none' || /^matrix\(1, 0, 0, 1,/.test(cs.transform));
+    })));
   const card = await page.$('.pincard__hit');
   await card.focus();
   await card.press('Enter');

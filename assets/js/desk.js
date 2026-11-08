@@ -1,19 +1,23 @@
 /* ==========================================================================
    desk.js — the desk at the top of the page.
 
-   • Fits the whole desk — photo, name, folders — inside the screen. The
+   • Fits the whole desk — photo, name, folders — inside one screen. The
      photo is cropped from the top (never into her head) and, on a short
      screen, the folders get a little smaller.
-   • Lays the six folders on a fixed curve. They float; they never spin.
-     On a wide screen it is one row across the desk, the end folders rising
-     beside her name. Below 960px it is two curved rows of three.
+   • Her name sits on the desk right under her hands, the subtitle under it.
+   • The six folders sit on a fixed U around her: the two ends up beside her
+     at desk level, the middle two under her name. They float; they never
+     spin. Below 900px wide they become two curved rows of three.
    • Her eyes go to the folder you point at, before anything opens.
-   • The cursor: a crosshair, and a green selection frame around the folder
+   • The cursor: a crosshair and a green selection frame around the folder
      you're on, for a mouse or trackpad. On a phone a tap snaps the frame
      onto the folder.
-   • Opening a folder: her eyes move first, then the folder opens as a sheet
-     over the desk (folio.js). Live Projects opens the Vibe Coding study in
-     the reader.
+   • Opening a folder: her eyes move first, then it opens over the desk
+     (folio.js). Live Projects opens the Vibe Coding study in the reader.
+
+   Kept light on purpose: nothing here runs every frame. The cursor is drawn
+   when the mouse moves or the folder under it changes, and the folder you
+   point at stops floating so its frame can stay still.
 
    Every folder is a real link, so all of this is an enhancement: without
    the script, the desk.css fallback shows the same desk and plain links.
@@ -34,13 +38,13 @@
   var layer  = document.getElementById('deskCursor');
   var cross  = document.getElementById('deskCross');
   var sel    = document.getElementById('deskSel');
-  var nav    = document.getElementById('nav');
   if (!photo || !world || !me || !plate || !list) return;
 
   var items   = Array.prototype.slice.call(list.querySelectorAll('.folders__item'));
   var folders = items.map(function (li) { return li.querySelector('.folder'); });
   var nameEl  = plate.querySelector('.desk__name');
   var roleEl  = plate.querySelector('.desk__role');
+  var blend   = desk.querySelector('.desk__blend');
 
   var reduced = window.Motion ? Motion.reduced
                               : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -49,22 +53,28 @@
   desk.classList.add('desk--js');
 
   function px(v) { return v + 'px'; }
+  function clamp(v, lo, hi) { return v < lo ? lo : v > hi ? hi : v; }
 
   /* ======================================================================
      Layout
      ====================================================================== */
 
-  /* Fractions of each room photo. figTop is where the top of her photo sits
-     and figBottom where her forearms meet the desk. bottomCut is where the
-     photo stops (a strip of desk under her arms); headroom is how much room
-     is always kept above her head when the top is cropped. */
-  var WIDE = { aspect: 941 / 1672, figTop: 0.33,  figBottom: 0.845, bottomCut: 0.91, headroom: 0.035 };
-  var TALL = { aspect: 1672 / 941, figTop: 0.449, figBottom: 0.775, bottomCut: 0.84, headroom: 0.03 };
+  /* Fractions of each room photo. cx is the middle of her; figTop and
+     figBottom are the top of her photo and where her forearms meet the
+     desk; figW is how wide she is. bottomCut is where the photo stops — a
+     strip of desk under her arms, for her name to sit on. headroom is the
+     room always kept above her head when the top is cropped. */
+  var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.33,  figBottom: 0.845, figW: 0.25,
+               bottomCut: 0.97, headroom: 0.025 };
+  var TALL = { aspect: 1672 / 941, cx: 0.505, figTop: 0.449, figBottom: 0.775, figW: 0.5,
+               bottomCut: 0.84, headroom: 0.03 };
+
+  var TITLE_GAP = -6;      // her name starts this far below her hands (line box; the letters sit lower)
+  var TEXT_GAP = 18;       // between the subtitle and the folders under it
+  var EDGE = 18;           // folders keep this far from the sides of the screen
 
   var sides = [];          // which side of her each folder is on
   var lastW = 0;
-  var viewH = window.innerHeight;
-  var blend = desk.querySelector('.desk__blend');
 
   function layout(force) {
     var W = desk.clientWidth;
@@ -72,118 +82,166 @@
     // change of width re-lays the desk, so nothing jumps under your thumb.
     if (!force && W === lastW) return;
     lastW = W;
-    viewH = window.innerHeight;
+    var vh = window.innerHeight;
 
     var P = window.matchMedia('(max-width: 619px)').matches ? TALL : WIDE;
     var Himg = W * P.aspect;
-    var full = Himg * P.bottomCut;                                   // no crop
-    var least = full - (Himg * P.figTop - Himg * P.headroom);        // cropped to her head
-    var under = (P.bottomCut - P.figBottom) * Himg;                  // desk below her arms
-    var overlap = Math.max(0, Math.min(110, under - 14));            // her name sits just under her arms
+    var armsFull = P.figBottom * Himg;                       // arms, with no crop
+    var cropMax = (P.figTop - P.headroom) * Himg;            // never into her head
+    var under = (P.bottomCut - P.figBottom) * Himg;          // desk shown below her arms
 
-    plate.style.marginTop = px(-overlap);
-    if (blend) blend.style.height = px(under + 26);
-    var pad = parseFloat(getComputedStyle(desk).paddingBottom) || 0;
-    var room = viewH - 6;                                           // a little air at the bottom
+    // Her name always starts just under her hands, wherever the crop lands.
+    plate.style.marginTop = px(TITLE_GAP - under);
+    if (blend) blend.style.height = px(Math.max(40, under - 6));
+    var plateH = plate.offsetHeight;
+    var padB = parseFloat(getComputedStyle(desk).paddingBottom) || 0;
+    var wideU = W >= 900;
 
-    // Try the folders at full size, then a touch smaller, until it all fits.
-    var Hc = least, scales = [1, 0.93, 0.86, 0.8, 0.74, 0.68];
-    for (var i = 0; i < scales.length; i++) {
-      var L = W < 960 ? twoRows(W, scales[i]) : oneRow(W, scales[i]);
-      var below = plate.offsetHeight - overlap + parseFloat(getComputedStyle(list).marginTop) + L + pad;
-      var fits = room - below;
-      if (fits >= least || i === scales.length - 1) { Hc = Math.max(least, Math.min(full, fits)); break; }
+    // Try the folders at full size, then a little smaller, until it all fits.
+    var scales = [1, 0.93, 0.86, 0.8, 0.74, 0.68], plan = null, arms = armsFull - cropMax;
+    for (var i = 0; i < scales.length && !plan; i++) {
+      var size = wideU ? uSize(W, scales[i]) : rowSize(W, scales[i]);
+      var below = TITLE_GAP + plateH + TEXT_GAP + size.below + padB;
+      var room = vh - below;                                  // where her arms may sit
+      var last = i === scales.length - 1;
+      if (room < armsFull - cropMax && !last) continue;
+      arms = clamp(room, armsFull - cropMax, armsFull);
+      plan = wideU ? uPlan(W, P, arms, plateH, size) : rowPlan(W, arms, plateH, size);
+      if (!plan && last) plan = rowPlan(W, arms, plateH, rowSize(W, scales[i]));
     }
 
+    var crop = armsFull - arms;
     photo.style.aspectRatio = 'auto';
-    photo.style.height = px(Hc);
-    world.style.top = px(Hc - full);
+    photo.style.height = px(P.bottomCut * Himg - crop);
+    world.style.top = px(-crop);
 
+    plan.items.forEach(function (it, idx) {
+      var li = items[idx];
+      if (!li) return;
+      li.style.setProperty('--w', px(it.w));
+      li.style.setProperty('--h', px(it.h));
+      li.style.setProperty('--s', it.s.toFixed(3));
+      li.style.setProperty('--ry', it.ry.toFixed(2) + 'deg');
+      li.style.setProperty('--z', String(it.z));
+      li.style.setProperty('--d', (-idx * 1.1) + 's');
+      li.style.left = px(it.x);
+      li.style.top = px(it.y);
+      sides[idx] = it.side;
+    });
+
+    desk.style.minHeight = plan.bottom + padB > vh ? px(plan.bottom + padB) : '';
     if (window.Motion) Motion.remeasure();
+    kick(0);
   }
 
-  function place(li, x, y, w, h, s, ry, z, i) {
-    li.style.setProperty('--w', px(w));
-    li.style.setProperty('--h', px(h));
-    li.style.setProperty('--s', s.toFixed(3));
-    li.style.setProperty('--ry', ry.toFixed(2) + 'deg');
-    li.style.setProperty('--z', String(z));
-    li.style.setProperty('--d', (-i * 1.1) + 's');
-    li.style.left = px(x);
-    li.style.top = px(y);
+  /* ---- wide screens: a U around her ------------------------------------- */
+
+  function uSize(W, k) {
+    var w = clamp(W * 0.125, 140, 210) * k;
+    return { w: w, h: w * 1.19, below: w * 1.19 };
   }
 
-  // Narrower screens: two rows of three, each on a shallow cylinder.
-  function twoRows(W, k) {
-    var rows = [[0, 1, 2], [3, 4, 5]];
-    var step = 26 * Math.PI / 180, gap = 16, PERS = 1200, rise = 0.35;
-    var cw = Math.min(150, (W - 28) / 3.3) * k, ch = cw * 1.19;
-    var R = (cw + gap) / (2 * Math.sin(step / 2));
-    var rowGap = W < 620 ? 22 : 30;
-    var y = 0;
-    rows.forEach(function (row) {
-      var n = row.length, maxD = R * (1 - Math.cos(step * (n - 1) / 2));
-      row.forEach(function (idx, i) {
-        if (!items[idx]) return;
-        var t = (i - (n - 1) / 2) * step, d = R * (1 - Math.cos(t));
-        place(items[idx], W / 2 + R * Math.sin(t), y + ch / 2 + maxD * rise - d * rise + 6,
-              cw, ch, PERS / (PERS + d), t * 180 / Math.PI, 100 - Math.round(d), idx);
-        sides[idx] = t > 0.01 ? 'right' : (t < -0.01 ? 'left' : 'front');
-      });
-      y += ch + maxD * rise + rowGap;
+  function textRect() {
+    var d = desk.getBoundingClientRect(), r = document.createRange(), a, b;
+    r.selectNodeContents(nameEl); a = r.getBoundingClientRect();
+    r.selectNodeContents(roleEl); b = r.getBoundingClientRect();
+    return {
+      left: Math.min(a.left, b.left) - d.left - 14,
+      right: Math.max(a.right, b.right) - d.left + 14,
+      top: Math.min(a.top, b.top) - d.top - 10,
+      bottom: Math.max(a.bottom, b.bottom) - d.top + 12
+    };
+  }
+
+  function uPlan(W, P, arms, plateH, size) {
+    var w = size.w, h = size.h;
+    var cx = P.cx * W;
+    var textTop = arms + TITLE_GAP, textBottom = textTop + plateH;
+    var t = textRect();
+    // textRect() reads the plate where it is now; move it to where it will be
+    var shift = textTop - plate.offsetTop;
+    t.top += shift; t.bottom += shift;
+
+    var reach = Math.min(cx, W - cx) - w / 2 - EDGE;         // how far the ends can go
+    var rx = Math.min(W * 0.37, reach);
+    var yMid = textBottom + TEXT_GAP + h / 2;
+    t.bottom = Math.min(t.bottom, textBottom + TEXT_GAP - 2);
+    var lift = Math.min(h * 0.3, arms - h / 2 - 10);          // the ends rise beside her
+    var cy = arms - lift;
+    var uMid = Math.max(0.2, (w + 16) / (2 * rx));
+    var ryE = (yMid - cy) / Math.sqrt(1 - uMid * uMid);
+    var us = [-1, -0.6, -uMid, uMid, 0.6, 1];
+
+    var out = us.map(function (u) {
+      return { u: u, x: cx + rx * u, y: cy + ryE * Math.sqrt(Math.max(0, 1 - u * u)) };
     });
-    var h = y - rowGap + 26;
-    list.style.height = px(h);
-    return h;
-  }
 
-  // Wide screens: one row across the whole desk. The end folders rise up
-  // beside her name, the middle ones dip under the title, and no folder is
-  // ever allowed to cover the text.
-  function textBox(el) {
-    var r = document.createRange();
-    r.selectNodeContents(el);
-    return r.getBoundingClientRect();
-  }
-  function oneRow(W, k) {
-    var n = items.length, m = 24;
-    var cw = Math.max(130, Math.min(180, (W - 2 * m) / 6.6)) * k, ch = cw * 1.19;
-    var sp = (W - 2 * m - cw) / Math.max(1, n - 1), half = W / 2 - m - cw / 2;
-    var rise = Math.max(70, Math.min(160, W * 0.1)) * k;
-
-    list.style.height = '0px';
-    var lr = list.getBoundingClientRect(), nb = textBox(nameEl), rb = textBox(roleEl);
-    var boxL = Math.min(nb.left, rb.left) - lr.left - 18;
-    var boxR = Math.max(nb.right, rb.right) - lr.left + 18;
-    var textBottom = rb.bottom - lr.top;
-
-    var xs = [], us = [], base = textBottom + 26;
-    for (var i = 0; i < n; i++) {
-      var x = m + cw / 2 + i * sp;
-      // Only just touching the text? Slide it outwards rather than lower the row.
-      var ov = Math.min(x + cw / 2 - boxL, boxR - (x - cw / 2));
-      if (ov > 0 && ov < cw * 0.4 && sp - cw > ov + 10) x += x < W / 2 ? -ov : ov;
-      var u = (x - W / 2) / half;
-      xs.push(x); us.push(u);
-      if (x + cw / 2 > boxL && x - cw / 2 < boxR) base = Math.max(base, textBottom + 26 + rise * u * u);
+    // Nothing may cover her name: slide anything that touches it outwards,
+    // then make sure each pair on a side still clears each other.
+    function hits(o) {
+      return o.x + w / 2 > t.left && o.x - w / 2 < t.right &&
+             o.y + h / 2 > t.top && o.y - h / 2 < t.bottom;
     }
+    for (var side = -1; side <= 1; side += 2) {
+      var second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
+      if (hits(second)) second.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
+      if (hits(end)) end.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
+      if (Math.abs(end.x - second.x) < w + 12) end.x = second.x + side * (w + 12);
+      end.x = clamp(end.x, w / 2 + EDGE, W - w / 2 - EDGE);
+      second.x = clamp(second.x, w / 2 + EDGE, W - w / 2 - EDGE);
+      var apartX = Math.abs(end.x - second.x) >= w + 8;
+      var apartY = Math.abs(end.y - second.y) >= h + 8;
+      if ((!apartX && !apartY) || hits(second) || hits(end)) return null;   // too tight: go smaller
+      // and the ends stay clear of her
+      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;
+    }
+
     var bottom = 0;
-    items.forEach(function (li, i) {
-      var u = us[i], top = base - rise * u * u;
-      place(li, xs[i], top + ch / 2, cw, ch, 1 - 0.06 * u * u, u * 24, 100 - Math.round(u * u * 40), i);
-      sides[i] = u > 0 ? 'right' : 'left';
-      bottom = Math.max(bottom, top + ch);
+    var items = out.map(function (o) {
+      var depth = Math.sqrt(Math.max(0, 1 - o.u * o.u));      // 0 at her sides, 1 in front
+      bottom = Math.max(bottom, o.y + h / 2);
+      return {
+        x: o.x, y: o.y, w: w, h: h,
+        s: 0.9 + 0.1 * depth,
+        ry: o.u * 16,
+        z: 100 - Math.round(Math.abs(o.u) * 30),
+        side: o.u > 0 ? 'right' : 'left'
+      };
     });
-    var h = bottom + 22;
-    list.style.height = px(h);
-    return h;
+    return { items: items, bottom: bottom };
   }
 
-  layout(true);
-  if ('ResizeObserver' in window) new ResizeObserver(function () { layout(false); }).observe(desk);
-  else window.addEventListener('resize', function () { layout(false); }, { passive: true });
-  // Her name sets where the folders may rise; measure again once the fonts land.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(true); });
+  /* ---- narrow screens: two curved rows of three ------------------------- */
+
+  function rowSize(W, k) {
+    var w = Math.min(150, (W - 28) / 3.3) * k, h = w * 1.19;
+    var step = 26 * Math.PI / 180, gap = 16;
+    var R = (w + gap) / (2 * Math.sin(step / 2));
+    var maxD = R * (1 - Math.cos(step));
+    var rowGap = W < 620 ? 22 : 30;
+    return { w: w, h: h, step: step, R: R, maxD: maxD, rowGap: rowGap,
+             below: 2 * (h + maxD * 0.35) + rowGap + 14 };
+  }
+
+  function rowPlan(W, arms, plateH, size) {
+    var w = size.w, h = size.h, rise = 0.35, PERS = 1200;
+    var y = arms + TITLE_GAP + plateH + TEXT_GAP;
+    var items = [];
+    [[0, 1, 2], [3, 4, 5]].forEach(function (row) {
+      row.forEach(function (idx, i) {
+        var t = (i - 1) * size.step, d = size.R * (1 - Math.cos(t));
+        items[idx] = {
+          x: W / 2 + size.R * Math.sin(t),
+          y: y + h / 2 + size.maxD * rise - d * rise + 6,
+          w: w, h: h, s: PERS / (PERS + d), ry: t * 180 / Math.PI,
+          z: 100 - Math.round(d),
+          side: t > 0.01 ? 'right' : (t < -0.01 ? 'left' : 'front')
+        };
+      });
+      y += h + size.maxD * rise + size.rowGap;
+    });
+    return { items: items, bottom: y - size.rowGap + 14 };
+  }
 
   /* ======================================================================
      Her eyes
@@ -193,7 +251,25 @@
   Array.prototype.forEach.call(me.querySelectorAll('[data-look]'), function (img) {
     looks[img.getAttribute('data-look')] = img;
   });
+
+  // The photos of her looking aside are only needed once someone points at
+  // a folder, so they load after the page has settled instead of with it.
+  var looksLoaded = false;
+  function loadLooks() {
+    if (looksLoaded) return;
+    looksLoaded = true;
+    Object.keys(looks).forEach(function (k) {
+      var img = looks[k];
+      if (img.getAttribute('data-src')) img.src = img.getAttribute('data-src');
+    });
+  }
+  window.addEventListener('load', function () {
+    if ('requestIdleCallback' in window) requestIdleCallback(loadLooks, { timeout: 2500 });
+    else setTimeout(loadLooks, 1200);
+  });
+
   function gaze(side) {
+    if (side !== 'front') loadLooks();
     me.setAttribute('data-gaze', looks[side] ? side : 'front');
   }
 
@@ -202,6 +278,7 @@
      ====================================================================== */
 
   var busy = false, openIdx = -1, lastType = 'mouse';
+  var hovered = null, focused = null, tapped = null;
 
   function finish(folder) {
     folder.classList.remove('is-on');
@@ -209,6 +286,7 @@
     openIdx = -1;
     tapped = null;
     gaze('front');
+    kick(0);
   }
 
   function openFolder(i) {
@@ -222,6 +300,7 @@
     var looking = me.getAttribute('data-gaze') === sides[i] && looks[sides[i]];
     gaze(sides[i]);
     folder.classList.add('is-on');
+    kick(600);
 
     // Her eyes get there first; then the folder opens.
     setTimeout(function () {
@@ -242,27 +321,88 @@
       if (lastType !== 'mouse') tapped = folder;
       openFolder(i);
     });
-    folder.addEventListener('pointerenter', function () { if (!busy) gaze(sides[i]); });
-    folder.addEventListener('pointerleave', function () { if (!busy) gaze('front'); });
+    folder.addEventListener('pointerenter', function () {
+      if (!busy) gaze(sides[i]);
+      hovered = folder;
+      kick(600);
+    });
+    folder.addEventListener('pointerleave', function () {
+      if (!busy) gaze('front');
+      if (hovered === folder) hovered = null;
+      kick(600);
+    });
     folder.addEventListener('focus', function () {
       if (!busy) gaze(sides[i]);
       try { if (folder.matches(':focus-visible')) focused = folder; } catch (err) { focused = folder; }
+      kick(600);
     });
     folder.addEventListener('blur', function () {
       if (!busy) gaze('front');
       if (focused === folder) focused = null;
+      kick(600);
     });
   });
 
   /* ======================================================================
      The selection-frame cursor
+     Drawn only when something changes: the mouse moves, or the folder under
+     it does. A change starts a short run of frames to follow the folder as
+     it lifts; then it stops. The folder in the frame stops floating.
      ====================================================================== */
 
-  var P = { x: 0, y: 0, inside: false };
-  var hovered = null, focused = null, tapped = null;
+  var P0 = { x: 0, y: 0, inside: false };
   var xy = cross ? cross.querySelector('.desk__xy') : null;
   var selName = sel ? sel.querySelector('.desk__sel-name') : null;
   var selSize = sel ? sel.querySelector('.desk__sel-size') : null;
+  var queued = false, until = 0, held = null, shownName = '', shownSize = '';
+  var root = document.documentElement;
+
+  function kick(ms) {
+    if (!sel) return;
+    until = Math.max(until, performance.now() + (ms || 0));
+    if (!queued) { queued = true; requestAnimationFrame(draw); }
+  }
+
+  function draw(now) {
+    queued = false;
+    var folio = root.classList.contains('folio-open');
+    var target = folio ? null : (openIdx >= 0 ? folders[openIdx] : (hovered || tapped || focused));
+
+    // the folder in the frame holds still
+    var li = target ? target.parentNode : null;
+    if (li !== held) {
+      if (held) held.classList.remove('is-held');
+      if (li) li.classList.add('is-held');
+      held = li;
+    }
+
+    // read everything first, then write
+    var d = desk.getBoundingClientRect();
+    var r = target ? target.getBoundingClientRect() : null;
+    var showX = fine && P0.inside && lastType === 'mouse' && !folio;
+
+    cross.classList.toggle('is-on', showX);
+    if (showX) {
+      cross.style.transform = 'translate(' + P0.x + 'px,' + P0.y + 'px)';
+      xy.textContent = 'x ' + Math.round(P0.x) + '  y ' + Math.round(P0.y);
+      xy.style.opacity = target ? 0 : 1;
+    }
+    if (r) {
+      var pad = 7;
+      sel.style.transform = 'translate(' + (r.left - d.left - pad) + 'px,' + (r.top - d.top - pad) + 'px)';
+      sel.style.width = px(r.width + pad * 2);
+      sel.style.height = px(r.height + pad * 2);
+      var name = 'Folder / ' + target.querySelector('.folder__title').textContent;
+      if (name !== shownName) { selName.textContent = name; shownName = name; }
+      var size = Math.round(r.width) + ' × ' + Math.round(r.height);
+      if (size !== shownSize) { selSize.textContent = size; shownSize = size; }
+      sel.classList.add('is-on');
+    } else {
+      sel.classList.remove('is-on');
+    }
+
+    if (now < until) kick(0);
+  }
 
   if (layer && cross && sel) {
     if (fine) desk.classList.add('desk--cursor');
@@ -272,10 +412,10 @@
       lastType = e.pointerType || 'mouse';
       if (lastType !== 'mouse') return;
       var d = desk.getBoundingClientRect();
-      P.x = e.clientX - d.left; P.y = e.clientY - d.top; P.inside = true;
-      hovered = e.target.closest ? e.target.closest('.folder') : null;
-    });
-    desk.addEventListener('pointerleave', function () { P.inside = false; hovered = null; });
+      P0.x = e.clientX - d.left; P0.y = e.clientY - d.top; P0.inside = true;
+      kick(0);
+    }, { passive: true });
+    desk.addEventListener('pointerleave', function () { P0.inside = false; hovered = null; kick(300); });
 
     // A tap on the empty desk, on a phone: a small green crosshair pulse.
     desk.addEventListener('click', function (e) {
@@ -287,49 +427,13 @@
       layer.appendChild(p);
       setTimeout(function () { p.remove(); }, 520);
     });
-
-    var shown = '', visible = true, running = false;
-
-    var tick = function () {
-      running = false;
-      if (!visible) return;
-      var target = openIdx >= 0 ? folders[openIdx] : (hovered || tapped || focused);
-      var showX = fine && P.inside && lastType === 'mouse';
-      cross.classList.toggle('is-on', showX);
-      if (showX) {
-        cross.style.transform = 'translate(' + P.x + 'px,' + P.y + 'px)';
-        xy.textContent = 'x ' + Math.round(P.x) + '  y ' + Math.round(P.y);
-        xy.style.opacity = target ? 0 : 1;
-      }
-      if (target) {
-        var d = desk.getBoundingClientRect(), r = target.getBoundingClientRect(), pad = 7;
-        sel.style.left = px(r.left - d.left - pad);
-        sel.style.top = px(r.top - d.top - pad);
-        sel.style.width = px(r.width + pad * 2);
-        sel.style.height = px(r.height + pad * 2);
-        var name = 'Folder / ' + target.querySelector('.folder__title').textContent;
-        if (name !== shown) { selName.textContent = name; shown = name; }
-        selSize.textContent = Math.round(r.width) + ' × ' + Math.round(r.height);
-        sel.classList.add('is-on');
-      } else {
-        sel.classList.remove('is-on');
-      }
-      run();
-    };
-    var run = function () {
-      if (running || !visible) return;
-      running = true;
-      requestAnimationFrame(tick);
-    };
-
-    // Only draw while the desk is on screen.
-    if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
-        if (visible) run();
-      }).observe(desk);
-    }
-    run();
   }
 
+  /* ---- go ---------------------------------------------------------------- */
+
+  layout(true);
+  if ('ResizeObserver' in window) new ResizeObserver(function () { layout(false); }).observe(desk);
+  else window.addEventListener('resize', function () { layout(false); }, { passive: true });
+  // Her name sets where the folders may sit; measure again once the fonts land.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(true); });
 })();

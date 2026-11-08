@@ -112,7 +112,7 @@
   font-family: var(--font-display);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.625rem);
+  font-size: clamp(2rem, 0.9rem + 3.4vw, 4.75rem);
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--cream);
@@ -124,6 +124,12 @@
 }
 .desk__role b { color: var(--mustard); font-weight: 600; }
 .desk__role > span { white-space: nowrap; }
+/* below a wide laptop the numbers drop to a line of their own, which keeps
+   the text block narrow enough for the folders to curve round it */
+@media (max-width: 1199px) {
+  .desk__facts { display: block; width: fit-content; margin-inline: auto; }
+  .desk__dot { display: none; }
+}
 
 /* ---- The folders ------------------------------------------------------------
    Without JavaScript: a centred row that wraps. desk.js lifts them onto a
@@ -147,30 +153,45 @@
   container-type: size;
 }
 
-.desk--js .folders { position: relative; display: block; padding: 0; max-width: none; margin-top: 14px; }
+.desk--js .folders {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: block;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+  pointer-events: none;            /* the folders themselves take the pointer */
+}
 .desk--js .folders__item {
   position: absolute;
   z-index: var(--z, 1);
+  pointer-events: auto;
   transform: translate(-50%, -50%) scale(var(--s, 1)) perspective(1200px) rotateY(var(--ry, 0deg));
   animation: folder-bob 6s ease-in-out infinite alternate;
   animation-delay: var(--d, 0s);
 }
-/* a soft shadow on the air beneath each one */
+/* A soft shadow on the air beneath each one — a gradient, not a blur
+   filter, so floating costs the browser almost nothing. */
 .desk--js .folders__item::after {
   content: "";
   position: absolute;
-  left: 12%; right: 12%;
-  bottom: -20px;
-  height: 12px;
-  border-radius: 50%;
-  background: rgba(10, 4, 0, .6);
-  filter: blur(8px);
+  left: 6%; right: 6%;
+  bottom: -26px;
+  height: 22px;
+  background: radial-gradient(closest-side, rgba(10, 4, 0, .55), rgba(10, 4, 0, 0));
   animation: folder-shade 6s ease-in-out infinite alternate;
   animation-delay: var(--d, 0s);
   z-index: -1;
 }
 @keyframes folder-bob   { from { translate: 0 4px; } to { translate: 0 -7px; } }
 @keyframes folder-shade { from { transform: scaleX(1); opacity: .9; } to { transform: scaleX(.82); opacity: .55; } }
+/* The folder you're pointing at holds still (so its selection frame can),
+   and nothing on the desk floats while a folder is open over it. */
+.desk--js .folders__item.is-held,
+.desk--js .folders__item.is-held::after,
+.folio-open .desk--js .folders__item,
+.folio-open .desk--js .folders__item::after { animation-play-state: paused; }
 
 /* A folder: a back with a tab, a print sticking out, and a front with a
    paper label. Sizes are in cqw/cqh so the whole thing scales as one. */
@@ -335,7 +356,7 @@
   .desk__shadow--tight { top: 77.5%; width: 39%; }
   .desk__plate { margin-top: -30px; }
   /* the facts drop to a line of their own */
-  .desk__facts { display: block; }
+  .desk__facts { display: block; width: fit-content; margin-inline: auto; }
   .desk__dot { display: none; }
   .folder__sub { display: none; }
   .folder__title { font-size: 11.5cqw; }
@@ -382,7 +403,8 @@
   width: 0; height: 0;
   border: 1.5px solid var(--green);
   opacity: 0;
-  transition: left .2s var(--ease), top .2s var(--ease), width .2s var(--ease), height .2s var(--ease), opacity .18s;
+  will-change: transform;
+  transition: transform .2s var(--ease), width .2s var(--ease), height .2s var(--ease), opacity .18s;
 }
 .desk__sel.is-on { opacity: 1; }
 .desk__sel i { position: absolute; width: 8px; height: 8px; background: #fff; border: 1.5px solid var(--green); }
@@ -409,6 +431,9 @@
    The desk is the whole page: exactly one screen, no nav (the folders are
    the navigation), and the sections wait in the open folder instead. */
 .desk-mode .desk { min-height: 100vh; min-height: 100svh; }
+/* with the folders laid out by desk.js, the wood below them only has to
+   hold their shadows */
+.desk-mode .desk--js { padding-bottom: 30px; }
 /* short screens: less wood under the folders, so the whole desk still fits */
 @media (max-height: 780px) { .desk { padding-bottom: 1.25rem; } }
 .desk-mode .nav,
