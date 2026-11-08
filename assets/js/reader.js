@@ -48,8 +48,11 @@
    */
   function setHash(slug) {
     try {
+      // Closing a study opened from inside a folder leaves you in that
+      // folder, so the address goes back to the folder's, not to nothing.
+      var folder = window.Folio && Folio.hash();
       history.replaceState(null, '',
-        slug ? '#case/' + slug : location.pathname + location.search);
+        slug ? '#case/' + slug : (folder || location.pathname + location.search));
     } catch (err) {
       /* no addressable URL in this context — the reader still works */
     }

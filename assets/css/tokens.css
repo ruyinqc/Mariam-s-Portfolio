@@ -40,6 +40,13 @@
   --green-deep:   #16A34A;
   --green-wash:   #EAF7E8;
   --sage:         #EEE8D2;   /* testimonial bubbles                           */
+  --blush-wash:   #F6E2D8;   /* the other testimonial bubble — the pink folder */
+
+  /* Each folder's ink: a deep shade of its colour, dark enough to carry the
+     words in a title that are set in the display face. */
+  --ink-mustard:  #85570F;
+  --ink-olive:    #4F5A22;
+  --ink-clay:     #A1493A;
 
   /* Klaxs, the horn game: its warm paper and its mustard. Mustard is a FILL
      ONLY, like green — it sits inside an ink outline and never carries text. */

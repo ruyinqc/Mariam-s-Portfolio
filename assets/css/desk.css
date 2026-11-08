@@ -123,6 +123,7 @@
   color: rgba(246, 236, 217, .88);
 }
 .desk__role b { color: var(--mustard); font-weight: 600; }
+.desk__role > span { white-space: nowrap; }
 
 /* ---- The folders ------------------------------------------------------------
    Without JavaScript: a centred row that wraps. desk.js lifts them onto a
@@ -317,6 +318,12 @@
 .folder.is-on .folder__front { transform: rotateX(-16deg); }
 .folders:has(.folder:hover) .folder:not(:hover) { opacity: .62; }
 
+/* A small folder (a short laptop screen) keeps only its title on the label. */
+@container (max-width: 135px) {
+  .folder__sub { display: none; }
+  .folder__title { font-size: 11cqw; }
+}
+
 /* Small screens: the label keeps only its title, a touch larger. */
 @media (max-width: 619px) {
   .desk { --fill: #602C0F; }
@@ -326,7 +333,10 @@
   .desk__shadow  { left: 50.5%; }
   .desk__shadow--soft  { top: 77.2%; width: 46%; height: 1.9%; }
   .desk__shadow--tight { top: 77.5%; width: 39%; }
-  .desk__plate { margin-top: -96px; }
+  .desk__plate { margin-top: -30px; }
+  /* the facts drop to a line of their own */
+  .desk__facts { display: block; }
+  .desk__dot { display: none; }
   .folder__sub { display: none; }
   .folder__title { font-size: 11.5cqw; }
   .folder__tab { font-size: 6cqw; padding: 0 10cqw 0 5cqw; max-width: 96%; }
@@ -395,60 +405,20 @@
 .desk__pulse { position: absolute; margin: -11px 0 0 -11px; animation: desk-pulse .5s ease-out forwards; }
 @keyframes desk-pulse { from { opacity: 1; transform: scale(.6); } to { opacity: 0; transform: scale(1.7); } }
 
-/* ---- Opening a folder ---------------------------------------------------------
-   A sheet of paper in the folder's colour grows from the folder to fill the
-   screen; the page jumps to the section behind it, and the sheet fades. */
-.desk-sheet {
-  position: fixed;
-  z-index: 150;
-  display: grid;
-  place-content: center;
-  gap: 0.75rem;
-  overflow: hidden;
-  text-align: center;
-  color: var(--ink);
-  background: var(--paper) url("../img/desk/paper.webp");
-  background-size: 420px;
-  border-top: 10px solid var(--fc);
-  border-radius: 6px 14px 14px 14px;
-  box-shadow: 0 50px 90px -20px rgba(0, 0, 0, .55);
-  transition: top .5s var(--ease), left .5s var(--ease), width .5s var(--ease), height .5s var(--ease),
-              border-radius .5s var(--ease), opacity .32s ease;
-}
-.desk-sheet.is-full { border-radius: 0; }
-.desk-sheet.is-leaving { opacity: 0; }
-.desk-sheet__tag {
-  justify-self: center;
-  padding: 7px 10px;
-  border-radius: 3px;
-  background: var(--fc);
-  font: 500 11px/1 var(--font-mono);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity .2s .2s;
-}
-.desk-sheet__title {
-  font-family: var(--font-display);
-  font-variation-settings: "SOFT" 100, "WONK" 1;
-  font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.5rem);
-  line-height: 1;
-  opacity: 0;
-  transition: opacity .2s .2s;
-}
-.desk-sheet.is-full .desk-sheet__tag,
-.desk-sheet.is-full .desk-sheet__title { opacity: 1; }
-
-/* The nav stays out of the way while the desk is on screen — the folders
-   are the navigation there. */
-.nav { transition: opacity var(--dur) var(--ease), visibility var(--dur); }
-.nav.is-desk { opacity: 0; visibility: hidden; }
+/* ---- With folders that open over the desk (folio.js) ---------------------------
+   The desk is the whole page: exactly one screen, no nav (the folders are
+   the navigation), and the sections wait in the open folder instead. */
+.desk-mode .desk { min-height: 100vh; min-height: 100svh; }
+/* short screens: less wood under the folders, so the whole desk still fits */
+@media (max-height: 780px) { .desk { padding-bottom: 1.25rem; } }
+.desk-mode .nav,
+.desk-mode .footer,
+.desk-mode #main > .section { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .desk--js .folders__item,
   .desk--js .folders__item::after { animation: none; }
-  .folder, .folder__print, .folder__front, .desk__look, .desk__sel, .desk-sheet { transition: none; }
+  .folder, .folder__print, .folder__front, .desk__look, .desk__sel { transition: none; }
   .folder:hover, .folder:focus-visible, .folder.is-on { transform: none; }
   .desk__pulse { animation-duration: .01s; }
 }
