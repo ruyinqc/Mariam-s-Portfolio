@@ -149,8 +149,9 @@
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
       // The folders keep the size and spacing they have on a 16:10 screen
-      // (Mariam's choice), even where that means a short scroll.
-      var w = off ? clamp(Ws * 0.15, 150, 250) : Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
+      // (Mariam's choice), but shrink just enough to fit the height: the
+      // page never scrolls.
+      var w = Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
         arms = settle(w * 1.19);
         plan = uPlan({ left: Math.round(P.cx * (W - Ws)), width: Ws }, W, P, arms, nameRel, N, textBelow, w);
