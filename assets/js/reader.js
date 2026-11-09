@@ -24,11 +24,25 @@
   var elKind = document.getElementById('readerKind');
   var elIdx  = document.getElementById('readerIndex');
   var elTot  = document.getElementById('readerTotal');
+  var elCount = document.getElementById('readerCount');
+  var elNav  = document.getElementById('readerNav');
+  var elBack = document.getElementById('readerBack');
 
   if (!root || !window.WORK) return;
 
   var items = window.WORK.filter(function (w) { return w.published !== false; });
   if (!items.length) return;
+
+  /* Each kind is its own set: the case studies are counted and stepped
+     through together ("Case study 2 / 4"), and a one-off — the argument,
+     the vibe coding — stands alone, with no counter and no arrows. */
+  function group(i) {
+    var kind = items[i].kind;
+    return items.reduce(function (list, w, j) {
+      if (w.kind === kind) list.push(j);
+      return list;
+    }, []);
+  }
 
   var open = false;
   var index = -1;
@@ -486,6 +500,37 @@
     }).join('') + '</dl>';
   }
 
+  function foot(i) {
+    var set = group(i), pos = set.indexOf(i);
+    var kind = items[i].kind.toLowerCase();
+    if (set.length > 1) {
+      var next = items[set[(pos + 1) % set.length]];
+      return '<footer class="cs__foot">' +
+          '<p>' + esc(items[i].kind) + ' ' + (pos + 1) + ' of ' + set.length + '</p>' +
+          '<button class="btn btn--ghost" type="button" data-step="next">' +
+            'Next ' + esc(kind) + ': ' + esc(next.card.title) + ' ' + icon('arrow') +
+          '</button>' +
+        '</footer>';
+    }
+    return '<footer class="cs__foot">' +
+        '<p></p>' +
+        '<button class="btn btn--ghost" type="button" data-step="back">' +
+          icon('prev') + ' Back to ' + esc(origin.label) +
+        '</button>' +
+      '</footer>';
+  }
+
+  /* Where the reader was opened from, so Back can say so and go there:
+     the open folder (a case study opened from Case Studies), or the desk. */
+  var origin = { label: 'the desk', colour: '' };
+  function findOrigin(slug) {
+    if (window.Folio && Folio.hash()) {
+      return { label: Folio.title(), colour: Folio.colour() };
+    }
+    var f = document.querySelector('.folder[data-case="' + slug + '"]');
+    return { label: 'the desk', colour: f ? getComputedStyle(f).getPropertyValue('--fc').trim() : '' };
+  }
+
   function render(i) {
     var it = items[i];
     var isArg = /argument/i.test(it.kind);
@@ -514,24 +559,18 @@
         : '') +
       it.blocks.map(renderBlock).join('') +
 
-      '<footer class="cs__foot">' +
-        '<p>' + (i + 1) + ' of ' + items.length + '</p>' +
-        (items.length > 1
-          ? '<button class="btn btn--ghost" type="button" data-step="next">' +
-            'Next: ' + esc(items[(i + 1) % items.length].card.title) + ' ' + icon('arrow') +
-            '</button>'
-          : '') +
-      '</footer>';
+      foot(i);
 
     unmountLenses = Lens.mount(body);
 
+    var set = group(i), pos = set.indexOf(i);
+    var single = set.length < 2;
     elKind.textContent = it.kind;
-    elIdx.textContent = i + 1;
-    elTot.textContent = items.length;
-
-    // Arrows wrap, so they are never dead — but with one study there is
-    // nowhere to go.
-    var single = items.length < 2;
+    elIdx.textContent = pos + 1;
+    elTot.textContent = set.length;
+    // A one-off has nowhere to step to: no counter, no arrows.
+    if (elCount) elCount.hidden = single;
+    if (elNav) elNav.hidden = single;
     btnP.disabled = single;
     btnN.disabled = single;
 
@@ -577,6 +616,9 @@
 
     if (!open) {
       lastFocus = document.activeElement;
+      origin = findOrigin(items[i].slug);
+      if (elBack) elBack.textContent = origin.label === 'the desk' ? 'Desk' : origin.label;
+      root.style.setProperty('--fc', origin.colour || '');
       root.hidden = false;
       lockPage();
       setBackdropHidden(true);
@@ -622,9 +664,11 @@
     lastFocus = null;
   }
 
+  // The arrows step within the same kind, and wrap.
   function step(delta) {
-    if (items.length < 2) return;
-    openAt((index + delta + items.length) % items.length, false);
+    var set = group(index), pos = set.indexOf(index);
+    if (set.length < 2) return;
+    openAt(set[(pos + delta + set.length) % set.length], false);
   }
 
   /* ======================================================================
@@ -637,8 +681,8 @@
   btnN.addEventListener('click', function () { step(1); });
 
   body.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-step="next"]');
-    if (b) step(1);
+    if (e.target.closest('[data-step="next"]')) step(1);
+    else if (e.target.closest('[data-step="back"]')) close();
   });
 
   document.addEventListener('keydown', function (e) {

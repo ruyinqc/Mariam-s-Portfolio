@@ -8,23 +8,32 @@
 .reader__scrim {
   position: absolute;
   inset: 0;
-  background: rgba(16, 16, 24, .58);
-  -webkit-backdrop-filter: blur(6px);
-          backdrop-filter: blur(6px);
+  background: rgba(20, 9, 2, .58);   /* a plain tint, like an open folder's */
   opacity: 0;
   transition: opacity var(--dur) var(--ease);
 }
 .reader.is-open .reader__scrim { opacity: 1; }
 
+/* The same size and place as an open folder (folio.css), so a study opened
+   from Case Studies lies exactly over the folder it came from — a sheet the
+   width of its text, not the whole screen. The top edge takes the colour of
+   the folder it was opened from. */
 .reader__panel {
   position: absolute;
-  inset: clamp(0px, 2vw, 1.5rem);
+  top: max(2.5vh, 14px);
+  left: 50%;
+  width: min(1180px, calc(100vw - 32px));
+  height: calc(100vh - 2 * max(2.5vh, 14px));
+  height: calc(100svh - 2 * max(2.5vh, 14px));
+  margin-left: calc(-1 * min(1180px, calc(100vw - 32px)) / 2);
   display: flex;
   flex-direction: column;
-  background: var(--paper);
-  border-radius: clamp(0px, 2vw, var(--r-xl));
+  background: var(--paper) url("../img/desk/paper.webp");
+  background-size: 420px;
+  border-top: 12px solid var(--fc, var(--mustard));
+  border-radius: 8px 18px 18px 18px;
   overflow: hidden;
-  box-shadow: var(--sh-3);
+  box-shadow: 0 40px 80px -24px rgba(0, 0, 0, .6), 0 0 0 1px rgba(0, 0, 0, .06);
   opacity: 0;
   transform: translate3d(0, 22px, 0) scale(.985);
   transition:
@@ -60,13 +69,33 @@
   align-items: center;
   gap: var(--s-4);
   padding: var(--s-4) clamp(1rem, 3vw, 2rem);
-  background: color-mix(in srgb, var(--paper) 88%, transparent);
-  -webkit-backdrop-filter: blur(14px);
-          backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--line-strong);
 }
 
-.reader__close,
+/* Back to the folder (or the desk) it was opened from: the words say where. */
+.reader__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  height: 2.75rem;
+  flex: none;
+  padding: 0 1.1rem 0 0.8rem;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--r-pill);
+  background: var(--paper-raised);
+  color: var(--ink);
+  font-size: var(--t-small);
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    background var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+.reader__back:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.reader__back .icon { width: 1.1rem; height: 1.1rem; }
+.reader__count[hidden], .reader__nav[hidden] { display: none; }
+
 .reader__step {
   display: grid;
   place-items: center;
@@ -81,14 +110,13 @@
     border-color var(--dur-fast) var(--ease),
     color var(--dur-fast) var(--ease);
 }
-.reader__close:hover,
 .reader__step:hover:not([disabled]) {
   background: var(--ink);
   border-color: var(--ink);
   color: var(--paper);
 }
 .reader__step[disabled] { opacity: .35; cursor: not-allowed; }
-.reader__close .icon, .reader__step .icon { width: 1.2rem; height: 1.2rem; }
+.reader__step .icon { width: 1.2rem; height: 1.2rem; }
 
 .reader__crumb {
   display: flex;
@@ -117,7 +145,19 @@
 @media (max-width: 560px) {
   .reader__bar { gap: var(--s-3); padding-inline: var(--s-4); }
   #readerKind { display: none; }
-  .reader__close, .reader__step { width: 2.5rem; height: 2.5rem; }
+  .reader__step { width: 2.5rem; height: 2.5rem; }
+  .reader__back { height: 2.5rem; padding-inline: 0.6rem 0.9rem; }
+}
+/* On a phone the reader fills the screen, like an open folder does. */
+@media (max-width: 619px) {
+  .reader__panel {
+    top: 8px;
+    width: calc(100vw - 16px);
+    margin-left: calc(-50vw + 8px);
+    height: calc(100vh - 16px);
+    height: calc(100svh - 16px);
+    border-radius: 6px 14px 14px 14px;
+  }
 }
 
 /* ---- Scroll region ------------------------------------------------------ */

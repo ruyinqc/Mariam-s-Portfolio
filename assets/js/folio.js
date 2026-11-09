@@ -112,10 +112,6 @@
       var on = !t.hasAttribute('data-case') && t.getAttribute('href') === '#' + f.key;
       if (on) t.setAttribute('aria-current', 'page');
       else t.removeAttribute('aria-current');
-      // on a phone the tabs scroll sideways: bring the open one into view
-      if (on && t.parentNode.scrollWidth > t.parentNode.clientWidth) {
-        t.parentNode.scrollLeft = t.offsetLeft - (t.parentNode.clientWidth - t.offsetWidth) / 2;
-      }
     });
 
   }
@@ -125,6 +121,17 @@
   function remeasure() {
     if (window.Line) Line.measure();
     if (window.Motion) Motion.remeasure();
+  }
+
+  // On a phone the tabs scroll sideways: bring the open folder's tab into
+  // view. Only possible once the sheet is showing.
+  function showTab() {
+    var t = root.querySelector('.folio__tab[aria-current]');
+    if (!t) return;
+    var row = t.parentNode;
+    if (row.scrollWidth > row.clientWidth) {
+      row.scrollLeft = t.offsetLeft - row.offsetLeft - (row.clientWidth - t.offsetWidth) / 2;
+    }
   }
 
   function scrollToPart(id, f) {
@@ -181,6 +188,7 @@
         fill(f);
         root.classList.remove('is-switching', 'is-opening');
         remeasure();
+        showTab();
         scrollToPart(part, f);
       }, reduced ? 0 : 160);
       return;
@@ -199,6 +207,7 @@
     document.documentElement.classList.add('folio-open');
     setBackdrop(true);
     flipFrom(origin);
+    showTab();
     requestAnimationFrame(function () { root.classList.add('is-open'); });
     scroll.focus({ preventScroll: true });
 
@@ -318,6 +327,13 @@
     },
     /** The open folder's address, or null. reader.js returns to it on close. */
     hash: function () { return current ? '#' + current.key : null; },
+    /** The open folder's name and colour, for the reader's Back button. */
+    title: function () {
+      var t = current && deskFolder(current.key);
+      t = t && t.querySelector('.folder__title');
+      return t ? t.textContent : 'the folder';
+    },
+    colour: function () { return root.style.getPropertyValue('--fc').trim(); },
     close: requestClose
   };
 

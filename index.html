@@ -62,12 +62,12 @@
 <link rel="stylesheet" href="assets/css/tokens.css?v=20">
 <link rel="stylesheet" href="assets/css/base.css?v=19">
 <link rel="stylesheet" href="assets/css/layout.css?v=19">
-<link rel="stylesheet" href="assets/css/components.css?v=20">
+<link rel="stylesheet" href="assets/css/components.css?v=21">
 <!-- The case-study reader's styles aren't needed for the first screen, so they load
      without holding it up. (The reader itself needs JavaScript anyway.) -->
-<link rel="stylesheet" href="assets/css/reader.css?v=19" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/desk.css?v=4">
-<link rel="stylesheet" href="assets/css/folio.css?v=2">
+<link rel="stylesheet" href="assets/css/reader.css?v=20" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="assets/css/desk.css?v=5">
+<link rel="stylesheet" href="assets/css/folio.css?v=3">
 
 <!-- Structured data. The case studies and certificates are added at runtime
      by app.js, straight from data.js and config.js, so they can never drift
@@ -294,6 +294,13 @@
     <h1 class="desk__name">Mariam Emad Nabih</h1>
     <p class="desk__role"><span>Mid-Senior Product Designer</span><span class="desk__facts"><span class="desk__dot" aria-hidden="true"> · </span><b>6 years</b> in tech · <b>3.5 years</b> in product design</span></p>
   </div>
+
+  <!-- Pinned to the top-right corner of the desk; after her name in the
+       markup, so it is read after it. -->
+  <p class="status desk__status">
+    <span class="status__dot" aria-hidden="true"></span>
+    Based in Egypt · <strong>Open to relocation</strong>
+  </p>
 
   <!-- The six folders, left to right. --fc is the folder's colour and --fc2
        the lighter shade on its front. The picture inside each one is just an
@@ -869,16 +876,21 @@
     <div class="reader__progress" aria-hidden="true"><span id="readerProgress"></span></div>
 
     <header class="reader__bar">
-      <button class="reader__close" type="button" id="readerClose" aria-label="Close case study">
-        <svg class="icon" aria-hidden="true"><use href="#i-close"/></svg>
+      <!-- Back to wherever it was opened from: the folder ("Case Studies")
+           or the desk. reader.js sets the words. -->
+      <button class="reader__back" type="button" id="readerClose">
+        <svg class="icon" aria-hidden="true"><use href="#i-prev"/></svg>
+        <span><span class="sr-only">Back to </span><span id="readerBack">the desk</span></span>
       </button>
 
+      <!-- Counts only its own kind: "Case study 2 / 4". A one-off piece
+           (the argument, the vibe coding) shows its kind alone. -->
       <p class="reader__crumb">
         <span id="readerKind">Case study</span>
-        <span class="reader__count"><span id="readerIndex">1</span>&nbsp;/&nbsp;<span id="readerTotal">3</span></span>
+        <span class="reader__count" id="readerCount"><span id="readerIndex">1</span>&nbsp;/&nbsp;<span id="readerTotal">4</span></span>
       </p>
 
-      <div class="reader__nav">
+      <div class="reader__nav" id="readerNav">
         <button class="reader__step" type="button" id="readerPrev">
           <svg class="icon" aria-hidden="true"><use href="#i-prev"/></svg>
           <span class="sr-only">Previous case study</span>
@@ -905,10 +917,10 @@
 <script src="assets/js/nav.js?v=19"></script>
 <script src="assets/js/board.js?v=18"></script>
 <script src="assets/js/line.js?v=19"></script>
-<script src="assets/js/reader.js?v=19"></script>
+<script src="assets/js/reader.js?v=20"></script>
 <script src="assets/js/contact.js?v=19"></script>
-<script src="assets/js/folio.js?v=2"></script>
-<script src="assets/js/desk.js?v=5"></script>
+<script src="assets/js/folio.js?v=3"></script>
+<script src="assets/js/desk.js?v=6"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>
