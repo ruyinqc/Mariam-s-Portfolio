@@ -351,8 +351,9 @@ six folders on one curve in front of you: the four in the middle under the
 subtitle, and *About Me* and *Contact* at the ends, down by the desk's edge.
 On a wide screen your name and the subtitle are centred on you, so the curve
 clears them evenly. On a screen wider than 16:10 (a browser window of about
-1920×913, say) the folders keep the size and spacing they have at 1440×900,
-even if that means a short scroll. The *Based in Egypt
+1920×913, say) the folders keep the size they have at 1440×900 where the
+height allows, and shrink just enough to fit where it doesn't: the page
+never scrolls. The *Based in Egypt
 · Open to relocation* tag from About Me sits in the top-right corner; on a
 phone, where that corner is right above your head, it is smaller and the
 desk keeps your head clear of it. All of

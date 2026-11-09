@@ -624,9 +624,9 @@ async function run() {
     await c.close();
   }
 
-  // On a wide, short screen (Mariam's own: about 1920×913) the scene keeps
-  // the proportions it has at 1440×900, the size she chose: the same big,
-  // close-set folders, with the room carrying on softly either side.
+  // On a wide, short screen (Mariam's own: about 1920×913) the photo spans
+  // the full width and the page never scrolls: the folders shrink just
+  // enough to fit, and stay evenly spaced on the curve.
   {
     const c = await browser.newContext({ viewport: { width: 1920, height: 913 } });
     const pg = await c.newPage();
@@ -638,12 +638,12 @@ async function run() {
       return {
         width: Math.round(f[2].width),
         gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right)),
-        fits: document.documentElement.scrollWidth <= innerWidth,
+        fits: document.documentElement.scrollWidth <= innerWidth && document.documentElement.scrollHeight <= innerHeight + 1,
         photo: Math.round(document.getElementById('deskWorld').getBoundingClientRect().width) === innerWidth
       };
     });
-    check('on a wide, short screen the folders keep their 1440×900 size and spacing',
-          st.photo && st.fits && st.width >= 200 && st.gaps.every(g => g >= 8 && g <= 32) &&
+    check('on a wide, short screen the photo spans the width and nothing scrolls',
+          st.photo && st.fits && st.width >= 150 && st.gaps.every(g => g >= 8) &&
           Math.abs(st.gaps[0] - st.gaps[2]) <= 3, `${st.width}px folders, gaps ${st.gaps.join(', ')}`);
     await c.close();
   }
