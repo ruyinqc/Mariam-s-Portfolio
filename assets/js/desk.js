@@ -278,9 +278,9 @@
 
   function openFolder(folder) {
     var study = folder.getAttribute('data-case');
-    // Live Projects: the Vibe Coding study, in the reader. Setting the hash
-    // lands one history entry, exactly like clicking its card.
-    if (study && window.Reader) location.hash = '#case/' + study;
+    // Live Projects: the Vibe Coding study, in the reader — one history
+    // entry, exactly like clicking its card.
+    if (study && window.Reader) Reader.go(study);
     else if (window.Folio) Folio.show(folder.getAttribute('href').slice(1), folder);
     else location.hash = folder.getAttribute('href');
     tapped = null;

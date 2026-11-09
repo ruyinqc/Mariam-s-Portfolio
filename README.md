@@ -365,7 +365,9 @@ an open folder. The ← button at its top left says where it goes back to:
 opened it from the desk. The counter and the ‹ › arrows only count and step
 through studies of the same kind (*Case study 2 / 4*); the UX argument and
 the vibe coding are one of a kind, so they show neither, and their last
-button goes back instead of on.
+button goes back instead of on. Going back from a study (←, Escape, or the
+browser's Back) lands in the folder exactly where you left it, and the
+folder's × then closes it in one go.
 
 Which sections live in which folder is set at the top of
 `assets/js/folio.js` (About holds About and Toolkit; Experience holds the
@@ -518,8 +520,9 @@ idle, the cursor frame (and that it follows the mouse, not a leftover
 keyboard focus), the space kept over your head and under the folders, the
 corner tag, the subtitle's size, the gaps between folders, and opening,
 switching and closing a folder — and the reader: its size matching a
-folder's, the counter and arrows keeping to one kind, and where Back goes.
-At every width, each folder has to fit the screen. 111 checks.
+folder's, the counter and arrows keeping to one kind, where Back goes, and
+that Back from a study leaves the folder where you left it, closable in one
+go. At every width, each folder has to fit the screen. 114 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -599,7 +602,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               111 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               114 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -633,8 +636,13 @@ applying to European companies.
 
 **Case studies open in an overlay, not a new page.** The URL still changes to
 `#case/<slug>`, so you can send a recruiter a link straight to one study and
-the browser Back button behaves. The ‹ › arrows use `replaceState`, so somebody
-who reads all four case studies still leaves the overlay with a single Back.
+the browser Back button behaves. Opening a study from the page adds one history
+entry, marked as the reader's (`history.state.reader`), and closing it steps
+back over that entry, so nothing is left behind for the folder's × to trip
+over. The ‹ › arrows use `replaceState`, so somebody who reads all four case
+studies still leaves the overlay with a single Back. A study opened straight
+from its address has nothing of the site's behind it, so closing it only tidies
+the address, and never takes anyone off the site.
 
 **Reveal-on-scroll is armed by JavaScript, not CSS.** Elements are visible by
 default; `app.js` adds `.reveal-ready` to `<html>`, which is what switches on

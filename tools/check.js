@@ -251,6 +251,45 @@ async function run() {
   await page.waitForTimeout(700);
   check('Escape closes the folder', await page.evaluate(() => document.getElementById('folio').hidden));
 
+  // A study read from a folder opened on the desk. Closing the study goes
+  // back to the folder, where you left it, and one × then closes the
+  // folder. (Closing a study used to leave a second copy of the folder's
+  // entry in history, so the × had to be pressed twice.)
+  const folderOpen = () => page.evaluate(() => !document.getElementById('folio').hidden);
+  const readerOpen = () => page.evaluate(() => !document.getElementById('reader').hidden);
+  await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
+  await page.click('#folders .folder[href="#work"]:not([data-case])', { force: true });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => { document.getElementById('folioScroll').scrollTop = 300; });
+  await page.click('.pincard__hit[href="#case/klaxs"]');
+  await page.waitForTimeout(800);
+  const at = await page.evaluate(() => document.getElementById('folioScroll').scrollTop);
+  await page.click('#readerClose');
+  await page.waitForTimeout(800);
+  const backTo = { hash: await page.evaluate(() => location.hash), folio: await folderOpen(), reader: await readerOpen(),
+                   kept: await page.evaluate(() => document.getElementById('folioScroll').scrollTop) };
+  check('Back from a study lands in its folder, where you left it',
+        backTo.folio && !backTo.reader && backTo.hash === '#work' && at > 0 && Math.abs(backTo.kept - at) < 2,
+        `${backTo.hash}, scrolled ${at} → ${backTo.kept}`);
+  await page.click('#folioClose');
+  await page.waitForTimeout(800);
+  const gone = { hash: await page.evaluate(() => location.hash), folio: await folderOpen() };
+  check('…and one × then closes the folder', !gone.folio && gone.hash === '', JSON.stringify(gone));
+
+  // The browser's Back walks the same way: study, then folder, then desk.
+  await page.click('#folders .folder[href="#work"]:not([data-case])', { force: true });
+  await page.waitForTimeout(1200);
+  await page.click('.pincard__hit[href="#case/klaxs"]');
+  await page.waitForTimeout(800);
+  await page.goBack();
+  await page.waitForTimeout(800);
+  const b1 = { hash: await page.evaluate(() => location.hash), folio: await folderOpen(), reader: await readerOpen() };
+  await page.goBack();
+  await page.waitForTimeout(800);
+  const b2 = { hash: await page.evaluate(() => location.hash), folio: await folderOpen() };
+  check("the browser's Back goes study → folder → desk",
+        !b1.reader && b1.folio && b1.hash === '#work' && !b2.folio && b2.hash === '', `${JSON.stringify(b1)} ${JSON.stringify(b2)}`);
+
   await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
   await page.waitForTimeout(400);
   await page.click('#folders .folder[data-case="vibe-coding"]', { force: true });  // the folders float

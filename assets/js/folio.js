@@ -259,6 +259,10 @@
     var id = decodeURIComponent(location.hash.slice(1));
     if (/^case\//.test(id)) return;                 // the reader's
     var f = id && byId[id];
+    // Back from a study read in this folder: it's still open underneath,
+    // and keeps its place.
+    if (f && f === current && id === f.ids[0] && !root.hidden &&
+        !root.classList.contains('is-closing')) return;
     if (f) open(f, id);
     else if (current) close();
   }
@@ -275,7 +279,11 @@
       if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       e.preventDefault();
       var study = t.getAttribute('data-case');
-      if (study) { location.hash = '#case/' + study; return; }
+      if (study) {
+        if (window.Reader) Reader.go(study);
+        else location.hash = '#case/' + study;
+        return;
+      }
       var key = t.getAttribute('href').slice(1);
       setHash('#' + key, false);       // a tab switch replaces, so one Back still closes
       open(byKey[key], key);

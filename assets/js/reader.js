@@ -3,10 +3,15 @@
 
    Routing contract
    ----------------
-   #case/<slug> opens that study. Clicking a card is a normal link click, so
-   it lands one entry in history and Back returns to the board. Moving with
-   the ‹ › arrows uses replaceState instead, so a reader who has walked
-   through all three studies still gets out of the overlay with one Back.
+   #case/<slug> opens that study. Opening one from the page (a card, the
+   desk's Live Projects, a folder tab) adds one history entry, marked as the
+   reader's own, and closing it (←, Escape, the scrim, the footer button or
+   the browser's Back) steps back over exactly that entry, to the folder or
+   the desk it was opened from, which keeps its place. Moving with the ‹ ›
+   arrows replaces the entry instead, so a reader who has walked through all
+   four case studies still gets out with one Back. A study opened straight
+   from its address (a link someone was sent) has nothing of ours behind it:
+   closing it just tidies the address.
    ========================================================================== */
 
 (function () {
@@ -64,8 +69,9 @@
     try {
       // Closing a study opened from inside a folder leaves you in that
       // folder, so the address goes back to the folder's, not to nothing.
+      // Stepping to another study keeps the entry's mark (see go()).
       var folder = window.Folio && Folio.hash();
-      history.replaceState(null, '',
+      history.replaceState(slug ? history.state : null, '',
         slug ? '#case/' + slug : (folder || location.pathname + location.search));
     } catch (err) {
       /* no addressable URL in this context — the reader still works */
@@ -634,16 +640,28 @@
     scroll.focus({ preventScroll: true });
   }
 
-  function close() {
+  // Did opening this study add a history entry of ours? (See go().)
+  function ownEntry() {
+    return !!(history.state && history.state.reader);
+  }
+
+  // `fromHash` is true when the address has already moved on (the browser's
+  // Back): then there is nothing left to tidy.
+  function close(fromHash) {
     if (!open) return;
     open = false;
     root.classList.remove('is-open');
     setBackdropHidden(false);
     unlockPage();
 
-    // Strip the hash without adding to history, so Back still leaves the page
-    // rather than re-opening the study the visitor just closed.
-    if (location.hash.indexOf('#case/') === 0) setHash(null);
+    // Close the way it was opened. If opening added an entry of ours, step
+    // back over it, so nothing is left behind and the folder's × still
+    // closes the folder in one go. Otherwise strip the hash in place, so
+    // Back still leaves the page rather than re-opening this study.
+    if (fromHash !== true) {
+      if (ownEntry()) history.back();
+      else if (location.hash.indexOf('#case/') === 0) setHash(null);
+    }
 
     var done = function () {
       root.hidden = true;
@@ -731,7 +749,7 @@
 
   function syncFromHash() {
     var m = /^#case\/(.+)$/.exec(location.hash);
-    if (!m) { if (open) close(); return; }
+    if (!m) { if (open) close(true); return; }
     var i = slugIndex(decodeURIComponent(m[1]));
     if (i === -1) {
       // Unknown slug — clear it rather than leaving a broken-looking URL.
@@ -741,8 +759,33 @@
     openAt(i, true);
   }
 
+  // Open a study from the page: one new history entry, marked as the
+  // reader's, so closing it can step back over it (see close()).
+  function go(slug) {
+    var i = slugIndex(slug);
+    if (i === -1) return;
+    if (open) { openAt(i, false); return; }          // already reading: just move
+    try {
+      history.pushState({ reader: true }, '', '#case/' + slug);
+    } catch (err) { /* no addressable URL here — the study still opens */ }
+    openAt(i, true);
+  }
+
+  // Every link to a study (the cards, links in the text) opens it this way.
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href^="#case/"]');
+    if (!a || slugIndex(decodeURIComponent(a.getAttribute('href').slice(6))) === -1) return;
+    e.preventDefault();
+    go(decodeURIComponent(a.getAttribute('href').slice(6)));
+  });
+
   window.addEventListener('hashchange', syncFromHash);
   syncFromHash();
 
-  window.Reader = { open: function (slug) { openAt(slugIndex(slug), false); }, close: close };
+  window.Reader = {
+    open: function (slug) { openAt(slugIndex(slug), false); },
+    go: go,
+    close: close
+  };
 })();
