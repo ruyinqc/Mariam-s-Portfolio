@@ -344,11 +344,14 @@ pinning and becomes a row you swipe sideways instead.
 
 ## 4. The desk (the top of the page)
 
-The first thing anyone sees is you at your desk, your name on the desk right
-under your hands, and six folders on a U around you — the two ends up beside
-you at desk level, the middle two under your name. All of it is fitted to
-one screen, on a laptop or a phone (where the folders become two curved rows
-of three). Pointing at a folder makes you look at it and draws a
+The first thing anyone sees is you at your desk, your name across the
+desk's edge in front of your arms, the subtitle just under your hands, and
+six folders on a U around you — the two ends up beside you at desk level,
+the middle two under the subtitle. All of it is fitted to one screen, on a
+laptop or a phone (where the folders become two curved rows of three), with
+the folders made as big as the screen allows. A clear strip is always kept
+under the folders; when there's height to spare, the room over your head
+stays a modest margin and most of the rest goes under the folders. Pointing at a folder draws a
 green selection frame around it. Clicking it opens the folder over the desk:
 a sheet of paper in the folder's colour, holding that folder's sections, with
 tabs along its top to switch folders. ×, Escape and the Back button close it.
@@ -366,20 +369,11 @@ and the sections read as one long page.
 | `room-wide.webp` | the room, for computers (1672 × 941) |
 | `room-tall.webp` | the same room, for phones (941 × 1672) |
 | `mariam-front.webp` | you, cut out, looking at the camera (791 × 917) |
-| `mariam-look-right.webp` | the same photo, looking to the right |
 | `paper.webp` | the paper texture on the folder labels and the opening sheet |
 | `prints/` | small copies of the pictures inside the folders |
 
-**To add the photo of you looking left**, save it as
-`assets/img/desk/mariam-look-left.webp` — same size and framing as
-`mariam-front.webp`, with only your head and eyes changed — then in
-`index.html` search for `LOOK LEFT` and remove the `<!--` and `-->` around
-that line. Until then you look at the camera for the three folders on the
-left.
-
-If you replace a cutout of yourself, keep the same size and keep your arms
-in the same place in every version; the photos cross-fade, so anything that
-moves between them shows as a jump.
+If you replace the cutout of yourself, keep the same size and framing — the
+desk places your name and the folders from where your arms meet the desk.
 
 **The folders** are the six `<li class="folders__item">` under *THE DESK*.
 Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
@@ -391,7 +385,8 @@ in the reader instead. The pictures are small copies in
 print, so it doesn't need the full-size photo.
 
 **The cursor.** On the desk, a mouse or trackpad gets a green crosshair and
-a selection frame. Everywhere else it's an ordinary arrow and hand in
+a selection frame around the folder under it (keyboard users get the frame
+on the folder they've tabbed to). Everywhere else it's an ordinary arrow and hand in
 green, a little larger than usual — they're `--cur-arrow` and `--cur-hand`
 in `tokens.css`. Phones and keyboards keep their normal behaviour.
 
@@ -507,9 +502,11 @@ Drives a real browser: keyboard access, focus trapping in the reader, the
 contact form's success *and* failure paths, the clothesline (scroll, drag,
 arrows), four screen widths, reduced motion, and the page with JavaScript
 switched off — and the desk: that it fits one screen, that your name sits
-under your hands and no folder covers it or another folder, that the page
-does no work while idle, your eyes, the cursor frame, and opening, switching
-and closing a folder. 86 checks.
+across the desk and the subtitle under your hands, that the folders are big
+and none covers the text or another folder, that the page does no work while
+idle, the cursor frame (and that it follows the mouse, not a leftover
+keyboard focus), the space kept over your head and under the folders, and
+opening, switching and closing a folder. 89 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -561,7 +558,7 @@ assets/
     lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
-    desk.js              the desk: fitting it to the screen, the curve, her eyes,
+    desk.js              the desk: fitting it to the screen, the U of folders,
                          the cursor frame
     folio.js             an open folder: which sections it holds, tabs, routing
     board.js             the work cards (the 3-column grid is CSS)
@@ -589,7 +586,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               86 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               89 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -602,9 +599,8 @@ tools/
 plain CSS the browser does on its own, the cursor frame is only drawn when
 the mouse moves, and the folder you point at stops floating so its frame can
 sit still. Floors and shadows are gradients, not blur filters, and nothing
-blurs the desk behind an open folder. The photos of you looking aside load
-after the page has settled, and the reader's styles load without holding up
-the first screen. `tools/check.js` fails if the desk starts doing work while
+blurs the desk behind an open folder. The reader's styles load without
+holding up the first screen. `tools/check.js` fails if the desk starts doing work while
 idle.
 
 **Light only.** There is no dark mode and no `prefers-color-scheme` block

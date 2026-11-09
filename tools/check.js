@@ -122,21 +122,26 @@ async function run() {
     for (let i = 0; i < f.length; i++) for (let j = i + 1; j < f.length; j++) if (hit(f[i], f[j])) overlap++;
     const end = f[0], last = f[f.length - 1];
     return {
-      gap: Math.round(name.top - me.bottom),
+      nameMid: Math.round((name.top + name.bottom) / 2 - me.bottom),
+      roleTop: Math.round(role.top - me.bottom),
       coversText: f.filter(r => hit(r, name) || hit(r, role)).length,
       overlap,
       beside: end.right < me.left && last.left > me.right &&
               end.top < me.bottom && last.top < me.bottom,
-      width: Math.round(f[2].width)
+      width: Math.round(f[2].width),
+      overHead: Math.round(me.top),
+      underFolders: Math.round(innerHeight - Math.max(...f.map(r => r.bottom)))
     };
   });
-  // measured from the top of the name's line box, which sits a little above
-  // its letters: a small negative gap is the letters just under her hands
-  check('her name sits right under her hands', geo.gap > -24 && geo.gap < 30, `gap=${geo.gap}px`);
+  // her arms meet the desk at the bottom of her photo (.desk__me)
+  check('her name sits across the desk, in front of her arms', geo.nameMid < -20 && geo.nameMid > -140, `${geo.nameMid}px from her arms`);
+  check('the subtitle sits just under her hands', geo.roleTop >= -4 && geo.roleTop < 30, `${geo.roleTop}px`);
   check('no folder covers her name', geo.coversText === 0, String(geo.coversText));
   check('no two folders overlap', geo.overlap === 0, String(geo.overlap));
   check('the end folders sit beside her, up at the desk', geo.beside);
-  check('the folders are a good size', geo.width >= 140, `${geo.width}px`);
+  check('the folders are big', geo.width >= 180, `${geo.width}px`);
+  check('the folders keep clear of the bottom of the screen', geo.underFolders >= 36, `${geo.underFolders}px`);
+  check('no big empty band over her head', geo.overHead <= 950 * 0.1, `${geo.overHead}px`);
 
   // Nothing should run while nobody is touching the page.
   const cdp = await ctx.newCDPSession(page);
@@ -155,11 +160,9 @@ async function run() {
   await page.mouse.move(cb.x + cb.width / 2, cb.y + cb.height / 2);
   await page.waitForTimeout(500);
   const hover = await page.evaluate(() => ({
-    gaze: document.getElementById('deskMe').getAttribute('data-gaze'),
     frame: document.getElementById('deskSel').classList.contains('is-on'),
     label: document.querySelector('.desk__sel-name').textContent
   }));
-  check('she looks at the folder you point at', hover.gaze === 'right', hover.gaze);
   check('the selection frame wraps that folder', hover.frame && /Certificates/.test(hover.label), hover.label);
 
   await page.mouse.click(cb.x + cb.width / 2, cb.y + cb.height / 2);
@@ -206,6 +209,14 @@ async function run() {
   check('Back closes the folder in one step', shut.hidden && shut.hash === '', shut.hash);
   check('its sections go back where they live', shut.home);
   check('focus returns to the folder that opened it', shut.focus === '#proof', shut.focus);
+
+  // That folder keeps focus — but once the mouse moves over empty desk, the
+  // frame follows the mouse and lets go of it.
+  await page.mouse.move(700, 20);     // the room above her head: no folder there
+  await page.mouse.move(720, 32, { steps: 4 });
+  await page.waitForTimeout(500);
+  check('with the mouse on empty desk, no folder keeps the frame',
+    await page.evaluate(() => !document.getElementById('deskSel').classList.contains('is-on')));
   check('the desk is handed back', shut.deskInert === false);
 
   await page.evaluate(() => { location.hash = '#words'; });

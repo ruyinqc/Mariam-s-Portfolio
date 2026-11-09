@@ -2,18 +2,18 @@
    desk.js — the desk at the top of the page.
 
    • Fits the whole desk — photo, name, folders — inside one screen. The
-     photo is cropped from the top (never into her head) and, on a short
-     screen, the folders get a little smaller.
-   • Her name sits on the desk right under her hands, the subtitle under it.
+     photo is cropped from the top (never into her head), and the folders
+     are made as big as the screen allows.
+   • Her name sits across the desk's edge, in front of her arms; the
+     subtitle sits just under her hands.
    • The six folders sit on a fixed U around her: the two ends up beside her
-     at desk level, the middle two under her name. They float; they never
+     at desk level, the middle two under the subtitle. They float; they never
      spin. Below 900px wide they become two curved rows of three.
-   • Her eyes go to the folder you point at, before anything opens.
    • The cursor: a crosshair and a green selection frame around the folder
      you're on, for a mouse or trackpad. On a phone a tap snaps the frame
      onto the folder.
-   • Opening a folder: her eyes move first, then it opens over the desk
-     (folio.js). Live Projects opens the Vibe Coding study in the reader.
+   • Clicking a folder opens it over the desk (folio.js). Live Projects
+     opens the Vibe Coding study in the reader.
 
    Kept light on purpose: nothing here runs every frame. The cursor is drawn
    when the mouse moves or the folder under it changes, and the folder you
@@ -32,13 +32,12 @@
 
   var photo  = document.getElementById('deskPhoto');
   var world  = document.getElementById('deskWorld');
-  var me     = document.getElementById('deskMe');
   var plate  = document.getElementById('deskPlate');
   var list   = document.getElementById('folders');
   var layer  = document.getElementById('deskCursor');
   var cross  = document.getElementById('deskCross');
   var sel    = document.getElementById('deskSel');
-  if (!photo || !world || !me || !plate || !list) return;
+  if (!photo || !world || !plate || !list) return;
 
   var items   = Array.prototype.slice.call(list.querySelectorAll('.folders__item'));
   var folders = items.map(function (li) { return li.querySelector('.folder'); });
@@ -46,9 +45,7 @@
   var roleEl  = plate.querySelector('.desk__role');
   var blend   = desk.querySelector('.desk__blend');
 
-  var reduced = window.Motion ? Motion.reduced
-                              : window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var fine    = window.matchMedia('(pointer: fine)').matches;
+  var fine = window.matchMedia('(pointer: fine)').matches;
 
   desk.classList.add('desk--js');
 
@@ -61,20 +58,21 @@
 
   /* Fractions of each room photo. cx is the middle of her; figTop and
      figBottom are the top of her photo and where her forearms meet the
-     desk; figW is how wide she is. bottomCut is where the photo stops — a
-     strip of desk under her arms, for her name to sit on. headroom is the
-     room always kept above her head when the top is cropped. */
+     desk; figW is how wide she is; deskEdge is the back edge of the desk,
+     where her name sits. bottomCut is where the photo stops; headroom is
+     the room always kept above her head when the top is cropped. */
   var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.33,  figBottom: 0.845, figW: 0.25,
-               bottomCut: 0.97, headroom: 0.025 };
+               deskEdge: 0.776, bottomCut: 0.97, headroom: 0.02 };
   var TALL = { aspect: 1672 / 941, cx: 0.505, figTop: 0.449, figBottom: 0.775, figW: 0.5,
-               bottomCut: 0.84, headroom: 0.03 };
+               deskEdge: 0.72, bottomCut: 0.84, headroom: 0.03 };
 
-  var TITLE_GAP = -6;      // her name starts this far below her hands (line box; the letters sit lower)
+  var ROLE_GAP = 6;        // the subtitle starts this far under her hands
   var TEXT_GAP = 18;       // between the subtitle and the folders under it
   var EDGE = 18;           // folders keep this far from the sides of the screen
 
   var sides = [];          // which side of her each folder is on
   var lastW = 0;
+  var textBoxes = [];      // her name and the subtitle, once laid out
 
   function layout(force) {
     var W = desk.clientWidth;
@@ -86,28 +84,54 @@
 
     var P = window.matchMedia('(max-width: 619px)').matches ? TALL : WIDE;
     var Himg = W * P.aspect;
-    var armsFull = P.figBottom * Himg;                       // arms, with no crop
-    var cropMax = (P.figTop - P.headroom) * Himg;            // never into her head
+    var armsFull = P.figBottom * Himg;                       // her arms, with no crop
+    var armsMin = armsFull - (P.figTop - P.headroom) * Himg; // cropped right down to her head
     var under = (P.bottomCut - P.figBottom) * Himg;          // desk shown below her arms
 
-    // Her name always starts just under her hands, wherever the crop lands.
-    plate.style.marginTop = px(TITLE_GAP - under);
+    // Her name across the desk's edge, in front of her arms; the subtitle
+    // just under her hands. Both are placed relative to her arms, so they
+    // stay put wherever the crop lands.
+    var F = parseFloat(getComputedStyle(nameEl).fontSize) || 48;
+    var N = nameEl.offsetHeight;
+    var nameRel = -(P.figBottom - P.deskEdge) * Himg - 0.6 * F;   // letters centred on the edge
+    nameEl.style.marginBottom = px(ROLE_GAP - (nameRel + N));
+    plate.style.marginTop = px(nameRel - under);
     if (blend) blend.style.height = px(Math.max(40, under - 6));
-    var plateH = plate.offsetHeight;
-    var padB = parseFloat(getComputedStyle(desk).paddingBottom) || 0;
-    var wideU = W >= 900;
+    var textBelow = ROLE_GAP + roleEl.offsetHeight;          // subtitle bottom, below her arms
+    // Clear space always kept under the lowest folder, so no folder ever
+    // sits on the bottom edge of the screen.
+    var bottomSpace = clamp(vh * 0.05, 40, 64);
+    var spare = vh - textBelow - TEXT_GAP - bottomSpace;    // top of the screen to the lowest folder's foot
 
-    // Try the folders at full size, then a little smaller, until it all fits.
-    var scales = [1, 0.93, 0.86, 0.8, 0.74, 0.68], plan = null, arms = armsFull - cropMax;
-    for (var i = 0; i < scales.length && !plan; i++) {
-      var size = wideU ? uSize(W, scales[i]) : rowSize(W, scales[i]);
-      var below = TITLE_GAP + plateH + TEXT_GAP + size.below + padB;
-      var room = vh - below;                                  // where her arms may sit
-      var last = i === scales.length - 1;
-      if (room < armsFull - cropMax && !last) continue;
-      arms = clamp(room, armsFull - cropMax, armsFull);
-      plan = wideU ? uPlan(W, P, arms, plateH, size) : rowPlan(W, arms, plateH, size);
-      if (!plan && last) plan = rowPlan(W, arms, plateH, rowSize(W, scales[i]));
+    // Where her arms go, once the folders' height is known. With height to
+    // spare, the room over her head grows only to a comfortable margin, then
+    // takes a third of what is left; the rest goes under the folders.
+    var headMin = P.headroom * Himg, headIdeal = Math.max(headMin, vh * 0.045);
+    function settle(need) {
+      var room = Math.min(armsFull, spare - need) - armsMin;
+      if (room <= 0) return armsMin;
+      var give = Math.min(room, headIdeal - headMin);
+      return armsMin + give + (room - give) * 0.35;
+    }
+
+    var plan = null, arms = armsMin, i;
+    if (W >= 900) {
+      // As big as the height allows (and no bigger than looks right), then
+      // a little smaller at a time until the U clears her name.
+      var w = Math.min(clamp(W * 0.15, 150, 250), (spare - armsMin) / 1.19);
+      for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
+        arms = settle(w * 1.19);
+        plan = uPlan(W, P, arms, nameRel, N, textBelow, w);
+      }
+    }
+    if (!plan) {
+      var scales = [1, 0.93, 0.86, 0.8, 0.74, 0.68];
+      for (i = 0; i < scales.length && !plan; i++) {
+        var size = rowSize(W, scales[i]);
+        if (spare - size.below < armsMin && i < scales.length - 1) continue;
+        arms = settle(size.below);
+        plan = rowPlan(W, arms, textBelow, size);
+      }
     }
 
     var crop = armsFull - arms;
@@ -129,72 +153,83 @@
       sides[idx] = it.side;
     });
 
-    desk.style.minHeight = plan.bottom + padB > vh ? px(plan.bottom + padB) : '';
+    desk.style.minHeight = plan.bottom + bottomSpace > vh ? px(plan.bottom + bottomSpace) : '';
     if (window.Motion) Motion.remeasure();
+    textBoxes = [box(nameEl), box(roleEl)];
     kick(0);
+  }
+
+  // Where a line of text sits on the desk, in the desk's own coordinates.
+  function box(el) {
+    var d = desk.getBoundingClientRect(), r = document.createRange();
+    r.selectNodeContents(el);
+    var b = r.getBoundingClientRect();
+    return { left: b.left - d.left, right: b.right - d.left, top: b.top - d.top, bottom: b.bottom - d.top };
   }
 
   /* ---- wide screens: a U around her ------------------------------------- */
 
-  function uSize(W, k) {
-    var w = clamp(W * 0.125, 140, 210) * k;
-    return { w: w, h: w * 1.19, below: w * 1.19 };
+  // Where her name and the subtitle sit across the screen (they are placed
+  // up and down by arms + their offsets, so only left and right are read).
+  function span(el) {
+    var d = desk.getBoundingClientRect(), r = document.createRange();
+    r.selectNodeContents(el);
+    var b = r.getBoundingClientRect();
+    return { left: b.left - d.left - 14, right: b.right - d.left + 14 };
   }
 
-  function textRect() {
-    var d = desk.getBoundingClientRect(), r = document.createRange(), a, b;
-    r.selectNodeContents(nameEl); a = r.getBoundingClientRect();
-    r.selectNodeContents(roleEl); b = r.getBoundingClientRect();
-    return {
-      left: Math.min(a.left, b.left) - d.left - 14,
-      right: Math.max(a.right, b.right) - d.left + 14,
-      top: Math.min(a.top, b.top) - d.top - 10,
-      bottom: Math.max(a.bottom, b.bottom) - d.top + 12
-    };
-  }
-
-  function uPlan(W, P, arms, plateH, size) {
-    var w = size.w, h = size.h;
+  function uPlan(W, P, arms, nameRel, N, textBelow, w) {
+    var h = w * 1.19;
     var cx = P.cx * W;
-    var textTop = arms + TITLE_GAP, textBottom = textTop + plateH;
-    var t = textRect();
-    // textRect() reads the plate where it is now; move it to where it will be
-    var shift = textTop - plate.offsetTop;
-    t.top += shift; t.bottom += shift;
+    var ns = span(nameEl), rs = span(roleEl);
+    var boxes = [
+      { left: ns.left, right: ns.right, top: arms + nameRel - 8, bottom: arms + nameRel + N + 4 },
+      { left: rs.left, right: rs.right, top: arms + ROLE_GAP - 8, bottom: arms + textBelow + TEXT_GAP - 2 }
+    ];
 
     var reach = Math.min(cx, W - cx) - w / 2 - EDGE;         // how far the ends can go
     var rx = Math.min(W * 0.37, reach);
-    var yMid = textBottom + TEXT_GAP + h / 2;
-    t.bottom = Math.min(t.bottom, textBottom + TEXT_GAP - 2);
+    var yMid = arms + textBelow + TEXT_GAP + h / 2;
     var lift = Math.min(h * 0.3, arms - h / 2 - 10);          // the ends rise beside her
     var cy = arms - lift;
     var uMid = Math.max(0.2, (w + 16) / (2 * rx));
-    var ryE = (yMid - cy) / Math.sqrt(1 - uMid * uMid);
+    var ry = (yMid - cy) / Math.sqrt(1 - uMid * uMid);
     var us = [-1, -0.6, -uMid, uMid, 0.6, 1];
 
     var out = us.map(function (u) {
-      return { u: u, x: cx + rx * u, y: cy + ryE * Math.sqrt(Math.max(0, 1 - u * u)) };
+      return { u: u, x: cx + rx * u, y: cy + ry * Math.sqrt(Math.max(0, 1 - u * u)) };
     });
 
-    // Nothing may cover her name: slide anything that touches it outwards,
-    // then make sure each pair on a side still clears each other.
-    function hits(o) {
-      return o.x + w / 2 > t.left && o.x - w / 2 < t.right &&
-             o.y + h / 2 > t.top && o.y - h / 2 < t.bottom;
+    // Nothing may cover her name or the subtitle: slide anything that
+    // touches them outwards, then make sure each pair on a side still clears.
+    function hit(o) {
+      for (var b = 0; b < boxes.length; b++) {
+        var t = boxes[b];
+        if (o.x + w / 2 > t.left && o.x - w / 2 < t.right &&
+            o.y + h / 2 > t.top && o.y - h / 2 < t.bottom) return t;
+      }
+      return null;
+    }
+    function clear(o, side) {
+      for (var n = 0, t; n < 3 && (t = hit(o)); n++) o.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
+    }
+    // Two folders are apart if they clear each other across or up and down.
+    function apart(a, b) {
+      return Math.abs(a.x - b.x) >= w + 8 || Math.abs(a.y - b.y) >= h + 8;
     }
     for (var side = -1; side <= 1; side += 2) {
-      var second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
-      if (hits(second)) second.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
-      if (hits(end)) end.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
-      if (Math.abs(end.x - second.x) < w + 12) end.x = second.x + side * (w + 12);
+      var mid = out[side < 0 ? 2 : 3], second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
+      clear(second, side);
+      clear(end, side);
+      // each folder steps out past the one inside it, if they would touch
+      if (!apart(second, mid)) second.x = mid.x + side * (w + 12);
+      if (!apart(end, second)) end.x = second.x + side * (w + 12);
       end.x = clamp(end.x, w / 2 + EDGE, W - w / 2 - EDGE);
       second.x = clamp(second.x, w / 2 + EDGE, W - w / 2 - EDGE);
-      var apartX = Math.abs(end.x - second.x) >= w + 8;
-      var apartY = Math.abs(end.y - second.y) >= h + 8;
-      if ((!apartX && !apartY) || hits(second) || hits(end)) return null;   // too tight: go smaller
-      // and the ends stay clear of her
-      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;
+      if (!apart(second, mid) || !apart(end, second) || hit(second) || hit(end)) return null;  // too tight: go smaller
+      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;                      // the ends clear her
     }
+    if (hit(out[2]) || hit(out[3])) return null;
 
     var bottom = 0;
     var items = out.map(function (o) {
@@ -223,9 +258,9 @@
              below: 2 * (h + maxD * 0.35) + rowGap + 14 };
   }
 
-  function rowPlan(W, arms, plateH, size) {
+  function rowPlan(W, arms, textBelow, size) {
     var w = size.w, h = size.h, rise = 0.35, PERS = 1200;
-    var y = arms + TITLE_GAP + plateH + TEXT_GAP;
+    var y = arms + textBelow + TEXT_GAP;
     var items = [];
     [[0, 1, 2], [3, 4, 5]].forEach(function (row) {
       row.forEach(function (idx, i) {
@@ -244,100 +279,50 @@
   }
 
   /* ======================================================================
-     Her eyes
-     ====================================================================== */
-
-  var looks = {};
-  Array.prototype.forEach.call(me.querySelectorAll('[data-look]'), function (img) {
-    looks[img.getAttribute('data-look')] = img;
-  });
-
-  // The photos of her looking aside are only needed once someone points at
-  // a folder, so they load after the page has settled instead of with it.
-  var looksLoaded = false;
-  function loadLooks() {
-    if (looksLoaded) return;
-    looksLoaded = true;
-    Object.keys(looks).forEach(function (k) {
-      var img = looks[k];
-      if (img.getAttribute('data-src')) img.src = img.getAttribute('data-src');
-    });
-  }
-  window.addEventListener('load', function () {
-    if ('requestIdleCallback' in window) requestIdleCallback(loadLooks, { timeout: 2500 });
-    else setTimeout(loadLooks, 1200);
-  });
-
-  function gaze(side) {
-    if (side !== 'front') loadLooks();
-    me.setAttribute('data-gaze', looks[side] ? side : 'front');
-  }
-
-  /* ======================================================================
      Opening a folder
      ====================================================================== */
 
-  var busy = false, openIdx = -1, lastType = 'mouse';
+  var lastType = 'mouse';
+  // Which hand is on the controls. With the mouse, the frame follows the
+  // mouse and nothing else; the folder with keyboard focus (focus returns to
+  // a folder after it closes) only gets the frame while the keyboard is in
+  // use — otherwise it would keep pulling the frame back to that folder.
+  var lastInput = 'mouse';
   var hovered = null, focused = null, tapped = null;
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Tab' || e.key === 'Enter' || e.key === ' ' || e.key === 'Escape' ||
+        e.key.indexOf('Arrow') === 0) { lastInput = 'keyboard'; kick(600); }
+  }, true);
 
-  function finish(folder) {
-    folder.classList.remove('is-on');
-    busy = false;
-    openIdx = -1;
+  function openFolder(folder) {
+    var study = folder.getAttribute('data-case');
+    // Live Projects: the Vibe Coding study, in the reader. Setting the hash
+    // lands one history entry, exactly like clicking its card.
+    if (study && window.Reader) location.hash = '#case/' + study;
+    else if (window.Folio) Folio.show(folder.getAttribute('href').slice(1), folder);
+    else location.hash = folder.getAttribute('href');
     tapped = null;
-    gaze('front');
     kick(0);
   }
 
-  function openFolder(i) {
-    if (busy) return;
-    var folder = folders[i];
-    var key = folder.getAttribute('href').slice(1);
-    var study = folder.getAttribute('data-case');
-    busy = true;
-    openIdx = i;
-
-    var looking = me.getAttribute('data-gaze') === sides[i] && looks[sides[i]];
-    gaze(sides[i]);
-    folder.classList.add('is-on');
-    kick(600);
-
-    // Her eyes get there first; then the folder opens.
-    setTimeout(function () {
-      // Live Projects: the Vibe Coding study, in the reader. Setting the hash
-      // lands one history entry, exactly like clicking its card.
-      if (study && window.Reader) location.hash = '#case/' + study;
-      else if (window.Folio) Folio.show(key, folder);
-      else location.hash = '#' + key;
-      finish(folder);
-    }, reduced ? 0 : (looking ? 160 : 400));
-  }
-
-  folders.forEach(function (folder, i) {
+  folders.forEach(function (folder) {
     folder.addEventListener('click', function (e) {
       // A middle-click or ⌘-click still opens a new tab, like any link.
       if (e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       e.preventDefault();
-      if (lastType !== 'mouse') tapped = folder;
-      openFolder(i);
+      if (lastType !== 'mouse') { tapped = folder; kick(400); }
+      openFolder(folder);
     });
-    folder.addEventListener('pointerenter', function () {
-      if (!busy) gaze(sides[i]);
-      hovered = folder;
-      kick(600);
-    });
+    folder.addEventListener('pointerenter', function () { hovered = folder; kick(600); });
     folder.addEventListener('pointerleave', function () {
-      if (!busy) gaze('front');
       if (hovered === folder) hovered = null;
       kick(600);
     });
     folder.addEventListener('focus', function () {
-      if (!busy) gaze(sides[i]);
       try { if (folder.matches(':focus-visible')) focused = folder; } catch (err) { focused = folder; }
       kick(600);
     });
     folder.addEventListener('blur', function () {
-      if (!busy) gaze('front');
       if (focused === folder) focused = null;
       kick(600);
     });
@@ -366,7 +351,7 @@
   function draw(now) {
     queued = false;
     var folio = root.classList.contains('folio-open');
-    var target = folio ? null : (openIdx >= 0 ? folders[openIdx] : (hovered || tapped || focused));
+    var target = folio ? null : (hovered || tapped || (lastInput === 'keyboard' ? focused : null));
 
     // the folder in the frame holds still
     var li = target ? target.parentNode : null;
@@ -394,6 +379,13 @@
       sel.style.height = px(r.height + pad * 2);
       var name = 'Folder / ' + target.querySelector('.folder__title').textContent;
       if (name !== shownName) { selName.textContent = name; shownName = name; }
+      // The name label sits above the frame, Figma-style — unless that would
+      // put it on top of her name or the subtitle; then it goes underneath.
+      var lt = r.top - d.top - pad - 24, ll = r.left - d.left - pad, lr = ll + 170;
+      var clash = textBoxes.some(function (t) {
+        return lt < t.bottom && lt + 20 > t.top && ll < t.right && lr > t.left;
+      });
+      sel.classList.toggle('is-below', clash);
       var size = Math.round(r.width) + ' × ' + Math.round(r.height);
       if (size !== shownSize) { selSize.textContent = size; shownSize = size; }
       sel.classList.add('is-on');
@@ -411,6 +403,7 @@
     desk.addEventListener('pointermove', function (e) {
       lastType = e.pointerType || 'mouse';
       if (lastType !== 'mouse') return;
+      lastInput = 'mouse';
       var d = desk.getBoundingClientRect();
       P0.x = e.clientX - d.left; P0.y = e.clientY - d.top; P0.inside = true;
       kick(0);
