@@ -61,10 +61,10 @@
      desk; figW is how wide she is; deskEdge is the back edge of the desk,
      where her name sits. bottomCut is where the photo stops; headroom is
      the room always kept above her head when the top is cropped. */
-  var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.33,  figBottom: 0.845, figW: 0.25,
-               deskEdge: 0.776, bottomCut: 0.97, headroom: 0.016 };
-  var TALL = { aspect: 1672 / 941, cx: 0.505, figTop: 0.449, figBottom: 0.775, figW: 0.5,
-               deskEdge: 0.72, bottomCut: 0.84, headroom: 0.03 };
+  var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.345, figBottom: 0.86, figW: 0.25,
+               deskEdge: 0.82, bottomCut: 0.97, headroom: 0.016 };
+  var TALL = { aspect: 1672 / 941, cx: 0.513, figTop: 0.454, figBottom: 0.78, figW: 0.5,
+               deskEdge: 0.735, bottomCut: 0.84, headroom: 0.03 };
 
   var ROLE_GAP = 6;        // the subtitle starts this far under her hands
   var TEXT_GAP = 14;       // between the subtitle and the folders under it

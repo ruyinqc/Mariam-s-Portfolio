@@ -54,8 +54,8 @@
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/plus-jakarta-sans-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/jetbrains-mono-normal-latin.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="assets/fonts/fraunces-normal-latin.woff2" crossorigin>
-<link rel="preload" as="image" href="assets/img/desk/room-wide.webp" media="(min-width: 620px)" fetchpriority="high">
-<link rel="preload" as="image" href="assets/img/desk/room-tall.webp" media="(max-width: 619px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/desk/room-wide.webp?v=2" media="(min-width: 620px)" fetchpriority="high">
+<link rel="preload" as="image" href="assets/img/desk/room-tall.webp?v=2" media="(max-width: 619px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/desk/mariam-front.webp" fetchpriority="high">
 
 <link rel="stylesheet" href="assets/css/fonts.css?v=19">
@@ -66,7 +66,7 @@
 <!-- The case-study reader's styles aren't needed for the first screen, so they load
      without holding it up. (The reader itself needs JavaScript anyway.) -->
 <link rel="stylesheet" href="assets/css/reader.css?v=20" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/desk.css?v=5">
+<link rel="stylesheet" href="assets/css/desk.css?v=6">
 <link rel="stylesheet" href="assets/css/folio.css?v=3">
 
 <!-- Structured data. The case studies and certificates are added at runtime
@@ -275,8 +275,8 @@
   <div class="desk__photo" id="deskPhoto">
     <div class="desk__world" id="deskWorld">
       <picture class="desk__room">
-        <source media="(max-width: 619px)" srcset="assets/img/desk/room-tall.webp" width="941" height="1672">
-        <img src="assets/img/desk/room-wide.webp" width="1672" height="941" alt="" fetchpriority="high" decoding="async" id="deskRoom">
+        <source media="(max-width: 619px)" srcset="assets/img/desk/room-tall.webp?v=2" width="941" height="1672">
+        <img src="assets/img/desk/room-wide.webp?v=2" width="1672" height="941" alt="" fetchpriority="high" decoding="async" id="deskRoom">
       </picture>
       <img class="desk__reflect" src="assets/img/desk/mariam-front.webp" width="791" height="917" alt="" decoding="async">
       <span class="desk__shadow desk__shadow--soft" aria-hidden="true"></span>
@@ -920,7 +920,7 @@
 <script src="assets/js/reader.js?v=21"></script>
 <script src="assets/js/contact.js?v=19"></script>
 <script src="assets/js/folio.js?v=4"></script>
-<script src="assets/js/desk.js?v=7"></script>
+<script src="assets/js/desk.js?v=8"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>

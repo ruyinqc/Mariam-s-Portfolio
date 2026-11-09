@@ -387,6 +387,18 @@ and the sections read as one long page.
 If you replace the cutout of yourself, keep the same size and framing — the
 desk places your name and the folders from where your arms meet the desk.
 
+The room is a UX designer's studio: the monitor with phone designs, the
+wireframes on the wall, your certificate, Klaxs on a phone and a little
+Cairo taxi. If you replace a room photo, keep the empty chair in the middle,
+the plain wall behind it and the light from the left, then re-measure where
+you sit in it. Those numbers are `WIDE` and `TALL` at the top of
+`assets/js/desk.js` (fractions of the photo: the middle of you, the top of
+your head, where your arms meet the desk, how wide you are, the desk's far
+edge), and the same numbers are in `assets/css/desk.css` (`.desk__me`,
+`.desk__reflect`, `.desk__shadow`). Change them together, then rebuild the
+social card with `node tools/make-og.js`, whose positions come from the same
+numbers.
+
 **The folders** are the six `<li class="folders__item">` under *THE DESK*.
 Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
 image already on the site), a title and a one-line note on its label.
