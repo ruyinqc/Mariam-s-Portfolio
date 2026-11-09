@@ -148,21 +148,31 @@ async function run() {
     const tag = document.querySelector('.desk__status');
     const t = tag && tag.getBoundingClientRect();
     const f = [...document.querySelectorAll('.folders__item')].map(el => el.getBoundingClientRect());
-    // the four folders in the row under her hands, left to right
+    // the four folders under her hands, left to right
     const row = f.slice(1, -1).sort((a, b) => a.left - b.left);
+    const mid = r => (r.top + r.bottom) / 2;
+    const arms = document.getElementById('deskMe').getBoundingClientRect().bottom;
     return {
       tag: !!t && t.width > 0 && innerWidth - t.right < 48 && t.top < 48 && /Open to relocation/.test(tag.textContent),
       tagAt: t ? `${Math.round(innerWidth - t.right)}px from the right, ${Math.round(t.top)}px from the top` : 'missing',
       tagClear: !!t && f.every(b => !hit(b, t)),
       roleSize: parseFloat(getComputedStyle(document.querySelector('.desk__role')).fontSize),
-      gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right))
+      gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right)),
+      // About Me and Contact, down by the desk's edge (Mariam's markup), and
+      // all six on one curve: ends highest, the middle two lowest
+      ends: [f[0], f[5]].map(r => Math.round(mid(r) - arms)),
+      arc: mid(f[0]) < mid(f[1]) && mid(f[1]) < mid(f[2]) && mid(f[5]) < mid(f[4]) && mid(f[4]) < mid(f[3])
     };
   });
   check('the "open to relocation" tag sits in the top-right corner', corner.tag, corner.tagAt);
   check('no folder covers that tag', corner.tagClear);
   check('the subtitle is big enough to read', corner.roleSize >= 20, `${corner.roleSize}px`);
-  check('the folders in the row sit close together', corner.gaps.length === 3 && corner.gaps.every(g => g >= 8 && g <= 40),
+  check('the four folders under her name sit close and evenly', corner.gaps.length === 3 &&
+        corner.gaps.every(g => g >= 8 && g <= 40) && Math.abs(corner.gaps[0] - corner.gaps[2]) <= 3,
         `${corner.gaps.join(', ')}px`);
+  check('the six folders make one curve in front of her', corner.arc);
+  check('About Me and Contact sit down by the desk\'s edge', corner.ends.every(d => d > 0 && d < 120),
+        `${corner.ends.join(', ')}px below her arms`);
 
   // Nothing should run while nobody is touching the page.
   const cdp = await ctx.newCDPSession(page);

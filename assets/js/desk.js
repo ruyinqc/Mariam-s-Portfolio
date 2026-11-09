@@ -63,12 +63,12 @@
      where her name sits. bottomCut is where the photo stops; headroom is
      the room always kept above her head when the top is cropped. */
   var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.345, figBottom: 0.86, figW: 0.25,
-               deskEdge: 0.82, bottomCut: 0.97, headroom: 0.016 };
+               deskEdge: 0.82, bottomCut: 0.97, headroom: 0.02 };
   var TALL = { aspect: 1672 / 941, cx: 0.513, figTop: 0.454, figBottom: 0.78, figW: 0.5,
                deskEdge: 0.735, bottomCut: 0.84, headroom: 0.03 };
 
   var ROLE_GAP = 6;        // the subtitle starts this far under her hands
-  var TEXT_GAP = 14;       // between the subtitle and the folders under it
+  var TEXT_GAP = 18;       // between the subtitle and the folders under it
   var EDGE = 18;           // folders keep this far from the sides of the screen
 
   var sides = [];          // which side of her each folder is on
@@ -112,7 +112,7 @@
     var textBelow = ROLE_GAP + roleEl.offsetHeight;          // subtitle bottom, below her arms
     // Clear space always kept under the lowest folder, so no folder ever
     // sits on the bottom edge of the screen.
-    var bottomSpace = clamp(vh * 0.045, 36, 60);
+    var bottomSpace = clamp(vh * 0.05, 40, 64);
     var spare = vh - textBelow - TEXT_GAP - bottomSpace;    // top of the screen to the lowest folder's foot
 
     // Where her arms go, once the folders' height is known. With height to
@@ -127,15 +127,15 @@
     }
 
     var plan = null, arms = armsMin, i;
+    // On a wide screen her name and the subtitle are centred on her (she sits
+    // a little right of the middle), so the curve clears them evenly.
+    plate.style.transform = W >= 900 ? 'translateX(' + px(Math.round(P.cx * W - W / 2)) + ')' : '';
     if (W >= 900) {
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
-      // a folder is 1.19 times as tall as it is wide, and the middle two dip
-      // by another 8% of that: DROP is the whole height the row needs
-      var DROP = 1.19 * 1.08;
-      var w = Math.min(clamp(W * 0.15, 150, 250), (spare - armsMin) / DROP);
+      var w = Math.min(clamp(W * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
-        arms = settle(w * DROP);
+        arms = settle(w * 1.19);
         plan = uPlan(W, P, arms, nameRel, N, textBelow, w);
       }
     }
@@ -193,46 +193,71 @@
     return { left: b.left - d.left - 14, right: b.right - d.left + 14 };
   }
 
-  // The folders sit close together, with an even, small gap: four in a
-  // gentle smile under the subtitle, and About Me and Contact up beside her
-  // at desk level, just past her name.
   function uPlan(W, P, arms, nameRel, N, textBelow, w) {
     var h = w * 1.19;
-    var g = clamp(w * 0.14, 16, 30);                          // the gap between folders
     var cx = P.cx * W;
-    var ns = span(nameEl);
-    var nameBox = { left: ns.left, right: ns.right, top: arms + nameRel - 8, bottom: arms + nameRel + N + 4 };
+    var ns = span(nameEl), rs = span(roleEl);
+    var boxes = [
+      { left: ns.left, right: ns.right, top: arms + nameRel - 8, bottom: arms + nameRel + N + 4 },
+      { left: rs.left, right: rs.right, top: arms + ROLE_GAP - 8, bottom: arms + textBelow + TEXT_GAP - 2 }
+    ];
 
-    var step = w + g;
-    var rowTop = arms + textBelow + TEXT_GAP;                // under the subtitle
-    var dip = h * 0.08;                                        // the middle two sit a touch lower
-    var lift = Math.min(h * 0.3, arms - h / 2 - 10);
-    var yEnd = arms - lift;                                    // the ends, up at the desk
+    var reach = Math.min(cx, W - cx) - w / 2 - EDGE;         // how far the ends can go
+    var rx = Math.min(W * 0.37, reach);
+    var yMid = arms + textBelow + TEXT_GAP + h / 2;
+    var lift = Math.min(h * 0.3, arms - h / 2 - 10);          // the ends rise beside her
+    var cy = arms - lift;
+    var uMid = Math.max(0.2, (w + 16) / (2 * rx));
+    var ry = (yMid - cy) / Math.sqrt(1 - uMid * uMid);
+    var us = [-1, -0.6, -uMid, uMid, 0.6, 1];
 
-    var out = [];
-    // About Me and Contact: one step past the row, or just past her name
-    // if that is further out — they sit at its height.
-    var reach = Math.max(2.5 * step, cx - nameBox.left + w / 2, nameBox.right - cx + w / 2);
-    out[0] = { u: -1, x: cx - reach, y: yEnd };
-    out[5] = { u: 1,  x: cx + reach, y: yEnd };
-    [-1.5, -0.5, 0.5, 1.5].forEach(function (k, j) {
-      out[j + 1] = { u: k / 2.5, x: cx + k * step, y: rowTop + h / 2 + (Math.abs(k) < 1 ? dip : 0) };
+    var out = us.map(function (u) {
+      return { u: u, x: cx + rx * u, y: cy + ry * Math.sqrt(Math.max(0, 1 - u * u)) };
     });
+    // About Me and Contact sit lower than the curve's ends would: just below
+    // the desk's edge, in front of it, so all six read as one arc in front of
+    // her (Mariam's own markup). The other four stay where the curve puts them.
+    out[0].y = out[5].y = arms + h * 0.15;
 
-    // everything on the screen, and the ends clear of her
-    for (var i = 0; i < out.length; i++) {
-      if (out[i].x - w / 2 < EDGE || out[i].x + w / 2 > W - EDGE) return null;   // too wide: go smaller
+    // Nothing may cover her name or the subtitle: slide anything that
+    // touches them outwards, then make sure each pair on a side still clears.
+    function hit(o) {
+      for (var b = 0; b < boxes.length; b++) {
+        var t = boxes[b];
+        if (o.x + w / 2 > t.left && o.x - w / 2 < t.right &&
+            o.y + h / 2 > t.top && o.y - h / 2 < t.bottom) return t;
+      }
+      return null;
     }
-    if (reach - w / 2 < P.figW * W / 2 + 8) return null;
+    function clear(o, side) {
+      for (var n = 0, t; n < 3 && (t = hit(o)); n++) o.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
+    }
+    // Two folders are apart if they clear each other across or up and down.
+    function apart(a, b) {
+      return Math.abs(a.x - b.x) >= w + 8 || Math.abs(a.y - b.y) >= h + 8;
+    }
+    for (var side = -1; side <= 1; side += 2) {
+      var mid = out[side < 0 ? 2 : 3], second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
+      clear(second, side);
+      clear(end, side);
+      // each folder steps out past the one inside it, if they would touch
+      if (!apart(second, mid)) second.x = mid.x + side * (w + 12);
+      if (!apart(end, second)) end.x = second.x + side * (w + 12);
+      end.x = clamp(end.x, w / 2 + EDGE, W - w / 2 - EDGE);
+      second.x = clamp(second.x, w / 2 + EDGE, W - w / 2 - EDGE);
+      if (!apart(second, mid) || !apart(end, second) || hit(second) || hit(end)) return null;  // too tight: go smaller
+      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;                      // the ends clear her
+    }
+    if (hit(out[2]) || hit(out[3])) return null;
 
     var bottom = 0;
     var items = out.map(function (o) {
-      var end = Math.abs(o.u) === 1;
+      var depth = Math.sqrt(Math.max(0, 1 - o.u * o.u));      // 0 at her sides, 1 in front
       bottom = Math.max(bottom, o.y + h / 2);
       return {
         x: o.x, y: o.y, w: w, h: h,
-        s: end ? 0.92 : 1,
-        ry: o.u * 14,
+        s: 0.9 + 0.1 * depth,
+        ry: o.u * 16,
         z: 100 - Math.round(Math.abs(o.u) * 30),
         side: o.u > 0 ? 'right' : 'left'
       };

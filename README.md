@@ -347,8 +347,10 @@ pinning and becomes a row you swipe sideways instead.
 
 The first thing anyone sees is you at your desk, your name across the
 desk's edge in front of your arms, the subtitle just under your hands, and
-six folders around you — *About Me* and *Contact* up beside you at desk
-level, the other four in a close row under the subtitle. The *Based in Egypt
+six folders on one curve in front of you: the four in the middle under the
+subtitle, and *About Me* and *Contact* at the ends, down by the desk's edge.
+On a wide screen your name and the subtitle are centred on you, so the curve
+clears them evenly. The *Based in Egypt
 · Open to relocation* tag from About Me sits in the top-right corner; on a
 phone, where that corner is right above your head, it is smaller and the
 desk keeps your head clear of it. All of
@@ -538,7 +540,8 @@ folder's, the counter and arrows keeping to one kind, where Back goes, and
 that Back from a study leaves the folder where you left it, closable in one
 go. At every width, each folder has to fit the screen, and on a phone the
 corner tag must never cover your head. And with the scripts held back, the old
-top nav must never flash up. 117 checks.
+top nav must never flash up, and the six folders must make one even curve
+with About Me and Contact down by the desk's edge. 119 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -590,7 +593,7 @@ assets/
     lens.js              close-ups of those screens in challenge diagrams
     motion.js            one scroll loop shared by everything
     nav.js               active section, progress ring, mobile sheet
-    desk.js              the desk: fitting it to the screen, the U of folders,
+    desk.js              the desk: fitting it to the screen, the curve of folders,
                          the cursor frame
     folio.js             an open folder: which sections it holds, tabs, routing
     board.js             the work cards (the 3-column grid is CSS)
@@ -618,7 +621,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               117 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               119 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
