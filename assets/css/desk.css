@@ -42,17 +42,9 @@
   transform: translateX(-50%);
 }
 .desk__me img { width: 100%; }
-/* her photos are warmed a little, to sit in the room's late-afternoon light */
+/* her photo is warmed a little, to sit in the room's late-afternoon light */
 .desk__me img,
 .desk__reflect { filter: sepia(.14) saturate(1.06) brightness(.96) contrast(1.02); }
-.desk__look {
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  transition: opacity .38s ease;
-}
-.desk__me[data-gaze="right"] [data-look="right"],
-.desk__me[data-gaze="left"]  [data-look="left"] { opacity: 1; }
 
 /* Grounding: a faint reflection in the varnished desk, and a contact shadow
    under her arms, so she rests on the desk rather than floating over it. */
@@ -116,7 +108,9 @@
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--cream);
-  text-shadow: 0 1px 0 rgba(0,0,0,.35), 0 8px 24px rgba(0,0,0,.35);
+  /* it sits across the desk's edge, in front of her arms: a soft dark halo
+     keeps it readable over the sweater and the wood */
+  text-shadow: 0 1px 1px rgba(0,0,0,.45), 0 0 18px rgba(30,12,2,.6), 0 8px 28px rgba(0,0,0,.45);
 }
 .desk__role {
   font-size: clamp(0.875rem, 0.8rem + 0.4vw, 1.0625rem);
@@ -124,12 +118,11 @@
 }
 .desk__role b { color: var(--mustard); font-weight: 600; }
 .desk__role > span { white-space: nowrap; }
-/* below a wide laptop the numbers drop to a line of their own, which keeps
-   the text block narrow enough for the folders to curve round it */
-@media (max-width: 1199px) {
-  .desk__facts { display: block; width: fit-content; margin-inline: auto; }
-  .desk__dot { display: none; }
-}
+.desk__role { text-shadow: 0 1px 8px rgba(30,12,2,.55); }
+/* The numbers on a line of their own: a short, narrow block under her hands
+   that the folders can curve round. */
+.desk__facts { display: block; width: fit-content; margin-inline: auto; }
+.desk__dot { display: none; }
 
 /* ---- The folders ------------------------------------------------------------
    Without JavaScript: a centred row that wraps. desk.js lifts them onto a
@@ -355,9 +348,6 @@
   .desk__shadow--soft  { top: 77.2%; width: 46%; height: 1.9%; }
   .desk__shadow--tight { top: 77.5%; width: 39%; }
   .desk__plate { margin-top: -30px; }
-  /* the facts drop to a line of their own */
-  .desk__facts { display: block; width: fit-content; margin-inline: auto; }
-  .desk__dot { display: none; }
   .folder__sub { display: none; }
   .folder__title { font-size: 11.5cqw; }
   .folder__tab { font-size: 6cqw; padding: 0 10cqw 0 5cqw; max-width: 96%; }
@@ -422,6 +412,9 @@
   text-shadow: 0 1px 2px rgba(0, 0, 0, .6);
 }
 .desk__sel-size { position: absolute; left: 50%; top: calc(100% + 8px); transform: translateX(-50%); }
+/* when the label would sit on her name or the subtitle, it goes underneath */
+.desk__sel.is-below .desk__sel-name { bottom: auto; top: calc(100% + 12px); }
+.desk__sel.is-below .desk__sel-size { left: auto; right: 0; transform: none; }
 
 /* a tap on the empty desk, on a phone */
 .desk__pulse { position: absolute; margin: -11px 0 0 -11px; animation: desk-pulse .5s ease-out forwards; }
@@ -443,7 +436,7 @@
 @media (prefers-reduced-motion: reduce) {
   .desk--js .folders__item,
   .desk--js .folders__item::after { animation: none; }
-  .folder, .folder__print, .folder__front, .desk__look, .desk__sel { transition: none; }
+  .folder, .folder__print, .folder__front, .desk__sel { transition: none; }
   .folder:hover, .folder:focus-visible, .folder.is-on { transform: none; }
   .desk__pulse { animation-duration: .01s; }
 }

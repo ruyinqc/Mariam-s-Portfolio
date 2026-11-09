@@ -66,7 +66,7 @@
 <!-- The case-study reader's styles aren't needed for the first screen, so they load
      without holding it up. (The reader itself needs JavaScript anyway.) -->
 <link rel="stylesheet" href="assets/css/reader.css?v=19" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/desk.css?v=3">
+<link rel="stylesheet" href="assets/css/desk.css?v=4">
 <link rel="stylesheet" href="assets/css/folio.css?v=2">
 
 <!-- Structured data. The case studies and certificates are added at runtime
@@ -262,17 +262,15 @@
 <main id="main">
 
 <!-- ============ THE DESK ============ -->
-<!-- The first thing anyone sees: Mariam at her desk, her name on the desk
-     front, and six folders that open the rest of the page.
+<!-- The first thing anyone sees: Mariam at her desk, her name across the
+     desk's edge, and six folders around her that open the rest of the page.
 
      Everything here works without JavaScript: the photo is laid out with
      percentages, and each folder is an ordinary link to its section.
-     desk.js adds the rest — the curved row, her eyes following the folder
-     you point at, the selection-frame cursor and the opening animation.
+     desk.js adds the rest — fitting it all to one screen, the U of folders
+     and the selection-frame cursor; folio.js opens a folder over the desk.
 
-     Photos live in assets/img/desk/. To add the photo of her looking left,
-     save it as assets/img/desk/mariam-look-left.webp (same size and framing
-     as mariam-front.webp) and un-comment the line marked LOOK LEFT below. -->
+     Photos live in assets/img/desk/. -->
 <section class="desk" id="top" aria-label="Mariam at her desk">
   <div class="desk__photo" id="deskPhoto">
     <div class="desk__world" id="deskWorld">
@@ -283,11 +281,9 @@
       <img class="desk__reflect" src="assets/img/desk/mariam-front.webp" width="791" height="917" alt="" decoding="async">
       <span class="desk__shadow desk__shadow--soft" aria-hidden="true"></span>
       <span class="desk__shadow desk__shadow--tight" aria-hidden="true"></span>
-      <div class="desk__me" id="deskMe" data-gaze="front">
+      <div class="desk__me" id="deskMe">
         <img src="assets/img/desk/mariam-front.webp" width="791" height="917" fetchpriority="high" decoding="async"
              alt="Mariam Emad Nabih sitting at her desk, smiling, her arms folded on the desk.">
-        <img class="desk__look" data-look="right" data-src="assets/img/desk/mariam-look-right.webp" width="791" height="917" alt="" decoding="async">
-        <!-- LOOK LEFT: <img class="desk__look" data-look="left" data-src="assets/img/desk/mariam-look-left.webp" width="791" height="917" alt="" decoding="async"> -->
       </div>
       <span class="desk__light" aria-hidden="true"></span>
     </div>
@@ -912,7 +908,7 @@
 <script src="assets/js/reader.js?v=19"></script>
 <script src="assets/js/contact.js?v=19"></script>
 <script src="assets/js/folio.js?v=2"></script>
-<script src="assets/js/desk.js?v=3"></script>
+<script src="assets/js/desk.js?v=4"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>
