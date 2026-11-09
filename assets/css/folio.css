@@ -39,6 +39,11 @@
   margin-left: calc(-1 * min(1180px, calc(100vw - 32px)) / 2);
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
+  /* minmax(0, …): without it the row of tabs (which never wraps) stretches
+     the column to its own full width, and on a phone the folder's contents
+     were laid out twice as wide as the sheet and cut off. The tabs scroll
+     sideways instead. */
+  grid-template-columns: minmax(0, 1fr);
   overflow: hidden;
   background: var(--paper) url("../img/desk/paper.webp");
   background-size: 420px;

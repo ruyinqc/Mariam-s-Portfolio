@@ -113,16 +113,32 @@
   text-shadow: 0 1px 1px rgba(0,0,0,.45), 0 0 18px rgba(30,12,2,.6), 0 8px 28px rgba(0,0,0,.45);
 }
 .desk__role {
-  font-size: clamp(0.875rem, 0.8rem + 0.4vw, 1.0625rem);
-  color: rgba(246, 236, 217, .88);
+  font-size: clamp(1.0625rem, 0.65rem + 0.85vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--cream);
+  /* it sits on the wood under her hands: a dark halo keeps it crisp */
+  text-shadow: 0 1px 2px rgba(0,0,0,.6), 0 0 14px rgba(25,10,0,.75);
 }
-.desk__role b { color: var(--mustard); font-weight: 600; }
+.desk__role b { color: var(--mustard); font-weight: 800; }
 .desk__role > span { white-space: nowrap; }
-.desk__role { text-shadow: 0 1px 8px rgba(30,12,2,.55); }
+.desk__facts { font-weight: 500; }
 /* The numbers on a line of their own: a short, narrow block under her hands
    that the folders can curve round. */
 .desk__facts { display: block; width: fit-content; margin-inline: auto; }
 .desk__dot { display: none; }
+
+/* ---- "Based in Egypt · Open to relocation", in the top-right corner ---------- */
+.desk__status {
+  position: absolute;
+  z-index: 8;
+  top: max(16px, calc(env(safe-area-inset-top, 0px) + 12px));
+  right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
+}
+@media (max-width: 619px) {
+  .desk__status { font-size: 0.75rem; padding: 0.35rem 0.75rem; }
+}
 
 /* ---- The folders ------------------------------------------------------------
    Without JavaScript: a centred row that wraps. desk.js lifts them onto a
@@ -184,7 +200,8 @@
 .desk--js .folders__item.is-held,
 .desk--js .folders__item.is-held::after,
 .folio-open .desk--js .folders__item,
-.folio-open .desk--js .folders__item::after { animation-play-state: paused; }
+.folio-open .desk--js .folders__item::after,
+.folio-open .desk__status .status__dot::after { animation-play-state: paused; }
 
 /* A folder: a back with a tab, a print sticking out, and a front with a
    paper label. Sizes are in cqw/cqh so the whole thing scales as one. */
@@ -320,17 +337,21 @@
   object-fit: cover;
 }
 
-/* Pointing at a folder: the front tips open and the print slides up. */
-.folder:hover,
+/* Pointing at a folder: the front tips open and the print slides up.
+   Hover only where there is a real pointer — on a phone a tap would leave
+   the folder stuck open after it closes. */
 .folder:focus-visible,
 .folder.is-on { transform: translateY(-8px); }
-.folder:hover .folder__print,
 .folder:focus-visible .folder__print,
 .folder.is-on .folder__print { transform: translateY(-14cqh) rotate(0); }
-.folder:hover .folder__front,
 .folder:focus-visible .folder__front,
 .folder.is-on .folder__front { transform: rotateX(-16deg); }
-.folders:has(.folder:hover) .folder:not(:hover) { opacity: .62; }
+@media (hover: hover) {
+  .folder:hover { transform: translateY(-8px); }
+  .folder:hover .folder__print { transform: translateY(-14cqh) rotate(0); }
+  .folder:hover .folder__front { transform: rotateX(-16deg); }
+  .folders:has(.folder:hover) .folder:not(:hover) { opacity: .62; }
+}
 
 /* A small folder (a short laptop screen) keeps only its title on the label. */
 @container (max-width: 135px) {

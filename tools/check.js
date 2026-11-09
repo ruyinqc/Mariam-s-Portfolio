@@ -143,6 +143,27 @@ async function run() {
   check('the folders keep clear of the bottom of the screen', geo.underFolders >= 36, `${geo.underFolders}px`);
   check('no big empty band over her head', geo.overHead <= 950 * 0.1, `${geo.overHead}px`);
 
+  const corner = await page.evaluate(() => {
+    const hit = (a, b) => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+    const tag = document.querySelector('.desk__status');
+    const t = tag && tag.getBoundingClientRect();
+    const f = [...document.querySelectorAll('.folders__item')].map(el => el.getBoundingClientRect());
+    // the four folders in the row under her hands, left to right
+    const row = f.slice(1, -1).sort((a, b) => a.left - b.left);
+    return {
+      tag: !!t && t.width > 0 && innerWidth - t.right < 48 && t.top < 48 && /Open to relocation/.test(tag.textContent),
+      tagAt: t ? `${Math.round(innerWidth - t.right)}px from the right, ${Math.round(t.top)}px from the top` : 'missing',
+      tagClear: !!t && f.every(b => !hit(b, t)),
+      roleSize: parseFloat(getComputedStyle(document.querySelector('.desk__role')).fontSize),
+      gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right))
+    };
+  });
+  check('the "open to relocation" tag sits in the top-right corner', corner.tag, corner.tagAt);
+  check('no folder covers that tag', corner.tagClear);
+  check('the subtitle is big enough to read', corner.roleSize >= 20, `${corner.roleSize}px`);
+  check('the folders in the row sit close together', corner.gaps.length === 3 && corner.gaps.every(g => g >= 8 && g <= 40),
+        `${corner.gaps.join(', ')}px`);
+
   // Nothing should run while nobody is touching the page.
   const cdp = await ctx.newCDPSession(page);
   await cdp.send('Performance.enable');
@@ -152,7 +173,9 @@ async function run() {
   const b0 = await busy();
   await page.waitForTimeout(2000);
   const idle = Math.round((await busy() - b0) * 1000);
-  check('the desk does no work while idle', idle < 150, `${idle}ms busy in 2s`);
+  // An idle desk measures ~3ms. Anything that repaints every frame (a
+  // box-shadow pulse did) costs ~150ms, so the bar sits well under that.
+  check('the desk does no work while idle', idle < 50, `${idle}ms busy in 2s`);
   check('the folders are the navigation (no nav bar over the desk)', desk.navHidden);
 
   const certFolder = await page.$('#folders .folder[href="#proof"]');
@@ -228,15 +251,66 @@ async function run() {
   await page.waitForTimeout(700);
   check('Escape closes the folder', await page.evaluate(() => document.getElementById('folio').hidden));
 
+  // A study read from a folder opened on the desk. Closing the study goes
+  // back to the folder, where you left it, and one × then closes the
+  // folder. (Closing a study used to leave a second copy of the folder's
+  // entry in history, so the × had to be pressed twice.)
+  const folderOpen = () => page.evaluate(() => !document.getElementById('folio').hidden);
+  const readerOpen = () => page.evaluate(() => !document.getElementById('reader').hidden);
+  await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
+  await page.click('#folders .folder[href="#work"]:not([data-case])', { force: true });
+  await page.waitForTimeout(1200);
+  await page.evaluate(() => { document.getElementById('folioScroll').scrollTop = 300; });
+  await page.click('.pincard__hit[href="#case/klaxs"]');
+  await page.waitForTimeout(800);
+  const at = await page.evaluate(() => document.getElementById('folioScroll').scrollTop);
+  await page.click('#readerClose');
+  await page.waitForTimeout(800);
+  const backTo = { hash: await page.evaluate(() => location.hash), folio: await folderOpen(), reader: await readerOpen(),
+                   kept: await page.evaluate(() => document.getElementById('folioScroll').scrollTop) };
+  check('Back from a study lands in its folder, where you left it',
+        backTo.folio && !backTo.reader && backTo.hash === '#work' && at > 0 && Math.abs(backTo.kept - at) < 2,
+        `${backTo.hash}, scrolled ${at} → ${backTo.kept}`);
+  await page.click('#folioClose');
+  await page.waitForTimeout(800);
+  const gone = { hash: await page.evaluate(() => location.hash), folio: await folderOpen() };
+  check('…and one × then closes the folder', !gone.folio && gone.hash === '', JSON.stringify(gone));
+
+  // The browser's Back walks the same way: study, then folder, then desk.
+  await page.click('#folders .folder[href="#work"]:not([data-case])', { force: true });
+  await page.waitForTimeout(1200);
+  await page.click('.pincard__hit[href="#case/klaxs"]');
+  await page.waitForTimeout(800);
+  await page.goBack();
+  await page.waitForTimeout(800);
+  const b1 = { hash: await page.evaluate(() => location.hash), folio: await folderOpen(), reader: await readerOpen() };
+  await page.goBack();
+  await page.waitForTimeout(800);
+  const b2 = { hash: await page.evaluate(() => location.hash), folio: await folderOpen() };
+  check("the browser's Back goes study → folder → desk",
+        !b1.reader && b1.folio && b1.hash === '#work' && !b2.folio && b2.hash === '', `${JSON.stringify(b1)} ${JSON.stringify(b2)}`);
+
   await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
   await page.waitForTimeout(400);
   await page.click('#folders .folder[data-case="vibe-coding"]', { force: true });  // the folders float
   await page.waitForTimeout(1200);
   const live = await page.evaluate(() => ({
-    hash: location.hash, open: !document.getElementById('reader').hidden }));
+    hash: location.hash, open: !document.getElementById('reader').hidden,
+    counter: !document.getElementById('readerCount').hidden,
+    arrows: !document.getElementById('readerNav').hidden,
+    back: document.getElementById('readerClose').textContent.replace(/\s+/g, ' ').trim(),
+    foot: (document.querySelector('#readerBody [data-step="back"]') || {}).textContent || ''
+  }));
   check('Live Projects opens the vibe coding study', live.open && live.hash === '#case/vibe-coding', live.hash);
-  await page.keyboard.press('Escape');
+  // It is the only one of its kind: nothing to count, nowhere to step.
+  check('a one-off has no counter and no arrows', !live.counter && !live.arrows);
+  check('Back says it goes to the desk', live.back === 'Back to Desk' && /Back to the desk/.test(live.foot),
+        `${live.back} | ${live.foot.trim()}`);
+  await page.click('#readerClose');
   await page.waitForTimeout(700);
+  const home = await page.evaluate(() => ({
+    reader: !document.getElementById('reader').hidden, folio: !document.getElementById('folio').hidden, hash: location.hash }));
+  check('…and it does', !home.reader && !home.folio && home.hash === '', JSON.stringify(home));
   await page.evaluate(() => { history.replaceState(null, '', location.pathname); scrollTo(0, 0); });
   await page.waitForTimeout(300);
 
@@ -322,6 +396,23 @@ async function run() {
   const after = await page.evaluate(() => location.hash);
   check('arrow keys step between studies', before !== after, `${before} → ${after}`);
 
+  // The counter and the arrows belong to the case studies alone: four of
+  // them, in a loop, never stepping into the argument or the vibe coding.
+  const tour = [];
+  for (let i = 0; i < 4; i++) {
+    tour.push(await page.evaluate(() => ({
+      hash: location.hash, kind: document.getElementById('readerKind').textContent,
+      count: document.getElementById('readerIndex').textContent + '/' + document.getElementById('readerTotal').textContent
+    })));
+    await page.keyboard.press('ArrowRight');
+    await page.waitForTimeout(300);
+  }
+  const round = await page.evaluate(() => location.hash);
+  check('the counter counts case studies only', tour.every(s => s.kind === 'Case study' && /^[1-4]\/4$/.test(s.count)),
+        tour.map(s => s.count).join(' '));
+  check('the arrows go round the case studies and come back', round === tour[0].hash &&
+        new Set(tour.map(s => s.hash)).size === 4, tour.map(s => s.hash.replace('#case/', '')).join(' → '));
+
   await page.keyboard.press('Escape');
   await page.waitForTimeout(700);
   const closed = await page.evaluate(() => ({
@@ -345,11 +436,39 @@ async function run() {
   await card.focus();
   await card.press('Enter');
   await page.waitForTimeout(700);
+  const over = await page.evaluate(() => {
+    const a = document.getElementById('folioSheet').getBoundingClientRect();
+    const b = document.getElementById('readerPanel').getBoundingClientRect();
+    return {
+      same: ['left', 'top', 'width', 'height'].every(k => Math.abs(a[k] - b[k]) <= 2),
+      sizes: `folder ${Math.round(a.width)}×${Math.round(a.height)}, study ${Math.round(b.width)}×${Math.round(b.height)}`,
+      back: document.getElementById('readerClose').textContent.replace(/\s+/g, ' ').trim(),
+      count: document.getElementById('readerKind').textContent + ' ' +
+             document.getElementById('readerIndex').textContent + '/' + document.getElementById('readerTotal').textContent
+    };
+  });
+  check('a study opens the same size as the folder', over.same, over.sizes);
+  check('a case study is counted among the case studies', over.count === 'Case study 1/4', over.count);
+  check('Back names the folder it goes back to', over.back === 'Back to Case Studies', over.back);
   await page.keyboard.press('Escape');
   await page.waitForTimeout(700);
   const restored = await page.evaluate(() => ({ cls: document.activeElement.className, hash: location.hash }));
   check('focus returns to the card that opened it', restored.cls.includes('pincard__hit'));
   check('closing a study opened in a folder leaves you in that folder', restored.hash === '#work', restored.hash);
+
+  // The argument is a one-off too, opened from the folder: its Back, at the
+  // top and at the foot, returns to the folder.
+  await page.click('.pincard__hit[href="#case/ux-argument-localisation"]');
+  await page.waitForTimeout(700);
+  const arg = await page.evaluate(() => ({
+    counter: !document.getElementById('readerCount').hidden,
+    foot: (document.querySelector('#readerBody [data-step="back"]') || {}).textContent || ''
+  }));
+  check('the argument stands alone, with a way back to the folder', !arg.counter && /Back to Case Studies/.test(arg.foot), arg.foot.trim());
+  await page.click('#readerBody [data-step="back"]');
+  await page.waitForTimeout(700);
+  check('…which leaves you in the folder', await page.evaluate(() =>
+    document.getElementById('reader').hidden && !document.getElementById('folio').hidden && location.hash === '#work'));
   await page.keyboard.press('Escape');
   await page.waitForTimeout(700);
 
@@ -460,13 +579,37 @@ async function run() {
       s: document.documentElement.scrollWidth, c: document.documentElement.clientWidth }));
     check(`no horizontal overflow at ${w}px`, o.s <= o.c, `${o.s} vs ${o.c}`);
 
+    // Every folder fits its sheet, and its own tab is in view in the tab row
+    // (which scrolls sideways on a phone).
+    const wide = [];
+    let sheetW = 0;
+    for (const key of ['about', 'work', 'path', 'proof', 'contact']) {
+      await pg.evaluate(k => { location.hash = '#' + k; }, key);
+      await pg.waitForTimeout(key === 'about' ? 900 : 500);
+      const f = await pg.evaluate(() => {
+        const s = document.getElementById('folioScroll');
+        const sheet = document.getElementById('folioSheet').getBoundingClientRect();
+        const t = document.querySelector('.folio__tab[aria-current]');
+        const a = t.getBoundingClientRect(), row = t.parentNode.getBoundingClientRect();
+        return { sw: s.scrollWidth, cw: s.clientWidth, sheetW: sheet.width,
+                 inside: sheet.left >= 0 && sheet.right <= innerWidth,
+                 tab: a.left >= row.left - 1 && a.right <= row.right + 1 };
+      });
+      sheetW = f.sheetW;
+      if (f.sw > f.cw || !f.inside || !f.tab) wide.push(`${key}: ${f.sw}/${f.cw}${f.inside ? '' : ' off screen'}${f.tab ? '' : ' tab hidden'}`);
+    }
+    check(`every folder fits the screen at ${w}px`, wide.length === 0, wide.join(' | '));
+    await pg.evaluate(() => { location.hash = ''; });
+    await pg.waitForTimeout(700);
+
     await pg.evaluate(() => { location.hash = '#case/invoices-payments'; });
     await pg.waitForTimeout(700);
     const r = await pg.evaluate(() => {
       const s = document.getElementById('readerScroll');
-      return { sw: s.scrollWidth, cw: s.clientWidth };
+      return { sw: s.scrollWidth, cw: s.clientWidth, w: document.getElementById('readerPanel').getBoundingClientRect().width };
     });
     check(`reader does not scroll sideways at ${w}px`, r.sw <= r.cw);
+    check(`the reader is as wide as a folder at ${w}px`, Math.abs(r.w - sheetW) <= 2, `${Math.round(r.w)} vs ${Math.round(sheetW)}`);
     check(`no page errors at ${w}px`, errs.length === 0, errs.join(' | '));
     await c.close();
   }

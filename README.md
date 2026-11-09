@@ -80,7 +80,8 @@ A minimal one looks like this:
 ```js
 {
   slug: 'my-project',            // becomes the URL: yoursite.com/#case/my-project
-  kind: 'Case study',            // or 'UX argument'
+  kind: 'Case study',            // or 'UX argument' — studies of the same kind
+                                 // are counted and stepped through together
   published: true,               // false hides the card completely
   status: 'live',                // 'live' → "Shipped" pill · 'draft' → "In progress"
                                  // 'concept' → "Concept": finished, designed but not built
@@ -346,16 +347,27 @@ pinning and becomes a row you swipe sideways instead.
 
 The first thing anyone sees is you at your desk, your name across the
 desk's edge in front of your arms, the subtitle just under your hands, and
-six folders on a U around you — the two ends up beside you at desk level,
-the middle two under the subtitle. All of it is fitted to one screen, on a
-laptop or a phone (where the folders become two curved rows of three), with
-the folders made as big as the screen allows. A clear strip is always kept
+six folders around you — *About Me* and *Contact* up beside you at desk
+level, the other four in a close row under the subtitle. The *Based in Egypt
+· Open to relocation* tag from About Me sits in the top-right corner. All of
+it is fitted to one screen, on a laptop or a phone (where the folders become
+two curved rows of three), with the folders made as big as the screen allows. A clear strip is always kept
 under the folders; when there's height to spare, the room over your head
 stays a modest margin and most of the rest goes under the folders. Pointing at a folder draws a
 green selection frame around it. Clicking it opens the folder over the desk:
 a sheet of paper in the folder's colour, holding that folder's sections, with
 tabs along its top to switch folders. ×, Escape and the Back button close it.
 *Live Projects* opens the Vibe Coding study in the reader instead.
+
+**A case study** opens in the reader, the same size and in the same place as
+an open folder. The ← button at its top left says where it goes back to:
+*Case Studies* when you opened the study from that folder, *Desk* when you
+opened it from the desk. The counter and the ‹ › arrows only count and step
+through studies of the same kind (*Case study 2 / 4*); the UX argument and
+the vibe coding are one of a kind, so they show neither, and their last
+button goes back instead of on. Going back from a study (←, Escape, or the
+browser's Back) lands in the folder exactly where you left it, and the
+folder's × then closes it in one go.
 
 Which sections live in which folder is set at the top of
 `assets/js/folio.js` (About holds About and Toolkit; Experience holds the
@@ -505,8 +517,12 @@ switched off — and the desk: that it fits one screen, that your name sits
 across the desk and the subtitle under your hands, that the folders are big
 and none covers the text or another folder, that the page does no work while
 idle, the cursor frame (and that it follows the mouse, not a leftover
-keyboard focus), the space kept over your head and under the folders, and
-opening, switching and closing a folder. 89 checks.
+keyboard focus), the space kept over your head and under the folders, the
+corner tag, the subtitle's size, the gaps between folders, and opening,
+switching and closing a folder — and the reader: its size matching a
+folder's, the counter and arrows keeping to one kind, where Back goes, and
+that Back from a study leaves the folder where you left it, closable in one
+go. At every width, each folder has to fit the screen. 114 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -563,7 +579,7 @@ assets/
     folio.js             an open folder: which sections it holds, tabs, routing
     board.js             the work cards (the 3-column grid is CSS)
     line.js              the clothesline: pinning, drag, the swing, the rope
-    reader.js            the overlay: routing, prev/next, focus trap
+    reader.js            the overlay: routing, prev/next within a kind, Back, focus trap
     contact.js           validation and delivery
     app.js               bootstrap
   fonts/                 woff2, latin + latin-ext
@@ -586,7 +602,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               89 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               114 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -599,9 +615,11 @@ tools/
 plain CSS the browser does on its own, the cursor frame is only drawn when
 the mouse moves, and the folder you point at stops floating so its frame can
 sit still. Floors and shadows are gradients, not blur filters, and nothing
-blurs the desk behind an open folder. The reader's styles load without
-holding up the first screen. `tools/check.js` fails if the desk starts doing work while
-idle.
+blurs the desk behind an open folder. Even the corner tag's pulsing dot is a
+ring that only grows and fades, which the browser animates without
+repainting (a glow that changed size cost the idle page ~150ms of every
+2 seconds). The reader's styles load without holding up the first screen.
+`tools/check.js` fails if the desk starts doing work while idle.
 
 **Light only.** There is no dark mode and no `prefers-color-scheme` block
 anywhere. If you add one, add the new pairings to `tools/contrast.js` too.
@@ -618,8 +636,13 @@ applying to European companies.
 
 **Case studies open in an overlay, not a new page.** The URL still changes to
 `#case/<slug>`, so you can send a recruiter a link straight to one study and
-the browser Back button behaves. The ‹ › arrows use `replaceState`, so somebody
-who reads all three still leaves the overlay with a single Back.
+the browser Back button behaves. Opening a study from the page adds one history
+entry, marked as the reader's (`history.state.reader`), and closing it steps
+back over that entry, so nothing is left behind for the folder's × to trip
+over. The ‹ › arrows use `replaceState`, so somebody who reads all four case
+studies still leaves the overlay with a single Back. A study opened straight
+from its address has nothing of the site's behind it, so closing it only tidies
+the address, and never takes anyone off the site.
 
 **Reveal-on-scroll is armed by JavaScript, not CSS.** Elements are visible by
 default; `app.js` adds `.reveal-ready` to `<html>`, which is what switches on

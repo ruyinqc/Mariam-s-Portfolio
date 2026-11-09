@@ -252,18 +252,28 @@
 }
 .status strong { color: var(--ink); font-weight: 700; }
 .status__dot {
+  position: relative;
+  flex: none;
   width: 8px; height: 8px;
   border-radius: 50%;
   background: var(--green-deep);
-  box-shadow: 0 0 0 0 color-mix(in srgb, var(--green-deep) 70%, transparent);
+}
+/* The pulse is a ring that only grows and fades: transform and opacity,
+   which the browser animates without repainting. (A box-shadow pulse
+   repainted every frame, and kept an idle page busy.) */
+.status__dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--green-deep);
   animation: pulse 2.4s var(--ease) infinite;
 }
 @keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--green-deep) 70%, transparent); }
-  70%  { box-shadow: 0 0 0 8px transparent; }
-  100% { box-shadow: 0 0 0 0 transparent; }
+  0%        { opacity: .7; transform: scale(1); }
+  70%, 100% { opacity: 0;  transform: scale(3); }
 }
-@media (prefers-reduced-motion: reduce) { .status__dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .status__dot::after { animation: none; opacity: 0; } }
 
 /* ==========================================================================
    Work cards — three to a row, then two, then one. A short last row sits

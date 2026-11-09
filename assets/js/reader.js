@@ -3,10 +3,15 @@
 
    Routing contract
    ----------------
-   #case/<slug> opens that study. Clicking a card is a normal link click, so
-   it lands one entry in history and Back returns to the board. Moving with
-   the ‹ › arrows uses replaceState instead, so a reader who has walked
-   through all three studies still gets out of the overlay with one Back.
+   #case/<slug> opens that study. Opening one from the page (a card, the
+   desk's Live Projects, a folder tab) adds one history entry, marked as the
+   reader's own, and closing it (←, Escape, the scrim, the footer button or
+   the browser's Back) steps back over exactly that entry, to the folder or
+   the desk it was opened from, which keeps its place. Moving with the ‹ ›
+   arrows replaces the entry instead, so a reader who has walked through all
+   four case studies still gets out with one Back. A study opened straight
+   from its address (a link someone was sent) has nothing of ours behind it:
+   closing it just tidies the address.
    ========================================================================== */
 
 (function () {
@@ -24,11 +29,25 @@
   var elKind = document.getElementById('readerKind');
   var elIdx  = document.getElementById('readerIndex');
   var elTot  = document.getElementById('readerTotal');
+  var elCount = document.getElementById('readerCount');
+  var elNav  = document.getElementById('readerNav');
+  var elBack = document.getElementById('readerBack');
 
   if (!root || !window.WORK) return;
 
   var items = window.WORK.filter(function (w) { return w.published !== false; });
   if (!items.length) return;
+
+  /* Each kind is its own set: the case studies are counted and stepped
+     through together ("Case study 2 / 4"), and a one-off — the argument,
+     the vibe coding — stands alone, with no counter and no arrows. */
+  function group(i) {
+    var kind = items[i].kind;
+    return items.reduce(function (list, w, j) {
+      if (w.kind === kind) list.push(j);
+      return list;
+    }, []);
+  }
 
   var open = false;
   var index = -1;
@@ -50,8 +69,9 @@
     try {
       // Closing a study opened from inside a folder leaves you in that
       // folder, so the address goes back to the folder's, not to nothing.
+      // Stepping to another study keeps the entry's mark (see go()).
       var folder = window.Folio && Folio.hash();
-      history.replaceState(null, '',
+      history.replaceState(slug ? history.state : null, '',
         slug ? '#case/' + slug : (folder || location.pathname + location.search));
     } catch (err) {
       /* no addressable URL in this context — the reader still works */
@@ -486,6 +506,37 @@
     }).join('') + '</dl>';
   }
 
+  function foot(i) {
+    var set = group(i), pos = set.indexOf(i);
+    var kind = items[i].kind.toLowerCase();
+    if (set.length > 1) {
+      var next = items[set[(pos + 1) % set.length]];
+      return '<footer class="cs__foot">' +
+          '<p>' + esc(items[i].kind) + ' ' + (pos + 1) + ' of ' + set.length + '</p>' +
+          '<button class="btn btn--ghost" type="button" data-step="next">' +
+            'Next ' + esc(kind) + ': ' + esc(next.card.title) + ' ' + icon('arrow') +
+          '</button>' +
+        '</footer>';
+    }
+    return '<footer class="cs__foot">' +
+        '<p></p>' +
+        '<button class="btn btn--ghost" type="button" data-step="back">' +
+          icon('prev') + ' Back to ' + esc(origin.label) +
+        '</button>' +
+      '</footer>';
+  }
+
+  /* Where the reader was opened from, so Back can say so and go there:
+     the open folder (a case study opened from Case Studies), or the desk. */
+  var origin = { label: 'the desk', colour: '' };
+  function findOrigin(slug) {
+    if (window.Folio && Folio.hash()) {
+      return { label: Folio.title(), colour: Folio.colour() };
+    }
+    var f = document.querySelector('.folder[data-case="' + slug + '"]');
+    return { label: 'the desk', colour: f ? getComputedStyle(f).getPropertyValue('--fc').trim() : '' };
+  }
+
   function render(i) {
     var it = items[i];
     var isArg = /argument/i.test(it.kind);
@@ -514,24 +565,18 @@
         : '') +
       it.blocks.map(renderBlock).join('') +
 
-      '<footer class="cs__foot">' +
-        '<p>' + (i + 1) + ' of ' + items.length + '</p>' +
-        (items.length > 1
-          ? '<button class="btn btn--ghost" type="button" data-step="next">' +
-            'Next: ' + esc(items[(i + 1) % items.length].card.title) + ' ' + icon('arrow') +
-            '</button>'
-          : '') +
-      '</footer>';
+      foot(i);
 
     unmountLenses = Lens.mount(body);
 
+    var set = group(i), pos = set.indexOf(i);
+    var single = set.length < 2;
     elKind.textContent = it.kind;
-    elIdx.textContent = i + 1;
-    elTot.textContent = items.length;
-
-    // Arrows wrap, so they are never dead — but with one study there is
-    // nowhere to go.
-    var single = items.length < 2;
+    elIdx.textContent = pos + 1;
+    elTot.textContent = set.length;
+    // A one-off has nowhere to step to: no counter, no arrows.
+    if (elCount) elCount.hidden = single;
+    if (elNav) elNav.hidden = single;
     btnP.disabled = single;
     btnN.disabled = single;
 
@@ -577,6 +622,9 @@
 
     if (!open) {
       lastFocus = document.activeElement;
+      origin = findOrigin(items[i].slug);
+      if (elBack) elBack.textContent = origin.label === 'the desk' ? 'Desk' : origin.label;
+      root.style.setProperty('--fc', origin.colour || '');
       root.hidden = false;
       lockPage();
       setBackdropHidden(true);
@@ -592,16 +640,28 @@
     scroll.focus({ preventScroll: true });
   }
 
-  function close() {
+  // Did opening this study add a history entry of ours? (See go().)
+  function ownEntry() {
+    return !!(history.state && history.state.reader);
+  }
+
+  // `fromHash` is true when the address has already moved on (the browser's
+  // Back): then there is nothing left to tidy.
+  function close(fromHash) {
     if (!open) return;
     open = false;
     root.classList.remove('is-open');
     setBackdropHidden(false);
     unlockPage();
 
-    // Strip the hash without adding to history, so Back still leaves the page
-    // rather than re-opening the study the visitor just closed.
-    if (location.hash.indexOf('#case/') === 0) setHash(null);
+    // Close the way it was opened. If opening added an entry of ours, step
+    // back over it, so nothing is left behind and the folder's × still
+    // closes the folder in one go. Otherwise strip the hash in place, so
+    // Back still leaves the page rather than re-opening this study.
+    if (fromHash !== true) {
+      if (ownEntry()) history.back();
+      else if (location.hash.indexOf('#case/') === 0) setHash(null);
+    }
 
     var done = function () {
       root.hidden = true;
@@ -622,9 +682,11 @@
     lastFocus = null;
   }
 
+  // The arrows step within the same kind, and wrap.
   function step(delta) {
-    if (items.length < 2) return;
-    openAt((index + delta + items.length) % items.length, false);
+    var set = group(index), pos = set.indexOf(index);
+    if (set.length < 2) return;
+    openAt(set[(pos + delta + set.length) % set.length], false);
   }
 
   /* ======================================================================
@@ -637,8 +699,8 @@
   btnN.addEventListener('click', function () { step(1); });
 
   body.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-step="next"]');
-    if (b) step(1);
+    if (e.target.closest('[data-step="next"]')) step(1);
+    else if (e.target.closest('[data-step="back"]')) close();
   });
 
   document.addEventListener('keydown', function (e) {
@@ -687,7 +749,7 @@
 
   function syncFromHash() {
     var m = /^#case\/(.+)$/.exec(location.hash);
-    if (!m) { if (open) close(); return; }
+    if (!m) { if (open) close(true); return; }
     var i = slugIndex(decodeURIComponent(m[1]));
     if (i === -1) {
       // Unknown slug — clear it rather than leaving a broken-looking URL.
@@ -697,8 +759,33 @@
     openAt(i, true);
   }
 
+  // Open a study from the page: one new history entry, marked as the
+  // reader's, so closing it can step back over it (see close()).
+  function go(slug) {
+    var i = slugIndex(slug);
+    if (i === -1) return;
+    if (open) { openAt(i, false); return; }          // already reading: just move
+    try {
+      history.pushState({ reader: true }, '', '#case/' + slug);
+    } catch (err) { /* no addressable URL here — the study still opens */ }
+    openAt(i, true);
+  }
+
+  // Every link to a study (the cards, links in the text) opens it this way.
+  document.addEventListener('click', function (e) {
+    if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    var a = e.target.closest && e.target.closest('a[href^="#case/"]');
+    if (!a || slugIndex(decodeURIComponent(a.getAttribute('href').slice(6))) === -1) return;
+    e.preventDefault();
+    go(decodeURIComponent(a.getAttribute('href').slice(6)));
+  });
+
   window.addEventListener('hashchange', syncFromHash);
   syncFromHash();
 
-  window.Reader = { open: function (slug) { openAt(slugIndex(slug), false); }, close: close };
+  window.Reader = {
+    open: function (slug) { openAt(slugIndex(slug), false); },
+    go: go,
+    close: close
+  };
 })();
