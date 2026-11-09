@@ -11,7 +11,7 @@
    ========================================================================== */
 
 .desk {
-  --fill: #5E2A0D;               /* the desk's wood, continued under the photo */
+  --fill: #7A3816;               /* the desk's wood, continued under the photo */
   --cream: #F6ECD9;
   position: relative;
   overflow: hidden;
@@ -32,12 +32,13 @@
 .desk__world { position: absolute; left: 0; top: 0; width: 100%; }
 .desk__room img { width: 100%; height: auto; }
 
-/* Where her forearms meet the desk is 84.5% of the way down the photo. */
+/* Where her forearms meet the desk is 86% of the way down the photo. These
+   numbers match WIDE and TALL at the top of desk.js: change them together. */
 .desk__me {
   position: absolute;
   z-index: 2;
   left: 51%;
-  top: 33%;
+  top: 34.5%;
   width: 25%;
   transform: translateX(-50%);
 }
@@ -52,7 +53,7 @@
   position: absolute;
   z-index: 1;
   left: 51%;
-  top: 84.3%;
+  top: 85.8%;
   width: 25%;
   transform: translateX(-50%) scaleY(-1);
   opacity: .16;
@@ -69,8 +70,8 @@
   transform: translate(-50%, -50%);
   pointer-events: none;
 }
-.desk__shadow--soft  { top: 84%;   width: 23%;   height: 3.3%; background: rgba(25,10,2,.5);  filter: blur(12px); }
-.desk__shadow--tight { top: 84.4%; width: 19.5%; height: 8px;  background: rgba(20,8,1,.7);  filter: blur(4px); }
+.desk__shadow--soft  { top: 85.5%; width: 23%;   height: 3.3%; background: rgba(25,10,2,.5);  filter: blur(12px); }
+.desk__shadow--tight { top: 85.9%; width: 19.5%; height: 8px;  background: rgba(20,8,1,.7);  filter: blur(4px); }
 
 /* the window's warm glow falling across the scene */
 .desk__light {
@@ -117,8 +118,10 @@
   font-weight: 600;
   line-height: 1.3;
   color: var(--cream);
-  /* it sits on the wood under her hands: a dark halo keeps it crisp */
-  text-shadow: 0 1px 2px rgba(0,0,0,.6), 0 0 14px rgba(25,10,0,.75);
+  /* It sits on the wood under her hands, which catches the sun: a tight dark
+     rim round every letter keeps it crisp on the brightest grain, and a
+     wider glow settles it into the desk. */
+  text-shadow: 0 0 2px rgba(20,8,0,.9), 0 1px 3px rgba(0,0,0,.6), 0 0 16px rgba(25,10,0,.8);
 }
 .desk__role b { color: var(--mustard); font-weight: 800; }
 .desk__role > span { white-space: nowrap; }
@@ -136,8 +139,18 @@
   right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
   box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
 }
+/* On a phone it is right over her head: smaller, and tucked into the corner.
+   desk.js keeps her head just clear of it. */
 @media (max-width: 619px) {
-  .desk__status { font-size: 0.75rem; padding: 0.35rem 0.75rem; }
+  .desk__status {
+    top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px));
+    right: max(10px, calc(env(safe-area-inset-right, 0px) + 8px));
+    gap: 0.45em;
+    padding: 0.28rem 0.65rem;
+    font-size: 0.6875rem;
+    line-height: 1.3;
+  }
+  .desk__status .status__dot { width: 6px; height: 6px; }
 }
 
 /* ---- The folders ------------------------------------------------------------
@@ -361,13 +374,13 @@
 
 /* Small screens: the label keeps only its title, a touch larger. */
 @media (max-width: 619px) {
-  .desk { --fill: #602C0F; }
+  .desk { --fill: #7C3815; }
   .desk__photo { aspect-ratio: 941 / 1555; }
-  .desk__me      { left: 50.5%; top: 44.9%; width: 50%; }
-  .desk__reflect { left: 50.5%; top: 77.3%; width: 50%; }
-  .desk__shadow  { left: 50.5%; }
-  .desk__shadow--soft  { top: 77.2%; width: 46%; height: 1.9%; }
-  .desk__shadow--tight { top: 77.5%; width: 39%; }
+  .desk__me      { left: 51.3%; top: 45.4%; width: 50%; }
+  .desk__reflect { left: 51.3%; top: 77.8%; width: 50%; }
+  .desk__shadow  { left: 51.3%; }
+  .desk__shadow--soft  { top: 77.7%; width: 46%; height: 1.9%; }
+  .desk__shadow--tight { top: 78%; width: 39%; }
   .desk__plate { margin-top: -30px; }
   .folder__sub { display: none; }
   .folder__title { font-size: 11.5cqw; }

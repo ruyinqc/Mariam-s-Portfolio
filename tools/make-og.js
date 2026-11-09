@@ -38,12 +38,12 @@ const HTML = `<!DOCTYPE html>
   }
   .room { position: absolute; left: 0; top: -45px; width: 1200px; }
   .me {
-    position: absolute; left: 612px; top: 176px; width: 300px;
+    position: absolute; left: 612px; top: 188px; width: 300px;
     transform: translateX(-50%);
     filter: sepia(.14) saturate(1.06) brightness(.96) contrast(1.02);
   }
   .shadow {
-    position: absolute; left: 612px; top: 525px; width: 280px; height: 18px;
+    position: absolute; left: 612px; top: 536px; width: 280px; height: 18px;
     transform: translate(-50%, -50%); border-radius: 50%;
     background: rgba(25,10,2,.55); filter: blur(10px);
   }

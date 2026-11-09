@@ -349,7 +349,9 @@ The first thing anyone sees is you at your desk, your name across the
 desk's edge in front of your arms, the subtitle just under your hands, and
 six folders around you — *About Me* and *Contact* up beside you at desk
 level, the other four in a close row under the subtitle. The *Based in Egypt
-· Open to relocation* tag from About Me sits in the top-right corner. All of
+· Open to relocation* tag from About Me sits in the top-right corner; on a
+phone, where that corner is right above your head, it is smaller and the
+desk keeps your head clear of it. All of
 it is fitted to one screen, on a laptop or a phone (where the folders become
 two curved rows of three), with the folders made as big as the screen allows. A clear strip is always kept
 under the folders; when there's height to spare, the room over your head
@@ -386,6 +388,18 @@ and the sections read as one long page.
 
 If you replace the cutout of yourself, keep the same size and framing — the
 desk places your name and the folders from where your arms meet the desk.
+
+The room is a UX designer's studio: the monitor with phone designs, the
+wireframes on the wall, your certificate, Klaxs on a phone and a little
+Cairo taxi. If you replace a room photo, keep the empty chair in the middle,
+the plain wall behind it and the light from the left, then re-measure where
+you sit in it. Those numbers are `WIDE` and `TALL` at the top of
+`assets/js/desk.js` (fractions of the photo: the middle of you, the top of
+your head, where your arms meet the desk, how wide you are, the desk's far
+edge), and the same numbers are in `assets/css/desk.css` (`.desk__me`,
+`.desk__reflect`, `.desk__shadow`). Change them together, then rebuild the
+social card with `node tools/make-og.js`, whose positions come from the same
+numbers.
 
 **The folders** are the six `<li class="folders__item">` under *THE DESK*.
 Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
@@ -522,7 +536,8 @@ corner tag, the subtitle's size, the gaps between folders, and opening,
 switching and closing a folder — and the reader: its size matching a
 folder's, the counter and arrows keeping to one kind, where Back goes, and
 that Back from a study leaves the folder where you left it, closable in one
-go. At every width, each folder has to fit the screen. 114 checks.
+go. At every width, each folder has to fit the screen, and on a phone the
+corner tag must never cover your head. 115 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -602,7 +617,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               114 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               115 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails

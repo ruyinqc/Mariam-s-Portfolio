@@ -614,6 +614,25 @@ async function run() {
     await c.close();
   }
 
+  // On a phone the "open to relocation" tag sits right above her head; the
+  // desk keeps her head clear of it, even on the shortest screens.
+  const covered = [];
+  for (const [w, h] of [[360, 640], [375, 667], [390, 664], [430, 740]]) {
+    const c = await browser.newContext({ viewport: { width: w, height: h }, isMobile: true, hasTouch: true });
+    const pg = await c.newPage();
+    await pg.goto(BASE, { waitUntil: 'networkidle' });
+    await pg.waitForTimeout(700);
+    const g = await pg.evaluate(() => {
+      const t = document.querySelector('.desk__status').getBoundingClientRect();
+      const me = document.getElementById('deskMe').getBoundingClientRect();
+      const across = t.left < me.right - me.width * 0.2 && t.right > me.left + me.width * 0.2;
+      return { gap: Math.round(me.top - t.bottom), across };
+    });
+    if (g.across && g.gap < 0) covered.push(`${w}x${h}: ${g.gap}px`);
+    await c.close();
+  }
+  check('on a phone the corner tag never covers her head', covered.length === 0, covered.join(' | '));
+
   /* ==================================================================
      5 — Reduced motion
      ================================================================== */
