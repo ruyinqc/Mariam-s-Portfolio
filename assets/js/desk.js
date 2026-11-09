@@ -73,7 +73,7 @@
   var STAGE = 1.6;
 
   var ROLE_GAP = 6;        // the subtitle starts this far under her hands
-  var TEXT_GAP = 18;       // between the subtitle and the folders under it
+  var TEXT_GAP = 12;       // between the subtitle and the folders under it
   var EDGE = 18;           // folders keep this far from the sides of the screen
 
   var sides = [];          // which side of her each folder is on
@@ -127,7 +127,7 @@
     var textBelow = ROLE_GAP + roleEl.offsetHeight;          // subtitle bottom, below her arms
     // Clear space always kept under the lowest folder, so no folder ever
     // sits on the bottom edge of the screen.
-    var bottomSpace = clamp(vh * 0.05, 40, 64);
+    var bottomSpace = clamp(vh * 0.025, 20, 40);
     var spare = vh - textBelow - TEXT_GAP - bottomSpace;    // top of the screen to the lowest folder's foot
 
     // Where her arms go, once the folders' height is known. With height to
@@ -148,9 +148,7 @@
     if (W >= 900) {
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
-      // The folders keep the size and spacing they have on a 16:10 screen
-      // (Mariam's choice), even where that means a short scroll.
-      var w = off ? clamp(Ws * 0.15, 150, 250) : Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
+      var w = Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
         arms = settle(w * 1.19);
         plan = uPlan({ left: Math.round(P.cx * (W - Ws)), width: Ws }, W, P, arms, nameRel, N, textBelow, w);
@@ -224,7 +222,7 @@
     ];
 
     var reach = Math.min(cx, Wd - cx) - w / 2 - EDGE;        // how far the ends can go
-    var rx = Math.min(W * 0.37, reach);
+    var rx = Math.min(W * 0.37, w * 2.47, reach);       // closes up with smaller folders
     var yMid = arms + textBelow + TEXT_GAP + h / 2;
     var lift = Math.min(h * 0.3, arms - h / 2 - 10);          // the ends rise beside her
     var cy = arms - lift;
