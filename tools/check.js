@@ -636,16 +636,14 @@ async function run() {
       const f = [...document.querySelectorAll('.folders__item')].map(el => el.getBoundingClientRect());
       const row = f.slice(1, -1).sort((a, b) => a.left - b.left);
       return {
-        stage: document.getElementById('top').classList.contains('desk--stage') &&
-               getComputedStyle(document.getElementById('deskExt')).display === 'block',
         width: Math.round(f[2].width),
         gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right)),
-        fits: document.documentElement.scrollHeight <= innerHeight + 1 &&
-              document.documentElement.scrollWidth <= innerWidth
+        fits: document.documentElement.scrollWidth <= innerWidth,
+        photo: Math.round(document.getElementById('deskWorld').getBoundingClientRect().width) === innerWidth
       };
     });
-    check('on a wide, short screen the desk keeps its 1440×900 proportions',
-          st.stage && st.fits && st.width >= 200 && st.gaps.every(g => g >= 8 && g <= 32) &&
+    check('on a wide, short screen the folders keep their 1440×900 size and spacing',
+          st.photo && st.fits && st.width >= 200 && st.gaps.every(g => g >= 8 && g <= 32) &&
           Math.abs(st.gaps[0] - st.gaps[2]) <= 3, `${st.width}px folders, gaps ${st.gaps.join(', ')}`);
     await c.close();
   }

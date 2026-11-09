@@ -31,16 +31,6 @@
 }
 .desk__world { position: absolute; left: 0; top: 0; width: 100%; }
 
-/* On a screen wider than 16:10 the scene keeps 16:10's proportions in the
-   middle (desk.js), and the room carries on either side: its own edges,
-   mirrored, soft and dimmed (tools/make-room-ext.js). The sharp photo fades
-   into it, so there is no seam. */
-.desk__ext { display: none; position: absolute; pointer-events: none; background: center / 100% 100% no-repeat; }
-.desk--stage .desk__ext { display: block; background-image: url("../img/desk/room-wide-ext.webp?v=1"); }
-.desk--stage .desk__world {
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
 .desk__room img { width: 100%; height: auto; }
 
 /* Where her forearms meet the desk is 86% of the way down the photo. These

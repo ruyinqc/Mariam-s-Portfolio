@@ -45,7 +45,6 @@
   var roleEl  = plate.querySelector('.desk__role');
   var blend   = desk.querySelector('.desk__blend');
   var tag     = desk.querySelector('.desk__status');
-  var ext     = document.getElementById('deskExt');
 
   var fine = window.matchMedia('(pointer: fine)').matches;
 
@@ -68,11 +67,10 @@
   var TALL = { aspect: 1672 / 941, cx: 0.513, figTop: 0.454, figBottom: 0.78, figW: 0.5,
                deskEdge: 0.735, bottomCut: 0.84, headroom: 0.03 };
 
-  // On a screen wider than 16:10 the scene keeps the proportions it has at
-  // 16:10 (1440×900, the size Mariam chose), centred, and the room carries on
-  // softly either side (room-wide-ext.webp, EXT times the photo's width).
+  // On a screen wider than 16:10 the folders and the text keep the size and
+  // spacing they have at 16:10 (1440×900, Mariam's choice); the photo still
+  // spans the full width.
   var STAGE = 1.6;
-  var EXT = 1.4;
 
   var ROLE_GAP = 6;        // the subtitle starts this far under her hands
   var TEXT_GAP = 18;       // between the subtitle and the folders under it
@@ -96,12 +94,12 @@
     // can fill).
     var Ws = W, off = 0;
     if (P === WIDE && W >= 900) {
-      Ws = Math.min(W, Math.max(Math.round(vh * STAGE), Math.ceil(W / EXT)));
+      Ws = Math.min(W, Math.round(vh * STAGE));
       off = Math.round((W - Ws) / 2);
     }
     // her name and the subtitle are sized from the scene's width, not the screen's
     desk.style.setProperty('--sw', off ? px(Ws / 100) : '');
-    var Himg = Ws * P.aspect;
+    var Himg = W * P.aspect;                                 // the photo always spans the full width
     var armsFull = P.figBottom * Himg;                       // her arms, with no crop
     // The least room kept over her head when the top of the photo is cropped:
     // a sliver, or, where the "open to relocation" tag sits right above her
@@ -109,8 +107,8 @@
     var headMin = P.headroom * Himg;
     if (tag) {
       var t = tag.getBoundingClientRect(), d = desk.getBoundingClientRect();
-      var hair = 0.3 * P.figW * Ws;                          // her head, either side of her middle
-      if (t.left - d.left < off + P.cx * Ws + hair && t.right - d.left > off + P.cx * Ws - hair) {
+      var hair = 0.3 * P.figW * W;                           // her head, either side of her middle
+      if (t.left - d.left < P.cx * W + hair && t.right - d.left > P.cx * W - hair) {
         headMin = Math.max(headMin, t.bottom - d.top + 6);
       }
     }
@@ -146,14 +144,16 @@
     var plan = null, arms = armsMin, i;
     // On a wide screen her name and the subtitle are centred on her (she sits
     // a little right of the middle), so the curve clears them evenly.
-    plate.style.transform = W >= 900 ? 'translateX(' + px(Math.round(off + P.cx * Ws - W / 2)) + ')' : '';
+    plate.style.transform = W >= 900 ? 'translateX(' + px(Math.round(P.cx * W - W / 2)) + ')' : '';
     if (W >= 900) {
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
-      var w = Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
+      // The folders keep the size and spacing they have on a 16:10 screen
+      // (Mariam's choice), even where that means a short scroll.
+      var w = off ? clamp(Ws * 0.15, 150, 250) : Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
         arms = settle(w * 1.19);
-        plan = uPlan({ left: off, width: Ws }, W, P, arms, nameRel, N, textBelow, w);
+        plan = uPlan({ left: Math.round(P.cx * (W - Ws)), width: Ws }, W, P, arms, nameRel, N, textBelow, w);
       }
     }
     if (!plan) {
@@ -170,15 +170,6 @@
     photo.style.aspectRatio = 'auto';
     photo.style.height = px(P.bottomCut * Himg - crop);
     world.style.top = px(-crop);
-    world.style.left = off ? px(off) : '';
-    world.style.width = off ? px(Ws) : '';
-    desk.classList.toggle('desk--stage', off > 0);
-    if (ext && off) {
-      ext.style.width = px(Ws * EXT);
-      ext.style.height = px(Himg);
-      ext.style.left = px(off - Ws * (EXT - 1) / 2);
-      ext.style.top = px(-crop);
-    }
 
     plan.items.forEach(function (it, idx) {
       var li = items[idx];
