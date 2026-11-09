@@ -349,7 +349,9 @@ desk's edge in front of your arms, the subtitle just under your hands, and
 six folders on a U around you — the two ends up beside you at desk level,
 the middle two under the subtitle. All of it is fitted to one screen, on a
 laptop or a phone (where the folders become two curved rows of three), with
-the folders made as big as the screen allows. Pointing at a folder draws a
+the folders made as big as the screen allows. A clear strip is always kept
+under the folders; when there's height to spare, the room over your head
+stays a modest margin and most of the rest goes under the folders. Pointing at a folder draws a
 green selection frame around it. Clicking it opens the folder over the desk:
 a sheet of paper in the folder's colour, holding that folder's sections, with
 tabs along its top to switch folders. ×, Escape and the Back button close it.
@@ -503,7 +505,8 @@ switched off — and the desk: that it fits one screen, that your name sits
 across the desk and the subtitle under your hands, that the folders are big
 and none covers the text or another folder, that the page does no work while
 idle, the cursor frame (and that it follows the mouse, not a leftover
-keyboard focus), and opening, switching and closing a folder. 87 checks.
+keyboard focus), the space kept over your head and under the folders, and
+opening, switching and closing a folder. 89 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -583,7 +586,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               87 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               89 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails

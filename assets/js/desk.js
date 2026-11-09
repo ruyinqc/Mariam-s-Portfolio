@@ -62,7 +62,7 @@
      where her name sits. bottomCut is where the photo stops; headroom is
      the room always kept above her head when the top is cropped. */
   var WIDE = { aspect: 941 / 1672, cx: 0.51,  figTop: 0.33,  figBottom: 0.845, figW: 0.25,
-               deskEdge: 0.776, bottomCut: 0.97, headroom: 0.025 };
+               deskEdge: 0.776, bottomCut: 0.97, headroom: 0.02 };
   var TALL = { aspect: 1672 / 941, cx: 0.505, figTop: 0.449, figBottom: 0.775, figW: 0.5,
                deskEdge: 0.72, bottomCut: 0.84, headroom: 0.03 };
 
@@ -98,16 +98,29 @@
     plate.style.marginTop = px(nameRel - under);
     if (blend) blend.style.height = px(Math.max(40, under - 6));
     var textBelow = ROLE_GAP + roleEl.offsetHeight;          // subtitle bottom, below her arms
-    var padB = parseFloat(getComputedStyle(desk).paddingBottom) || 0;
-    var spare = vh - textBelow - TEXT_GAP - padB;            // folders + her, top to bottom
+    // Clear space always kept under the lowest folder, so no folder ever
+    // sits on the bottom edge of the screen.
+    var bottomSpace = clamp(vh * 0.05, 40, 64);
+    var spare = vh - textBelow - TEXT_GAP - bottomSpace;    // top of the screen to the lowest folder's foot
+
+    // Where her arms go, once the folders' height is known. With height to
+    // spare, the room over her head grows only to a comfortable margin, then
+    // takes a third of what is left; the rest goes under the folders.
+    var headMin = P.headroom * Himg, headIdeal = Math.max(headMin, vh * 0.045);
+    function settle(need) {
+      var room = Math.min(armsFull, spare - need) - armsMin;
+      if (room <= 0) return armsMin;
+      var give = Math.min(room, headIdeal - headMin);
+      return armsMin + give + (room - give) * 0.35;
+    }
 
     var plan = null, arms = armsMin, i;
     if (W >= 900) {
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
-      var w = Math.min(clamp(W * 0.14, 150, 250), (spare - armsMin) / 1.19);
+      var w = Math.min(clamp(W * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
-        arms = clamp(spare - w * 1.19, armsMin, armsFull);
+        arms = settle(w * 1.19);
         plan = uPlan(W, P, arms, nameRel, N, textBelow, w);
       }
     }
@@ -116,7 +129,7 @@
       for (i = 0; i < scales.length && !plan; i++) {
         var size = rowSize(W, scales[i]);
         if (spare - size.below < armsMin && i < scales.length - 1) continue;
-        arms = clamp(spare - size.below, armsMin, armsFull);
+        arms = settle(size.below);
         plan = rowPlan(W, arms, textBelow, size);
       }
     }
@@ -140,7 +153,7 @@
       sides[idx] = it.side;
     });
 
-    desk.style.minHeight = plan.bottom + padB > vh ? px(plan.bottom + padB) : '';
+    desk.style.minHeight = plan.bottom + bottomSpace > vh ? px(plan.bottom + bottomSpace) : '';
     if (window.Motion) Motion.remeasure();
     textBoxes = [box(nameEl), box(roleEl)];
     kick(0);
@@ -200,17 +213,21 @@
     function clear(o, side) {
       for (var n = 0, t; n < 3 && (t = hit(o)); n++) o.x = side < 0 ? t.left - w / 2 : t.right + w / 2;
     }
+    // Two folders are apart if they clear each other across or up and down.
+    function apart(a, b) {
+      return Math.abs(a.x - b.x) >= w + 8 || Math.abs(a.y - b.y) >= h + 8;
+    }
     for (var side = -1; side <= 1; side += 2) {
-      var second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
+      var mid = out[side < 0 ? 2 : 3], second = out[side < 0 ? 1 : 4], end = out[side < 0 ? 0 : 5];
       clear(second, side);
       clear(end, side);
-      if (Math.abs(end.x - second.x) < w + 12) end.x = second.x + side * (w + 12);
+      // each folder steps out past the one inside it, if they would touch
+      if (!apart(second, mid)) second.x = mid.x + side * (w + 12);
+      if (!apart(end, second)) end.x = second.x + side * (w + 12);
       end.x = clamp(end.x, w / 2 + EDGE, W - w / 2 - EDGE);
       second.x = clamp(second.x, w / 2 + EDGE, W - w / 2 - EDGE);
-      var apartX = Math.abs(end.x - second.x) >= w + 8;
-      var apartY = Math.abs(end.y - second.y) >= h + 8;
-      if ((!apartX && !apartY) || hit(second) || hit(end)) return null;   // too tight: go smaller
-      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null; // the ends clear her
+      if (!apart(second, mid) || !apart(end, second) || hit(second) || hit(end)) return null;  // too tight: go smaller
+      if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;                      // the ends clear her
     }
     if (hit(out[2]) || hit(out[3])) return null;
 

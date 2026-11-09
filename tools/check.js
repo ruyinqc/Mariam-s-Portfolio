@@ -128,7 +128,9 @@ async function run() {
       overlap,
       beside: end.right < me.left && last.left > me.right &&
               end.top < me.bottom && last.top < me.bottom,
-      width: Math.round(f[2].width)
+      width: Math.round(f[2].width),
+      overHead: Math.round(me.top),
+      underFolders: Math.round(innerHeight - Math.max(...f.map(r => r.bottom)))
     };
   });
   // her arms meet the desk at the bottom of her photo (.desk__me)
@@ -138,6 +140,8 @@ async function run() {
   check('no two folders overlap', geo.overlap === 0, String(geo.overlap));
   check('the end folders sit beside her, up at the desk', geo.beside);
   check('the folders are big', geo.width >= 180, `${geo.width}px`);
+  check('the folders keep clear of the bottom of the screen', geo.underFolders >= 36, `${geo.underFolders}px`);
+  check('no big empty band over her head', geo.overHead <= 950 * 0.1, `${geo.overHead}px`);
 
   // Nothing should run while nobody is touching the page.
   const cdp = await ctx.newCDPSession(page);
@@ -208,8 +212,8 @@ async function run() {
 
   // That folder keeps focus — but once the mouse moves over empty desk, the
   // frame follows the mouse and lets go of it.
-  await page.mouse.move(60, 300);
-  await page.mouse.move(80, 320, { steps: 4 });
+  await page.mouse.move(700, 20);     // the room above her head: no folder there
+  await page.mouse.move(720, 32, { steps: 4 });
   await page.waitForTimeout(500);
   check('with the mouse on empty desk, no folder keeps the frame',
     await page.evaluate(() => !document.getElementById('deskSel').classList.contains('is-on')));
