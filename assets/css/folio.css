@@ -22,9 +22,7 @@
 .folio__scrim {
   position: absolute;
   inset: 0;
-  background: rgba(20, 9, 2, .58);
-  -webkit-backdrop-filter: blur(3px);
-          backdrop-filter: blur(3px);
+  background: rgba(20, 9, 2, .66);   /* a plain tint: blurring the desk behind cost too much */
   opacity: 0;
   transition: opacity .4s ease;
 }
@@ -46,8 +44,9 @@
   background-size: 420px;
   border-top: 12px solid var(--fc, var(--mustard));
   border-radius: 8px 18px 18px 18px;
-  box-shadow: 0 60px 120px -30px rgba(0, 0, 0, .6), 0 0 0 1px rgba(0, 0, 0, .06);
+  box-shadow: 0 40px 80px -24px rgba(0, 0, 0, .6), 0 0 0 1px rgba(0, 0, 0, .06);
   transition: transform .5s var(--ease), opacity .3s ease;
+  will-change: transform;
 }
 .folio.is-closing .folio__sheet { opacity: 0; transition: transform .46s var(--ease), opacity .2s ease .26s; }
 
@@ -115,8 +114,13 @@
   overscroll-behavior: contain;
   outline: none;
 }
-.folio__body { transition: opacity .16s ease; }
-.folio.is-switching .folio__body { opacity: 0; }
+.folio__body { transition: opacity .2s ease; }
+.folio.is-switching .folio__body { opacity: 0; transition-duration: .16s; }
+/* While the sheet grows out of the folder it is blank paper: its contents
+   are drawn once it has landed, so the opening never stutters. Closing
+   empties it first for the same reason. */
+.folio.is-opening .folio__body { opacity: 0; content-visibility: hidden; }
+.folio.is-closing .folio__body { opacity: 0; transition-duration: .12s; }
 
 /* Inside a folder the sections are tighter than on a long page. */
 .folio .section { padding-block: clamp(1.75rem, 3.5vw, 3rem) clamp(2rem, 4vw, 3.5rem); }
@@ -148,6 +152,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .folio__sheet, .folio__scrim, .folio__body, .folio__tab, .folio__close { transition: none; }
+  .folio__sheet { will-change: auto; }
 }
 
 /* ==========================================================================
@@ -223,17 +228,8 @@
   border-color: var(--line-strong);
   border-radius: 6px;
   box-shadow: 0 1px 2px rgba(33, 23, 14, .08), 0 18px 34px -18px rgba(33, 23, 14, .4);
-  rotate: -0.6deg;
-  transition:
-    box-shadow var(--dur) var(--ease),
-    border-color var(--dur) var(--ease),
-    translate var(--dur) var(--ease),
-    rotate var(--dur) var(--ease);
 }
-.pincard:nth-child(even) { rotate: 0.6deg; }
-.pincard:nth-child(3n) { rotate: -0.2deg; }
 .pincard:hover, .pincard:focus-within {
-  rotate: 0deg;
   border-color: var(--line-strong);
   box-shadow: 0 2px 4px rgba(33, 23, 14, .1), 0 30px 50px -20px rgba(33, 23, 14, .5);
 }

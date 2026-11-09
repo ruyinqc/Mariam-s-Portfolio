@@ -179,9 +179,9 @@
       current = f;
       animTimer = setTimeout(function () {
         fill(f);
+        root.classList.remove('is-switching', 'is-opening');
         remeasure();
         scrollToPart(part, f);
-        root.classList.remove('is-switching');
       }, reduced ? 0 : 160);
       return;
     }
@@ -194,14 +194,21 @@
 
     fill(f);
     root.classList.remove('is-closing');
+    root.classList.add('is-opening');
     root.hidden = false;
     document.documentElement.classList.add('folio-open');
     setBackdrop(true);
-    remeasure();
     flipFrom(origin);
     requestAnimationFrame(function () { root.classList.add('is-open'); });
-    scrollToPart(part, f);
     scroll.focus({ preventScroll: true });
+
+    // The sheet grows out of the folder as blank paper; its contents are
+    // laid out and drawn once it has landed, then fade in.
+    animTimer = setTimeout(function () {
+      root.classList.remove('is-opening');
+      remeasure();
+      scrollToPart(part, f);
+    }, reduced ? 0 : 480);
   }
 
   function close() {
@@ -210,7 +217,7 @@
     var back = deskFolder(current.key) || origin;
     current = null;
     pushed = false;
-    root.classList.remove('is-open');
+    root.classList.remove('is-open', 'is-opening');
     root.classList.add('is-closing');
     var shrinking = flipTo(back);
 

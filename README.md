@@ -344,9 +344,11 @@ pinning and becomes a row you swipe sideways instead.
 
 ## 4. The desk (the top of the page)
 
-The first thing anyone sees is you at your desk, your name on the desk front,
-and six folders on a curve under it — all of it fitted to one screen, on a
-laptop or a phone. Pointing at a folder makes you look at it and draws a
+The first thing anyone sees is you at your desk, your name on the desk right
+under your hands, and six folders on a U around you — the two ends up beside
+you at desk level, the middle two under your name. All of it is fitted to
+one screen, on a laptop or a phone (where the folders become two curved rows
+of three). Pointing at a folder makes you look at it and draws a
 green selection frame around it. Clicking it opens the folder over the desk:
 a sheet of paper in the folder's colour, holding that folder's sections, with
 tabs along its top to switch folders. ×, Escape and the Back button close it.
@@ -366,6 +368,7 @@ and the sections read as one long page.
 | `mariam-front.webp` | you, cut out, looking at the camera (791 × 917) |
 | `mariam-look-right.webp` | the same photo, looking to the right |
 | `paper.webp` | the paper texture on the folder labels and the opening sheet |
+| `prints/` | small copies of the pictures inside the folders |
 
 **To add the photo of you looking left**, save it as
 `assets/img/desk/mariam-look-left.webp` — same size and framing as
@@ -383,7 +386,9 @@ Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
 image already on the site), a title and a one-line note on its label.
 `--fc` is the folder's colour and `--fc2` the lighter shade on its front.
 The link (`href`) is the section it opens; `data-case` opens a case study
-in the reader instead.
+in the reader instead. The pictures are small copies in
+`assets/img/desk/prints/` (about 360px wide) — a folder only shows a little
+print, so it doesn't need the full-size photo.
 
 **The cursor.** On the desk, a mouse or trackpad gets a green crosshair and
 a selection frame. Everywhere else it's an ordinary arrow and hand in
@@ -501,8 +506,10 @@ node tools/check.js
 Drives a real browser: keyboard access, focus trapping in the reader, the
 contact form's success *and* failure paths, the clothesline (scroll, drag,
 arrows), four screen widths, reduced motion, and the page with JavaScript
-switched off — and the desk: that it fits one screen, the folders, your eyes,
-the cursor frame, and opening, switching and closing a folder. 79 checks.
+switched off — and the desk: that it fits one screen, that your name sits
+under your hands and no folder covers it or another folder, that the page
+does no work while idle, your eyes, the cursor frame, and opening, switching
+and closing a folder. 86 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -582,7 +589,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               79 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               86 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -590,6 +597,15 @@ tools/
 ```
 
 ### Decisions worth knowing about
+
+**The desk stays light.** Nothing on it runs every frame: the floating is
+plain CSS the browser does on its own, the cursor frame is only drawn when
+the mouse moves, and the folder you point at stops floating so its frame can
+sit still. Floors and shadows are gradients, not blur filters, and nothing
+blurs the desk behind an open folder. The photos of you looking aside load
+after the page has settled, and the reader's styles load without holding up
+the first screen. `tools/check.js` fails if the desk starts doing work while
+idle.
 
 **Light only.** There is no dark mode and no `prefers-color-scheme` block
 anywhere. If you add one, add the new pairings to `tools/contrast.js` too.
