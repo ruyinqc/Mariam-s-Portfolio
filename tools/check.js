@@ -148,21 +148,31 @@ async function run() {
     const tag = document.querySelector('.desk__status');
     const t = tag && tag.getBoundingClientRect();
     const f = [...document.querySelectorAll('.folders__item')].map(el => el.getBoundingClientRect());
-    // the four folders in the row under her hands, left to right
+    // the four folders under her hands, left to right
     const row = f.slice(1, -1).sort((a, b) => a.left - b.left);
+    const mid = r => (r.top + r.bottom) / 2;
+    const arms = document.getElementById('deskMe').getBoundingClientRect().bottom;
     return {
       tag: !!t && t.width > 0 && innerWidth - t.right < 48 && t.top < 48 && /Open to relocation/.test(tag.textContent),
       tagAt: t ? `${Math.round(innerWidth - t.right)}px from the right, ${Math.round(t.top)}px from the top` : 'missing',
       tagClear: !!t && f.every(b => !hit(b, t)),
       roleSize: parseFloat(getComputedStyle(document.querySelector('.desk__role')).fontSize),
-      gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right))
+      gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right)),
+      // About Me and Contact, down by the desk's edge (Mariam's markup), and
+      // all six on one curve: ends highest, the middle two lowest
+      ends: [f[0], f[5]].map(r => Math.round(mid(r) - arms)),
+      arc: mid(f[0]) < mid(f[1]) && mid(f[1]) < mid(f[2]) && mid(f[5]) < mid(f[4]) && mid(f[4]) < mid(f[3])
     };
   });
   check('the "open to relocation" tag sits in the top-right corner', corner.tag, corner.tagAt);
   check('no folder covers that tag', corner.tagClear);
   check('the subtitle is big enough to read', corner.roleSize >= 20, `${corner.roleSize}px`);
-  check('the folders in the row sit close together', corner.gaps.length === 3 && corner.gaps.every(g => g >= 8 && g <= 40),
+  check('the four folders under her name sit close and evenly', corner.gaps.length === 3 &&
+        corner.gaps.every(g => g >= 8 && g <= 40) && Math.abs(corner.gaps[0] - corner.gaps[2]) <= 3,
         `${corner.gaps.join(', ')}px`);
+  check('the six folders make one curve in front of her', corner.arc);
+  check('About Me and Contact sit down by the desk\'s edge', corner.ends.every(d => d > 0 && d < 120),
+        `${corner.ends.join(', ')}px below her arms`);
 
   // Nothing should run while nobody is touching the page.
   const cdp = await ctx.newCDPSession(page);
@@ -611,6 +621,31 @@ async function run() {
     check(`reader does not scroll sideways at ${w}px`, r.sw <= r.cw);
     check(`the reader is as wide as a folder at ${w}px`, Math.abs(r.w - sheetW) <= 2, `${Math.round(r.w)} vs ${Math.round(sheetW)}`);
     check(`no page errors at ${w}px`, errs.length === 0, errs.join(' | '));
+    await c.close();
+  }
+
+  // Before the scripts run, the page must already be the desk: the plain
+  // page's nav never flashes up, and the desk waits out of sight instead of
+  // jumping into place once it is laid out.
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const pg = await c.newPage();
+    await pg.route(/\.js(\?|$)/, async r => { await new Promise(res => setTimeout(res, 1500)); await r.continue(); });
+    pg.goto(BASE).catch(() => {});
+    await pg.waitForTimeout(700);
+    const early = await pg.evaluate(() => ({
+      nav: getComputedStyle(document.getElementById('nav')).display,
+      desk: getComputedStyle(document.querySelector('.desk__photo')).opacity
+    }));
+    await pg.waitForTimeout(2600);
+    const late = await pg.evaluate(() => ({
+      nav: getComputedStyle(document.getElementById('nav')).display,
+      desk: getComputedStyle(document.querySelector('.desk__photo')).opacity
+    }));
+    check('the old nav never flashes up before the scripts run', early.nav === 'none' && late.nav === 'none',
+          `${early.nav} → ${late.nav}`);
+    check('the desk waits out of sight, then shows once laid out', early.desk === '0' && late.desk === '1',
+          `opacity ${early.desk} → ${late.desk}`);
     await c.close();
   }
 

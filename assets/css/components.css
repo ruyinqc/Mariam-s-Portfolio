@@ -289,7 +289,9 @@
 
 .board__cards {
   --cols: 1;
-  --gap: clamp(1rem, 2.2vw, 1.75rem);
+  /* close-set, like cards laid side by side on a desk: 16px on a laptop,
+     12px on a phone */
+  --gap: clamp(0.75rem, 1.2vw, 1rem);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
