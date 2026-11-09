@@ -537,7 +537,8 @@ switching and closing a folder — and the reader: its size matching a
 folder's, the counter and arrows keeping to one kind, where Back goes, and
 that Back from a study leaves the folder where you left it, closable in one
 go. At every width, each folder has to fit the screen, and on a phone the
-corner tag must never cover your head. 115 checks.
+corner tag must never cover your head. And with the scripts held back, the old
+top nav must never flash up. 117 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -617,7 +618,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               115 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               117 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
@@ -635,6 +636,12 @@ ring that only grows and fades, which the browser animates without
 repainting (a glow that changed size cost the idle page ~150ms of every
 2 seconds). The reader's styles load without holding up the first screen.
 `tools/check.js` fails if the desk starts doing work while idle.
+
+**No flash on load.** A tiny script at the top of `index.html` marks the
+page as the desk before anything is drawn. So the plain page's top nav never
+flashes up while the scripts load, and the desk stays out of sight until
+`desk.js` has laid it out, then fades in already in place. If the scripts
+fail to run, the plain page comes back once the page has loaded.
 
 **Light only.** There is no dark mode and no `prefers-color-scheme` block
 anywhere. If you add one, add the new pairings to `tools/contrast.js` too.

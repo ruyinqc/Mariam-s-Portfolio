@@ -614,6 +614,31 @@ async function run() {
     await c.close();
   }
 
+  // Before the scripts run, the page must already be the desk: the plain
+  // page's nav never flashes up, and the desk waits out of sight instead of
+  // jumping into place once it is laid out.
+  {
+    const c = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const pg = await c.newPage();
+    await pg.route(/\.js(\?|$)/, async r => { await new Promise(res => setTimeout(res, 1500)); await r.continue(); });
+    pg.goto(BASE).catch(() => {});
+    await pg.waitForTimeout(700);
+    const early = await pg.evaluate(() => ({
+      nav: getComputedStyle(document.getElementById('nav')).display,
+      desk: getComputedStyle(document.querySelector('.desk__photo')).opacity
+    }));
+    await pg.waitForTimeout(2600);
+    const late = await pg.evaluate(() => ({
+      nav: getComputedStyle(document.getElementById('nav')).display,
+      desk: getComputedStyle(document.querySelector('.desk__photo')).opacity
+    }));
+    check('the old nav never flashes up before the scripts run', early.nav === 'none' && late.nav === 'none',
+          `${early.nav} → ${late.nav}`);
+    check('the desk waits out of sight, then shows once laid out', early.desk === '0' && late.desk === '1',
+          `opacity ${early.desk} → ${late.desk}`);
+    await c.close();
+  }
+
   // On a phone the "open to relocation" tag sits right above her head; the
   // desk keeps her head clear of it, even on the shortest screens.
   const covered = [];

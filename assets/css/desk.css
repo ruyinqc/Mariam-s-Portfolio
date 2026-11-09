@@ -457,6 +457,12 @@
 /* ---- With folders that open over the desk (folio.js) ---------------------------
    The desk is the whole page: exactly one screen, no nav (the folders are
    the navigation), and the sections wait in the open folder instead. */
+/* Until desk.js has laid the desk out, only the wood shows; then the room,
+   her name and the folders fade in already in place, rather than jumping
+   there (index.html sets .desk-pending before the first paint). */
+.desk-pending .desk > * { opacity: 0; }
+.desk__photo, .desk__plate, .desk__folders, .desk__status { transition: opacity var(--dur) var(--ease); }
+
 .desk-mode .desk { min-height: 100vh; min-height: 100svh; }
 /* with the folders laid out by desk.js, the wood below them only has to
    hold their shadows */

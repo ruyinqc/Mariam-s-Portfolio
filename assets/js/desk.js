@@ -425,6 +425,16 @@
   layout(true);
   if ('ResizeObserver' in window) new ResizeObserver(function () { layout(false); }).observe(desk);
   else window.addEventListener('resize', function () { layout(false); }, { passive: true });
-  // Her name sets where the folders may sit; measure again once the fonts land.
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layout(true); });
+
+  // The desk is kept out of sight until it is laid out (see the script at
+  // the top of index.html). Her name sets where the folders may sit, so show
+  // it once the fonts have landed and it has been measured again in them, or
+  // after a moment at most.
+  function reveal() { document.documentElement.classList.remove('desk-pending'); }
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { layout(true); reveal(); });
+    setTimeout(reveal, 700);
+  } else {
+    reveal();
+  }
 })();

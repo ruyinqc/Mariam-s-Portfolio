@@ -3,6 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- JavaScript is on, so this is the desk: folders open as sheets (folio.js)
+     and desk.js lays the desk out. Say so before the first paint, so the
+     plain page's nav never flashes up, and the desk shows once it is in place
+     instead of jumping into it. Should the scripts not run, the plain page
+     comes back when the page has loaded. -->
+<script>
+  (function (h) {
+    h.classList.add('desk-mode', 'desk-pending');
+    addEventListener('load', function () {
+      if (!window.Folio) h.classList.remove('desk-mode');
+      h.classList.remove('desk-pending');
+    });
+  })(document.documentElement);
+</script>
 <title>Mariam Emad Nabih — Product Designer, B2B SaaS</title>
 <meta name="description" content="Product designer with a computer-science background. I design billing, wallet and admin systems for B2B SaaS at Ovarc. Based in Egypt, open to relocation.">
 <meta name="author" content="Mariam Emad Nabih">
@@ -66,7 +80,7 @@
 <!-- The case-study reader's styles aren't needed for the first screen, so they load
      without holding it up. (The reader itself needs JavaScript anyway.) -->
 <link rel="stylesheet" href="assets/css/reader.css?v=20" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="assets/css/desk.css?v=7">
+<link rel="stylesheet" href="assets/css/desk.css?v=8">
 <link rel="stylesheet" href="assets/css/folio.css?v=3">
 
 <!-- Structured data. The case studies and certificates are added at runtime
@@ -920,7 +934,7 @@
 <script src="assets/js/reader.js?v=21"></script>
 <script src="assets/js/contact.js?v=19"></script>
 <script src="assets/js/folio.js?v=4"></script>
-<script src="assets/js/desk.js?v=9"></script>
+<script src="assets/js/desk.js?v=10"></script>
 <script src="assets/js/app.js?v=18"></script>
 </body>
 </html>
