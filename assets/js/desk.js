@@ -44,6 +44,7 @@
   var nameEl  = plate.querySelector('.desk__name');
   var roleEl  = plate.querySelector('.desk__role');
   var blend   = desk.querySelector('.desk__blend');
+  var tag     = desk.querySelector('.desk__status');
 
   var fine = window.matchMedia('(pointer: fine)').matches;
 
@@ -85,7 +86,18 @@
     var P = window.matchMedia('(max-width: 619px)').matches ? TALL : WIDE;
     var Himg = W * P.aspect;
     var armsFull = P.figBottom * Himg;                       // her arms, with no crop
-    var armsMin = armsFull - (P.figTop - P.headroom) * Himg; // cropped right down to her head
+    // The least room kept over her head when the top of the photo is cropped:
+    // a sliver, or, where the "open to relocation" tag sits right above her
+    // (on a phone), enough to clear it.
+    var headMin = P.headroom * Himg;
+    if (tag) {
+      var t = tag.getBoundingClientRect(), d = desk.getBoundingClientRect();
+      var hair = 0.3 * P.figW * W;                           // her head, either side of her middle
+      if (t.left - d.left < P.cx * W + hair && t.right - d.left > P.cx * W - hair) {
+        headMin = Math.max(headMin, t.bottom - d.top + 6);
+      }
+    }
+    var armsMin = Math.min(armsFull, armsFull - P.figTop * Himg + headMin); // cropped right down to that
     var under = (P.bottomCut - P.figBottom) * Himg;          // desk shown below her arms
 
     // Her name across the desk's edge, in front of her arms; the subtitle
@@ -106,7 +118,7 @@
     // Where her arms go, once the folders' height is known. With height to
     // spare, the room over her head grows only to a comfortable margin, then
     // takes a third of what is left; the rest goes under the folders.
-    var headMin = P.headroom * Himg, headIdeal = Math.max(headMin, vh * 0.045);
+    var headIdeal = Math.max(headMin, vh * 0.045);
     function settle(need) {
       var room = Math.min(armsFull, spare - need) - armsMin;
       if (room <= 0) return armsMin;

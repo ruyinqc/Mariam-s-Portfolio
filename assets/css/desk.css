@@ -139,8 +139,18 @@
   right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px));
   box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
 }
+/* On a phone it is right over her head: smaller, and tucked into the corner.
+   desk.js keeps her head just clear of it. */
 @media (max-width: 619px) {
-  .desk__status { font-size: 0.75rem; padding: 0.35rem 0.75rem; }
+  .desk__status {
+    top: max(10px, calc(env(safe-area-inset-top, 0px) + 8px));
+    right: max(10px, calc(env(safe-area-inset-right, 0px) + 8px));
+    gap: 0.45em;
+    padding: 0.28rem 0.65rem;
+    font-size: 0.6875rem;
+    line-height: 1.3;
+  }
+  .desk__status .status__dot { width: 6px; height: 6px; }
 }
 
 /* ---- The folders ------------------------------------------------------------

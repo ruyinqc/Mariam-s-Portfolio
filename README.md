@@ -349,7 +349,9 @@ The first thing anyone sees is you at your desk, your name across the
 desk's edge in front of your arms, the subtitle just under your hands, and
 six folders around you — *About Me* and *Contact* up beside you at desk
 level, the other four in a close row under the subtitle. The *Based in Egypt
-· Open to relocation* tag from About Me sits in the top-right corner. All of
+· Open to relocation* tag from About Me sits in the top-right corner; on a
+phone, where that corner is right above your head, it is smaller and the
+desk keeps your head clear of it. All of
 it is fitted to one screen, on a laptop or a phone (where the folders become
 two curved rows of three), with the folders made as big as the screen allows. A clear strip is always kept
 under the folders; when there's height to spare, the room over your head
@@ -534,7 +536,8 @@ corner tag, the subtitle's size, the gaps between folders, and opening,
 switching and closing a folder — and the reader: its size matching a
 folder's, the counter and arrows keeping to one kind, where Back goes, and
 that Back from a study leaves the folder where you left it, closable in one
-go. At every width, each folder has to fit the screen. 114 checks.
+go. At every width, each folder has to fit the screen, and on a phone the
+corner tag must never cover your head. 115 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -614,7 +617,7 @@ worker/
 sitemap.xml              the one URL, for Search Console
 tools/
   contrast.js            colour contrast, no install needed
-  check.js               114 browser checks (accessibility, desk, folders, reader, form, line)
+  check.js               115 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
