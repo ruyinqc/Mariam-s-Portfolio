@@ -351,9 +351,8 @@ six folders on one curve in front of you: the four in the middle under the
 subtitle, and *About Me* and *Contact* at the ends, down by the desk's edge.
 On a wide screen your name and the subtitle are centred on you, so the curve
 clears them evenly. On a screen wider than 16:10 (a browser window of about
-1920×913, say) the scene keeps the proportions it has at 1440×900: the same
-big, close-set folders, centred. The room carries on softly either side
-(`room-wide-ext.webp`: the photo's own edges, mirrored, blurred and dimmed). The *Based in Egypt
+1920×913, say) the folders keep the size and spacing they have at 1440×900,
+even if that means a short scroll. The *Based in Egypt
 · Open to relocation* tag from About Me sits in the top-right corner; on a
 phone, where that corner is right above your head, it is smaller and the
 desk keeps your head clear of it. All of
@@ -387,7 +386,6 @@ and the sections read as one long page.
 |---|---|
 | `room-wide.webp` | the room, for computers (1672 × 941) |
 | `room-tall.webp` | the same room, for phones (941 × 1672) |
-| `room-wide-ext.webp` | the wide room with its sides carried on, soft, for screens wider than 16:10 (made by `tools/make-room-ext.js`) |
 | `mariam-front.webp` | you, cut out, looking at the camera (791 × 917) |
 | `paper.webp` | the paper texture on the folder labels and the opening sheet |
 | `prints/` | small copies of the pictures inside the folders |
@@ -405,7 +403,7 @@ your head, where your arms meet the desk, how wide you are, the desk's far
 edge), and the same numbers are in `assets/css/desk.css` (`.desk__me`,
 `.desk__reflect`, `.desk__shadow`). Change them together, then rebuild the
 social card with `node tools/make-og.js`, whose positions come from the same
-numbers, and the soft sides with `node tools/make-room-ext.js`.
+numbers.
 
 **The folders** are the six `<li class="folders__item">` under *THE DESK*.
 Each one has a tab (`folder__tab`), a picture inside (`folder__print`, any
@@ -546,7 +544,7 @@ go. At every width, each folder has to fit the screen, and on a phone the
 corner tag must never cover your head. And with the scripts held back, the old
 top nav must never flash up, and the six folders must make one even curve
 with About Me and Contact down by the desk's edge, and on a 1920×913 screen
-the desk must keep its 1440×900 proportions. 120 checks.
+the folders must keep their 1440×900 size and spacing. 120 checks.
 
 ```bash
 node tools/seo.js           # add LIVE=1 to also check the canonical resolves
@@ -629,7 +627,6 @@ tools/
   check.js               120 browser checks (accessibility, desk, folders, reader, form, line)
   seo.js                 42 SEO checks
   make-og.js             rebuilds the social image
-  make-room-ext.js       rebuilds the room's soft sides for wide screens
   make-thumbs.js         rebuilds the localisation and vibe coding card thumbnails
   fetch-fonts.sh         re-downloads the webfonts
 ```
