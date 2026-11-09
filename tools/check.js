@@ -624,6 +624,32 @@ async function run() {
     await c.close();
   }
 
+  // On a wide, short screen (Mariam's own: about 1920×913) the scene keeps
+  // the proportions it has at 1440×900, the size she chose: the same big,
+  // close-set folders, with the room carrying on softly either side.
+  {
+    const c = await browser.newContext({ viewport: { width: 1920, height: 913 } });
+    const pg = await c.newPage();
+    await pg.goto(BASE, { waitUntil: 'networkidle' });
+    await pg.waitForTimeout(900);
+    const st = await pg.evaluate(() => {
+      const f = [...document.querySelectorAll('.folders__item')].map(el => el.getBoundingClientRect());
+      const row = f.slice(1, -1).sort((a, b) => a.left - b.left);
+      return {
+        stage: document.getElementById('top').classList.contains('desk--stage') &&
+               getComputedStyle(document.getElementById('deskExt')).display === 'block',
+        width: Math.round(f[2].width),
+        gaps: row.slice(1).map((b, i) => Math.round(b.left - row[i].right)),
+        fits: document.documentElement.scrollHeight <= innerHeight + 1 &&
+              document.documentElement.scrollWidth <= innerWidth
+      };
+    });
+    check('on a wide, short screen the desk keeps its 1440×900 proportions',
+          st.stage && st.fits && st.width >= 200 && st.gaps.every(g => g >= 8 && g <= 32) &&
+          Math.abs(st.gaps[0] - st.gaps[2]) <= 3, `${st.width}px folders, gaps ${st.gaps.join(', ')}`);
+    await c.close();
+  }
+
   // Before the scripts run, the page must already be the desk: the plain
   // page's nav never flashes up, and the desk waits out of sight instead of
   // jumping into place once it is laid out.

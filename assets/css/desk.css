@@ -30,6 +30,17 @@
   aspect-ratio: 1672 / 931;      /* the room photo, its last 1% trimmed */
 }
 .desk__world { position: absolute; left: 0; top: 0; width: 100%; }
+
+/* On a screen wider than 16:10 the scene keeps 16:10's proportions in the
+   middle (desk.js), and the room carries on either side: its own edges,
+   mirrored, soft and dimmed (tools/make-room-ext.js). The sharp photo fades
+   into it, so there is no seam. */
+.desk__ext { display: none; position: absolute; pointer-events: none; background: center / 100% 100% no-repeat; }
+.desk--stage .desk__ext { display: block; background-image: url("../img/desk/room-wide-ext.webp?v=1"); }
+.desk--stage .desk__world {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
 .desk__room img { width: 100%; height: auto; }
 
 /* Where her forearms meet the desk is 86% of the way down the photo. These
@@ -105,7 +116,7 @@
   font-family: var(--font-display);
   font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144;
   font-weight: 700;
-  font-size: clamp(2rem, 0.9rem + 3.4vw, 4.75rem);
+  font-size: clamp(2rem, 0.9rem + 3.4 * var(--sw, 1vw), 4.75rem);   /* --sw: a hundredth of the scene's width (desk.js) */
   line-height: 1;
   letter-spacing: -0.01em;
   color: var(--cream);
@@ -114,7 +125,7 @@
   text-shadow: 0 1px 1px rgba(0,0,0,.45), 0 0 18px rgba(30,12,2,.6), 0 8px 28px rgba(0,0,0,.45);
 }
 .desk__role {
-  font-size: clamp(1.0625rem, 0.65rem + 0.85vw, 1.5rem);
+  font-size: clamp(1.0625rem, 0.65rem + 0.85 * var(--sw, 1vw), 1.5rem);
   font-weight: 600;
   line-height: 1.3;
   color: var(--cream);

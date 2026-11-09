@@ -45,6 +45,7 @@
   var roleEl  = plate.querySelector('.desk__role');
   var blend   = desk.querySelector('.desk__blend');
   var tag     = desk.querySelector('.desk__status');
+  var ext     = document.getElementById('deskExt');
 
   var fine = window.matchMedia('(pointer: fine)').matches;
 
@@ -67,6 +68,12 @@
   var TALL = { aspect: 1672 / 941, cx: 0.513, figTop: 0.454, figBottom: 0.78, figW: 0.5,
                deskEdge: 0.735, bottomCut: 0.84, headroom: 0.03 };
 
+  // On a screen wider than 16:10 the scene keeps the proportions it has at
+  // 16:10 (1440×900, the size Mariam chose), centred, and the room carries on
+  // softly either side (room-wide-ext.webp, EXT times the photo's width).
+  var STAGE = 1.6;
+  var EXT = 1.4;
+
   var ROLE_GAP = 6;        // the subtitle starts this far under her hands
   var TEXT_GAP = 18;       // between the subtitle and the folders under it
   var EDGE = 18;           // folders keep this far from the sides of the screen
@@ -84,7 +91,17 @@
     var vh = window.innerHeight;
 
     var P = window.matchMedia('(max-width: 619px)').matches ? TALL : WIDE;
-    var Himg = W * P.aspect;
+    // The scene: the whole width, or on a wide, short screen a 16:10 stage
+    // in the middle (and never narrower than the room's carried-on sides
+    // can fill).
+    var Ws = W, off = 0;
+    if (P === WIDE && W >= 900) {
+      Ws = Math.min(W, Math.max(Math.round(vh * STAGE), Math.ceil(W / EXT)));
+      off = Math.round((W - Ws) / 2);
+    }
+    // her name and the subtitle are sized from the scene's width, not the screen's
+    desk.style.setProperty('--sw', off ? px(Ws / 100) : '');
+    var Himg = Ws * P.aspect;
     var armsFull = P.figBottom * Himg;                       // her arms, with no crop
     // The least room kept over her head when the top of the photo is cropped:
     // a sliver, or, where the "open to relocation" tag sits right above her
@@ -92,8 +109,8 @@
     var headMin = P.headroom * Himg;
     if (tag) {
       var t = tag.getBoundingClientRect(), d = desk.getBoundingClientRect();
-      var hair = 0.3 * P.figW * W;                           // her head, either side of her middle
-      if (t.left - d.left < P.cx * W + hair && t.right - d.left > P.cx * W - hair) {
+      var hair = 0.3 * P.figW * Ws;                          // her head, either side of her middle
+      if (t.left - d.left < off + P.cx * Ws + hair && t.right - d.left > off + P.cx * Ws - hair) {
         headMin = Math.max(headMin, t.bottom - d.top + 6);
       }
     }
@@ -129,14 +146,14 @@
     var plan = null, arms = armsMin, i;
     // On a wide screen her name and the subtitle are centred on her (she sits
     // a little right of the middle), so the curve clears them evenly.
-    plate.style.transform = W >= 900 ? 'translateX(' + px(Math.round(P.cx * W - W / 2)) + ')' : '';
+    plate.style.transform = W >= 900 ? 'translateX(' + px(Math.round(off + P.cx * Ws - W / 2)) + ')' : '';
     if (W >= 900) {
       // As big as the height allows (and no bigger than looks right), then
       // a little smaller at a time until the U clears her name.
-      var w = Math.min(clamp(W * 0.15, 150, 250), (spare - armsMin) / 1.19);
+      var w = Math.min(clamp(Ws * 0.15, 150, 250), (spare - armsMin) / 1.19);
       for (i = 0; i < 14 && !plan && w >= 110; i++, w *= 0.95) {
         arms = settle(w * 1.19);
-        plan = uPlan(W, P, arms, nameRel, N, textBelow, w);
+        plan = uPlan({ left: off, width: Ws }, W, P, arms, nameRel, N, textBelow, w);
       }
     }
     if (!plan) {
@@ -153,6 +170,15 @@
     photo.style.aspectRatio = 'auto';
     photo.style.height = px(P.bottomCut * Himg - crop);
     world.style.top = px(-crop);
+    world.style.left = off ? px(off) : '';
+    world.style.width = off ? px(Ws) : '';
+    desk.classList.toggle('desk--stage', off > 0);
+    if (ext && off) {
+      ext.style.width = px(Ws * EXT);
+      ext.style.height = px(Himg);
+      ext.style.left = px(off - Ws * (EXT - 1) / 2);
+      ext.style.top = px(-crop);
+    }
 
     plan.items.forEach(function (it, idx) {
       var li = items[idx];
@@ -193,16 +219,20 @@
     return { left: b.left - d.left - 14, right: b.right - d.left + 14 };
   }
 
-  function uPlan(W, P, arms, nameRel, N, textBelow, w) {
+  // `stage` is where the scene sits across the desk (its left edge and width):
+  // the curve is drawn to its proportions. The folders may still use the whole
+  // width of the desk, `Wd`.
+  function uPlan(stage, Wd, P, arms, nameRel, N, textBelow, w) {
+    var W = stage.width, L = stage.left;
     var h = w * 1.19;
-    var cx = P.cx * W;
+    var cx = L + P.cx * W;
     var ns = span(nameEl), rs = span(roleEl);
     var boxes = [
       { left: ns.left, right: ns.right, top: arms + nameRel - 8, bottom: arms + nameRel + N + 4 },
       { left: rs.left, right: rs.right, top: arms + ROLE_GAP - 8, bottom: arms + textBelow + TEXT_GAP - 2 }
     ];
 
-    var reach = Math.min(cx, W - cx) - w / 2 - EDGE;         // how far the ends can go
+    var reach = Math.min(cx, Wd - cx) - w / 2 - EDGE;        // how far the ends can go
     var rx = Math.min(W * 0.37, reach);
     var yMid = arms + textBelow + TEXT_GAP + h / 2;
     var lift = Math.min(h * 0.3, arms - h / 2 - 10);          // the ends rise beside her
@@ -243,8 +273,8 @@
       // each folder steps out past the one inside it, if they would touch
       if (!apart(second, mid)) second.x = mid.x + side * (w + 12);
       if (!apart(end, second)) end.x = second.x + side * (w + 12);
-      end.x = clamp(end.x, w / 2 + EDGE, W - w / 2 - EDGE);
-      second.x = clamp(second.x, w / 2 + EDGE, W - w / 2 - EDGE);
+      end.x = clamp(end.x, w / 2 + EDGE, Wd - w / 2 - EDGE);
+      second.x = clamp(second.x, w / 2 + EDGE, Wd - w / 2 - EDGE);
       if (!apart(second, mid) || !apart(end, second) || hit(second) || hit(end)) return null;  // too tight: go smaller
       if (Math.abs(end.x - cx) - w / 2 < P.figW * W / 2 + 8) return null;                      // the ends clear her
     }
